@@ -2,11 +2,13 @@
   <div v-if="characterStore.currentCharacter" class="space-y-8">
     <!-- Character Header -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         {{ characterStore.currentCharacter.name }}
       </h1>
       <div
-        class="flex items-center justify-center gap-4 text-gray-600 dark:text-gray-400"
+        class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-gray-600 dark:text-gray-400 text-sm md:text-base"
       >
         <Badge
           :variant="
@@ -27,7 +29,7 @@
     </div>
 
     <!-- Character Stats -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       <!-- Level & XP -->
       <Card>
         <CardHeader class="pb-2">

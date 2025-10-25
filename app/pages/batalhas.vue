@@ -75,7 +75,9 @@
     <!-- Battle State -->
     <div v-if="battleState === 'selecting'" class="space-y-6">
       <!-- Opponents Grid -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+      >
         <Card
           v-for="opponent in opponents"
           :key="opponent.id"
@@ -163,8 +165,8 @@
 
       <!-- Battle Arena -->
       <Card class="max-w-4xl mx-auto">
-        <CardContent class="p-8">
-          <div class="grid md:grid-cols-2 gap-8">
+        <CardContent class="p-4 md:p-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <!-- Character -->
             <div class="text-center">
               <h3
@@ -249,14 +251,21 @@
 
               <div v-if="battleTurn === 'player'" class="space-y-4">
                 <!-- Basic Actions -->
-                <div class="flex gap-4 justify-center">
-                  <Button @click="playerAttack" :disabled="battleLoading">
+                <div
+                  class="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center"
+                >
+                  <Button
+                    @click="playerAttack"
+                    :disabled="battleLoading"
+                    class="w-full sm:w-auto"
+                  >
                     {{ battleLoading ? "Atacando..." : "Atacar" }}
                   </Button>
                   <Button
                     @click="playerDefend"
                     variant="outline"
                     :disabled="battleLoading"
+                    class="w-full sm:w-auto"
                   >
                     Defender
                   </Button>
@@ -269,18 +278,21 @@
                   >
                     Habilidades:
                   </h4>
-                  <div class="flex flex-wrap gap-2 justify-center">
+                  <div
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 justify-center"
+                  >
                     <Button
                       v-for="skill in availableSkills"
                       :key="skill.id"
                       @click="useSkill(skill)"
                       variant="secondary"
                       size="sm"
+                      class="w-full"
                       :disabled="
                         battleLoading || isSkillOnCooldown(skill.skill_name)
                       "
                     >
-                      {{ skill.skill_name }}
+                      <span class="truncate">{{ skill.skill_name }}</span>
                       <span
                         v-if="isSkillOnCooldown(skill.skill_name)"
                         class="ml-1 text-xs"
@@ -300,20 +312,20 @@
             </div>
 
             <!-- Battle Log -->
-            <div v-if="battleLog.length > 0" class="mt-8">
+            <div v-if="battleLog.length > 0" class="mt-4 md:mt-8">
               <h4
-                class="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center"
+                class="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2 md:mb-4 text-center"
               >
                 Log da Batalha
               </h4>
               <div
-                class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 max-h-48 overflow-y-auto"
+                class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 md:p-4 max-h-32 md:max-h-48 overflow-y-auto"
               >
-                <div class="space-y-2">
+                <div class="space-y-1 md:space-y-2">
                   <div
                     v-for="(logEntry, index) in battleLog"
                     :key="index"
-                    class="text-sm text-gray-700 dark:text-gray-300"
+                    class="text-xs md:text-sm text-gray-700 dark:text-gray-300"
                   >
                     {{ logEntry }}
                   </div>

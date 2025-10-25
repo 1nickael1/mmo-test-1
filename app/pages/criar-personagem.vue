@@ -32,7 +32,7 @@
           <!-- Seleção de Classe -->
           <div class="space-y-4">
             <Label class="text-white text-lg">Escolha sua Classe</Label>
-            <div class="grid md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Ninja -->
               <Card
                 class="cursor-pointer transition-all duration-200 hover:scale-105"

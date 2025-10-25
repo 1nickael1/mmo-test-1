@@ -2,10 +2,12 @@
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Rankings
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Veja os melhores jogadores da galáxia
       </p>
     </div>
@@ -13,7 +15,7 @@
     <!-- Ranking Categories -->
     <div class="flex justify-center">
       <Tabs v-model="activeTab" class="w-full max-w-4xl">
-        <TabsList class="grid w-full grid-cols-4">
+        <TabsList class="grid w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="level">Nível</TabsTrigger>
           <TabsTrigger value="battles">Batalhas</TabsTrigger>
           <TabsTrigger value="skills">Habilidades</TabsTrigger>
@@ -34,7 +36,7 @@
                 <div
                   v-for="(player, index) in levelRanking"
                   :key="player.id"
-                  class="flex items-center gap-4 p-3 rounded-lg"
+                  class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 rounded-lg"
                   :class="
                     index < 3
                       ? 'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20'
@@ -96,7 +98,7 @@
                 <div
                   v-for="(player, index) in battleRanking"
                   :key="player.id"
-                  class="flex items-center gap-4 p-3 rounded-lg"
+                  class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 rounded-lg"
                   :class="
                     index < 3
                       ? 'bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20'
@@ -158,7 +160,7 @@
                 <div
                   v-for="(player, index) in skillRanking"
                   :key="player.id"
-                  class="flex items-center gap-4 p-3 rounded-lg"
+                  class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 rounded-lg"
                   :class="
                     index < 3
                       ? 'bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20'
@@ -220,7 +222,7 @@
                 <div
                   v-for="(player, index) in resourceRanking"
                   :key="player.id"
-                  class="flex items-center gap-4 p-3 rounded-lg"
+                  class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 rounded-lg"
                   :class="
                     index < 3
                       ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20'

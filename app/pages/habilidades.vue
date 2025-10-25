@@ -58,7 +58,7 @@
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Habilidades Aprendidas
         </h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card
             v-for="skill in learnedSkills"
             :key="skill.id"
@@ -90,7 +90,7 @@
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Habilidades Disponíveis
         </h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card
             v-for="skill in availableSkills"
             :key="skill.name"

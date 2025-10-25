@@ -55,6 +55,13 @@
               Personagem
             </a>
             <a
+              href="/selecionar-personagem"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+            >
+              Trocar Personagem
+            </a>
+            <a
               href="/habilidades"
               @click="handleNavigation"
               class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
@@ -189,6 +196,13 @@
               class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
             >
               👤 Personagem
+            </a>
+            <a
+              href="/selecionar-personagem"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              🔄 Trocar Personagem
             </a>
             <a
               href="/habilidades"

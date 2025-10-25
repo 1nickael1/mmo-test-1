@@ -2,10 +2,12 @@
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Melhorias
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Construa e melhore sua base espacial
       </p>
     </div>
@@ -13,8 +15,8 @@
     <!-- Resources Display -->
     <div v-if="resources.length > 0" class="flex justify-center">
       <Card class="w-full max-w-4xl">
-        <CardContent class="p-6">
-          <div class="grid grid-cols-3 gap-4 text-center">
+        <CardContent class="p-4 md:p-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
             <div
               v-for="resource in resources"
               :key="resource.resource_type"
@@ -40,7 +42,7 @@
             <h3 class="text-lg font-semibold mb-4 text-center">
               Como Obter Recursos
             </h3>
-            <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
               <div class="text-center">
                 <div class="text-2xl mb-2">🪙</div>
                 <h4 class="font-semibold mb-2">Ouro</h4>
@@ -103,7 +105,7 @@
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Melhorias de Stats
         </h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card
             v-for="upgrade in statUpgrades"
             :key="upgrade.id"
@@ -186,7 +188,7 @@
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Melhorias de Base
         </h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card
             v-for="upgrade in buildingUpgrades"
             :key="upgrade.id"
