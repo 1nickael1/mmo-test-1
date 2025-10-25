@@ -2,10 +2,12 @@
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Batalhas
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Enfrente oponentes e ganhe XP, recursos e glória!
       </p>
     </div>
@@ -13,8 +15,8 @@
     <!-- Character Status -->
     <div v-if="characterStore.currentCharacter" class="flex justify-center">
       <Card class="w-full max-w-2xl">
-        <CardContent class="p-6">
-          <div class="grid md:grid-cols-3 gap-4 text-center">
+        <CardContent class="p-4 md:p-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
             <div>
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ characterStore.currentCharacter.name }}
@@ -177,13 +179,27 @@
                   }}
                 </div>
                 <Progress
-                  :value="
-                    ((currentBattle?.character.stats.health || 0) /
-                      (currentBattle?.character.stats.max_health || 1)) *
-                    100
+                  :model-value="
+                    Math.min(
+                      100,
+                      ((currentBattle?.character.stats.health || 0) /
+                        (currentBattle?.character.stats.max_health || 1)) *
+                        100
+                    )
                   "
                   class="h-3"
                 />
+                <div
+                  class="text-xs text-gray-500 dark:text-gray-400 text-center"
+                >
+                  {{
+                    Math.round(
+                      ((currentBattle?.character.stats.health || 0) /
+                        (currentBattle?.character.stats.max_health || 1)) *
+                        100
+                    )
+                  }}%
+                </div>
               </div>
             </div>
 
@@ -199,13 +215,27 @@
                   }}
                 </div>
                 <Progress
-                  :value="
-                    ((currentBattle?.opponent.stats.health || 0) /
-                      (currentBattle?.opponent.stats.max_health || 1)) *
-                    100
+                  :model-value="
+                    Math.min(
+                      100,
+                      ((currentBattle?.opponent.stats.health || 0) /
+                        (currentBattle?.opponent.stats.max_health || 1)) *
+                        100
+                    )
                   "
                   class="h-3"
                 />
+                <div
+                  class="text-xs text-gray-500 dark:text-gray-400 text-center"
+                >
+                  {{
+                    Math.round(
+                      ((currentBattle?.opponent.stats.health || 0) /
+                        (currentBattle?.opponent.stats.max_health || 1)) *
+                        100
+                    )
+                  }}%
+                </div>
               </div>
             </div>
           </div>
@@ -265,6 +295,28 @@
               <div v-else-if="battleTurn === 'enemy'" class="text-center">
                 <div class="text-gray-600 dark:text-gray-400">
                   {{ currentBattle?.opponent.name }} está pensando...
+                </div>
+              </div>
+            </div>
+
+            <!-- Battle Log -->
+            <div v-if="battleLog.length > 0" class="mt-8">
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center"
+              >
+                Log da Batalha
+              </h4>
+              <div
+                class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 max-h-48 overflow-y-auto"
+              >
+                <div class="space-y-2">
+                  <div
+                    v-for="(logEntry, index) in battleLog"
+                    :key="index"
+                    class="text-sm text-gray-700 dark:text-gray-300"
+                  >
+                    {{ logEntry }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -380,6 +432,7 @@ const battleTurn = ref<"player" | "enemy">("player");
 const battleMessage = ref("Escolha sua ação!");
 const availableSkills = ref<any[]>([]);
 const skillCooldowns = ref<Record<string, number>>({});
+const battleLog = ref<string[]>([]);
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
@@ -420,6 +473,15 @@ const getDifficultyLabel = (difficulty: string) => {
   }
 };
 
+const addBattleLog = (message: string) => {
+  const timestamp = new Date().toLocaleTimeString();
+  battleLog.value.unshift(`[${timestamp}] ${message}`);
+  // Manter apenas as últimas 20 entradas
+  if (battleLog.value.length > 20) {
+    battleLog.value = battleLog.value.slice(0, 20);
+  }
+};
+
 const loadOpponents = async () => {
   if (!characterStore.currentCharacter) return;
 
@@ -428,7 +490,7 @@ const loadOpponents = async () => {
   try {
     const token = useCookie("token");
     const response = await $fetch(
-      `/api/battles/opponents?character_id=${characterStore.currentCharacter.id}`,
+      `/api/battles/opponents?level=${characterStore.currentCharacter.level}`,
       {
         headers: {
           Authorization: `Bearer ${token.value}`,
@@ -457,6 +519,26 @@ const loadSkills = async () => {
       }
     );
     availableSkills.value = response.data || [];
+
+    // Calcular cooldowns corretamente
+    const now = new Date();
+    availableSkills.value.forEach((skill: any) => {
+      if (skill.last_used) {
+        // Converter timestamp do banco para Date corretamente
+        const lastUsed = new Date(skill.last_used + "Z"); // Adicionar 'Z' para UTC
+        const cooldownSeconds = skill.cooldown_seconds || 1;
+        const timeDiff = (now.getTime() - lastUsed.getTime()) / 1000;
+
+        if (timeDiff >= 0 && timeDiff < cooldownSeconds) {
+          const remainingTime = Math.ceil(cooldownSeconds - timeDiff);
+          skillCooldowns.value[skill.skill_name] = remainingTime;
+        } else {
+          skillCooldowns.value[skill.skill_name] = 0;
+        }
+      } else {
+        skillCooldowns.value[skill.skill_name] = 0;
+      }
+    });
   } catch (error) {
     console.error("Erro ao carregar habilidades:", error);
   }
@@ -582,6 +664,8 @@ const startBattle = async (opponent: NPC) => {
       battleState.value = "battling";
       battleTurn.value = "player";
       battleMessage.value = "Escolha sua ação!";
+      battleLog.value = []; // Limpar log anterior
+      addBattleLog(`Batalha iniciada contra ${opponent.name}!`);
       startCooldownTimer();
 
       // Salvar estado da batalha
@@ -610,6 +694,10 @@ const playerAttack = async () => {
   currentBattle.value.opponent.stats.health = Math.max(
     0,
     currentBattle.value.opponent.stats.health - playerDamage
+  );
+
+  addBattleLog(
+    `${currentBattle.value.character.name} ataca e causa ${playerDamage} de dano!`
   );
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -661,6 +749,9 @@ const useSkill = async (skill: any) => {
       skillCooldowns.value[skill.skill_name] = response.data.cooldown_seconds;
 
       battleMessage.value = `${skill.skill_name} causou ${skillDamage} de dano!`;
+      addBattleLog(
+        `${currentBattle.value.character.name} usa ${skill.skill_name} e causa ${skillDamage} de dano!`
+      );
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -700,6 +791,7 @@ const playerDefend = async () => {
 
   battleLoading.value = true;
   battleMessage.value = "Você se defende!";
+  addBattleLog(`${currentBattle.value.character.name} se defende!`);
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -729,6 +821,10 @@ const enemyAttack = async (defenseMultiplier = 1) => {
     currentBattle.value.character.stats.health - enemyDamage
   );
 
+  addBattleLog(
+    `${currentBattle.value.opponent.name} ataca e causa ${enemyDamage} de dano!`
+  );
+
   if (currentBattle.value.character.stats.health <= 0) {
     // Derrota
     await resolveBattle("defeat");
@@ -747,6 +843,11 @@ const resolveBattle = async (outcome: "victory" | "defeat") => {
 
   try {
     const token = useCookie("token");
+
+    // Determinar se é uma batalha de história
+    const isStoryBattle = currentBattle.value.battle_type === "story";
+    const chapter = currentBattle.value.chapter;
+
     const response = await $fetch("/api/battles/resolve", {
       method: "POST",
       headers: {
@@ -757,12 +858,28 @@ const resolveBattle = async (outcome: "victory" | "defeat") => {
         opponent_id: currentBattle.value.opponent.id,
         outcome,
         character_health_remaining: currentBattle.value.character.stats.health,
+        battle_type: isStoryBattle ? "story" : "normal",
+        chapter: chapter,
       },
     });
 
     if (response.success) {
       battleResult.value = response.data;
       battleState.value = "result";
+
+      // Adicionar resultado ao log
+      if (outcome === "victory") {
+        addBattleLog(
+          `🎉 ${currentBattle.value.character.name} venceu a batalha!`
+        );
+
+        // Se for batalha de história e capítulo foi completado
+        if (isStoryBattle && response.data.chapter_completed) {
+          addBattleLog(`📖 Capítulo ${chapter} completado!`);
+        }
+      } else {
+        addBattleLog(`💀 ${currentBattle.value.character.name} foi derrotado!`);
+      }
 
       // Finalizar batalha ativa
       await finishBattle();
@@ -782,6 +899,7 @@ const resetBattle = () => {
   battleTurn.value = "player";
   battleMessage.value = "Escolha sua ação!";
   skillCooldowns.value = {};
+  battleLog.value = []; // Limpar log
   stopCooldownTimer();
 };
 
@@ -821,9 +939,12 @@ onMounted(async () => {
   // Carregar batalha ativa primeiro
   await loadActiveBattle();
 
-  // Se não há batalha ativa, carregar oponentes e habilidades
+  // Carregar habilidades sempre (necessário para batalhas ativas)
+  await loadSkills();
+
+  // Se não há batalha ativa, carregar oponentes
   if (battleState.value === "selecting") {
-    await Promise.all([loadOpponents(), loadSkills()]);
+    await loadOpponents();
   }
 });
 </script>

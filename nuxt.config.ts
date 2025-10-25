@@ -1,14 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineNuxtConfig({
   srcDir: "app",
   devtools: { enabled: true },
-  modules: ["@pinia/nuxt", "@vueuse/nuxt"],
+  modules: ["@pinia/nuxt", "@vueuse/nuxt", "@nuxtjs/tailwindcss"],
+  nitro: {
+    experimental: {
+      wasm: true,
+    },
+  },
   css: ["~/assets/css/main.css"],
   vite: {
-    plugins: [tailwindcss(), tsconfigPaths()],
+    plugins: [tsconfigPaths()],
   },
   components: [
     { path: "components", pathPrefix: false },
@@ -24,5 +28,9 @@ export default defineNuxtConfig({
   },
   build: {
     transpile: ["vue-sonner"],
+  },
+  typescript: {
+    strict: true,
+    typeCheck: false,
   },
 });

@@ -2,10 +2,12 @@
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Habilidades
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Desenvolva novas técnicas e jutsus para seu personagem
       </p>
     </div>
@@ -13,7 +15,7 @@
     <!-- Character Info -->
     <div v-if="characterStore.currentCharacter" class="flex justify-center">
       <Card class="w-full max-w-md">
-        <CardContent class="p-6">
+        <CardContent class="p-4 md:p-6">
           <div class="text-center">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
               {{ characterStore.currentCharacter.name }}
@@ -138,14 +140,14 @@
                   <div class="flex items-center gap-2">
                     <span
                       :class="
-                        characterStore.currentCharacter?.level >=
+                        (characterStore.currentCharacter?.level || 0) >=
                         skill.level_required
                           ? 'text-green-600'
                           : 'text-red-600'
                       "
                     >
                       {{
-                        characterStore.currentCharacter?.level >=
+                        (characterStore.currentCharacter?.level || 0) >=
                         skill.level_required
                           ? "✅"
                           : "❌"
@@ -153,7 +155,7 @@
                     </span>
                     <span
                       :class="
-                        characterStore.currentCharacter?.level >=
+                        (characterStore.currentCharacter?.level || 0) >=
                         skill.level_required
                           ? 'text-green-600'
                           : 'text-red-600'
@@ -267,9 +269,19 @@ const loadSkills = async () => {
 
     // Carregar habilidades disponíveis
     const availableResponse = await $fetch(
-      `/api/skills/available?character_id=${characterStore.currentCharacter.id}`
+      `/api/skills/available?class=${characterStore.currentCharacter.class}&level=${characterStore.currentCharacter.level}`
     );
-    availableSkills.value = availableResponse.data || [];
+    const allSkills = availableResponse.data || [];
+
+    // Marcar habilidades já aprendidas
+    const learnedSkillNames = learnedSkills.value.map(
+      (skill) => skill.skill_name
+    );
+    availableSkills.value = allSkills.map((skill) => ({
+      ...skill,
+      learned: learnedSkillNames.includes(skill.name),
+      can_learn: skill.can_learn && !learnedSkillNames.includes(skill.name),
+    }));
   } catch (error) {
     console.error("Erro ao carregar habilidades:", error);
   } finally {

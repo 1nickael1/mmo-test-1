@@ -10,74 +10,112 @@
           <div class="flex items-center space-x-4">
             <NuxtLink
               to="/home"
-              class="text-2xl font-bold text-blue-600 dark:text-blue-400"
+              class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400"
             >
               Ninja Space RPG
             </NuxtLink>
           </div>
 
-          <!-- Navigation -->
+          <!-- Mobile Menu Button -->
+          <Button
+            @click="toggleMobileMenu"
+            variant="ghost"
+            size="sm"
+            class="md:hidden"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </Button>
+
+          <!-- Desktop Navigation -->
           <nav class="hidden md:flex items-center space-x-6">
-            <NuxtLink
-              to="/home"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            <a
+              href="/home"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Home
-            </NuxtLink>
-            <NuxtLink
-              to="/personagem"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/personagem"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Personagem
-            </NuxtLink>
-            <NuxtLink
-              to="/habilidades"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/habilidades"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Habilidades
-            </NuxtLink>
-            <NuxtLink
-              to="/batalhas"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/batalhas"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Batalhas
-            </NuxtLink>
-            <NuxtLink
-              to="/modo-historia"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/melhorias"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+            >
+              Melhorias
+            </a>
+            <a
+              href="/modo-historia"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               História
-            </NuxtLink>
-            <NuxtLink
-              to="/loja"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/loja"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Loja
-            </NuxtLink>
-            <NuxtLink
-              to="/equipamentos"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/equipamentos"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Equipamentos
-            </NuxtLink>
-            <NuxtLink
-              to="/inventario"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/inventario"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Inventário
-            </NuxtLink>
-            <NuxtLink
-              to="/mineracao"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            </a>
+            <a
+              href="/mineracao"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               Mineração
-            </NuxtLink>
+            </a>
           </nav>
 
-          <!-- User Info & Actions -->
-          <div class="flex items-center space-x-4">
+          <!-- Desktop User Info & Actions -->
+          <div class="hidden md:flex items-center space-x-4">
             <!-- Server Time -->
-            <div class="hidden md:flex items-center space-x-2 text-sm">
+            <div class="flex items-center space-x-2 text-sm">
               <div class="relative group">
                 <Badge variant="outline" class="cursor-help">
                   🕐 {{ serverTime }}
@@ -96,7 +134,7 @@
             <!-- Character Info -->
             <div
               v-if="characterStore.currentCharacter"
-              class="hidden sm:flex items-center space-x-2 text-sm"
+              class="flex items-center space-x-2 text-sm"
             >
               <Badge variant="secondary">
                 Nível {{ characterStore.currentCharacter.level }}
@@ -111,6 +149,111 @@
               Sair
             </Button>
           </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div
+          v-if="mobileMenuOpen"
+          class="md:hidden border-t border-gray-200 dark:border-gray-700 py-4"
+        >
+          <!-- Mobile Character Info -->
+          <div
+            v-if="characterStore.currentCharacter"
+            class="flex items-center justify-between mb-4 px-2"
+          >
+            <div class="flex items-center space-x-2">
+              <Badge variant="secondary">
+                Nível {{ characterStore.currentCharacter.level }}
+              </Badge>
+              <span class="text-gray-600 dark:text-gray-300 text-sm">
+                {{ characterStore.currentCharacter.name }}
+              </span>
+            </div>
+            <Badge variant="outline" class="text-xs">
+              🕐 {{ serverTime }}
+            </Badge>
+          </div>
+
+          <!-- Mobile Navigation -->
+          <nav class="grid grid-cols-2 gap-2">
+            <a
+              href="/home"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              🏠 Home
+            </a>
+            <a
+              href="/personagem"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              👤 Personagem
+            </a>
+            <a
+              href="/habilidades"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              ⚡ Habilidades
+            </a>
+            <a
+              href="/batalhas"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              ⚔️ Batalhas
+            </a>
+            <a
+              href="/melhorias"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              🏗️ Melhorias
+            </a>
+            <a
+              href="/modo-historia"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              📖 História
+            </a>
+            <a
+              href="/loja"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              🛒 Loja
+            </a>
+            <a
+              href="/equipamentos"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              🛡️ Equipamentos
+            </a>
+            <a
+              href="/inventario"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              🎒 Inventário
+            </a>
+            <a
+              href="/mineracao"
+              @click="handleMobileNavigation"
+              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            >
+              ⛏️ Mineração
+            </a>
+            <Button
+              @click="handleLogout"
+              variant="outline"
+              class="col-span-2 mt-2"
+            >
+              🚪 Sair
+            </Button>
+          </nav>
         </div>
       </div>
     </header>
@@ -132,7 +275,15 @@
     </footer>
 
     <!-- Toast Notifications -->
-    <Sonner />
+    <ClientOnly>
+      <Sonner
+        position="top-right"
+        :toast-options="{
+          duration: 4000,
+          class: 'toast-notification',
+        }"
+      />
+    </ClientOnly>
   </div>
 </template>
 
@@ -146,6 +297,7 @@ const { startHealthRegeneration, stopHealthRegeneration, lastHealTime } =
   useHealthRegeneration();
 const serverTime = ref("");
 const timeToNextHeal = ref("");
+const mobileMenuOpen = ref(false);
 let timeInterval: NodeJS.Timeout | null = null;
 
 const updateServerTime = () => {
@@ -163,6 +315,10 @@ const updateServerTime = () => {
 
   const seconds = Math.ceil(timeUntilNextHeal / 1000);
   timeToNextHeal.value = `${seconds}s`;
+};
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value;
 };
 
 const handleLogout = async () => {

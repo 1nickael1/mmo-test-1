@@ -1,11 +1,15 @@
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900"
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 p-4"
   >
-    <div class="max-w-md w-full space-y-8 p-8">
+    <div class="max-w-md w-full space-y-8 p-4 md:p-8">
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-white mb-2">Ninja Space RPG</h1>
-        <p class="text-gray-300">Crie sua conta e comece sua aventura</p>
+        <h1 class="text-2xl md:text-4xl font-bold text-white mb-2">
+          Ninja Space RPG
+        </h1>
+        <p class="text-gray-300 text-sm md:text-base">
+          Crie sua conta e comece sua aventura
+        </p>
       </div>
 
       <Card class="bg-white/10 backdrop-blur-sm border-white/20">
@@ -91,13 +95,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Input } from "~/components/ui/input";
 import type { RegisterRequest } from "~/types";
 
 definePageMeta({
   layout: false,
-  middleware: [],
+});
+
+// Verificar se usuário já está logado e redirecionar
+onMounted(() => {
+  const token = useCookie("token");
+  if (token.value) {
+    console.log("Usuário já logado, redirecionando para /home");
+    navigateTo("/home");
+  }
 });
 
 const form = ref<RegisterRequest & { confirmPassword: string }>({

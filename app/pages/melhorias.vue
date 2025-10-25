@@ -171,7 +171,7 @@
                 variant="outline"
                 class="w-full"
               >
-                Nível Máximo
+                Nível {{ getRequiredLevel(upgrade.id) }} Necessário
               </Button>
               <Button v-else disabled variant="outline" class="w-full">
                 Recursos Insuficientes
@@ -292,7 +292,7 @@
                 variant="outline"
                 class="w-full"
               >
-                Nível Máximo
+                Nível {{ getRequiredLevel(upgrade.id) }} Necessário
               </Button>
               <Button v-else disabled variant="outline" class="w-full">
                 Recursos Insuficientes
@@ -374,6 +374,140 @@ const getProgressValue = (upgrade: any) => {
   return (elapsed / totalTime) * 100;
 };
 
+const getRequiredLevel = (upgradeId: string) => {
+  const id = parseInt(upgradeId);
+  // Mapear IDs para níveis necessários
+  const levelMap: Record<number, number> = {
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 2,
+    5: 3,
+    6: 3,
+    7: 4,
+    8: 4,
+    9: 5,
+    10: 5,
+    11: 6,
+    12: 6,
+    13: 7,
+    14: 7,
+    15: 8,
+    16: 8,
+    17: 9,
+    18: 9,
+    19: 10,
+    20: 10,
+    21: 11,
+    22: 11,
+    23: 12,
+    24: 12,
+    25: 13,
+    26: 13,
+    27: 14,
+    28: 14,
+    29: 15,
+    30: 15,
+    31: 16,
+    32: 16,
+    33: 17,
+    34: 17,
+    35: 18,
+    36: 18,
+    37: 19,
+    38: 19,
+    39: 20,
+    40: 20,
+    41: 21,
+    42: 21,
+    43: 22,
+    44: 22,
+    45: 23,
+    46: 23,
+    47: 24,
+    48: 24,
+    49: 25,
+    50: 25,
+    51: 26,
+    52: 26,
+    53: 27,
+    54: 27,
+    55: 28,
+    56: 28,
+    57: 29,
+    58: 29,
+    59: 30,
+    60: 30,
+    61: 31,
+    62: 31,
+    63: 32,
+    64: 32,
+    65: 33,
+    66: 33,
+    67: 34,
+    68: 34,
+    69: 35,
+    70: 35,
+    71: 36,
+    72: 36,
+    73: 37,
+    74: 37,
+    75: 38,
+    76: 38,
+    77: 39,
+    78: 39,
+    79: 40,
+    80: 40,
+    81: 41,
+    82: 41,
+    83: 42,
+    84: 42,
+    85: 43,
+    86: 43,
+    87: 44,
+    88: 44,
+    89: 45,
+    90: 45,
+    91: 46,
+    92: 46,
+    93: 47,
+    94: 47,
+    95: 48,
+    96: 48,
+    97: 49,
+    98: 49,
+    99: 50,
+    100: 50,
+  };
+  return levelMap[id] || 1;
+};
+
+// Função para atualizar contadores de tempo em tempo real
+const updateTimers = () => {
+  upgrades.value = upgrades.value.map((upgrade) => {
+    if (upgrade.time_remaining > 0) {
+      // Reduzir 1 segundo do tempo restante
+      const newTimeRemaining = Math.max(0, upgrade.time_remaining - 1000);
+
+      // Se o tempo acabou, marcar como concluído
+      if (newTimeRemaining === 0) {
+        return {
+          ...upgrade,
+          time_remaining: 0,
+          can_upgrade: true,
+          current_level: upgrade.current_level + 1,
+        };
+      }
+
+      return {
+        ...upgrade,
+        time_remaining: newTimeRemaining,
+      };
+    }
+    return upgrade;
+  });
+};
+
 const loadData = async () => {
   if (!characterStore.currentCharacter) return;
 
@@ -386,11 +520,34 @@ const loadData = async () => {
     );
     resources.value = resourcesResponse.data || [];
 
-    // Carregar melhorias
+    // Carregar melhorias disponíveis
     const upgradesResponse = await $fetch(
-      `/api/upgrades/${characterStore.currentCharacter.id}`
+      `/api/upgrades/available?level=${characterStore.currentCharacter.level}&characterId=${characterStore.currentCharacter.id}`
     );
-    upgrades.value = upgradesResponse.data || [];
+    const allUpgrades = upgradesResponse.data || [];
+
+    // Calcular se pode pagar cada melhoria
+    const goldResource = resources.value.find(
+      (r) => r.resource_type === "ouro"
+    );
+    const materialsResource = resources.value.find(
+      (r) => r.resource_type === "materiais"
+    );
+    const crystalsResource = resources.value.find(
+      (r) => r.resource_type === "cristais"
+    );
+
+    const currentGold = goldResource?.amount || 0;
+    const currentMaterials = materialsResource?.amount || 0;
+    const currentCrystals = crystalsResource?.amount || 0;
+
+    upgrades.value = allUpgrades.map((upgrade) => ({
+      ...upgrade,
+      can_afford:
+        currentGold >= (upgrade.current_cost?.gold || 0) &&
+        currentMaterials >= (upgrade.current_cost?.materials || 0) &&
+        currentCrystals >= (upgrade.current_cost?.crystals || 0),
+    }));
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   } finally {
@@ -426,6 +583,34 @@ const startUpgrade = async (upgradeId: string) => {
   }
 };
 
+const completeUpgrade = async (upgradeId: string) => {
+  if (!characterStore.currentCharacter) return;
+
+  upgrading.value = true;
+
+  try {
+    const response = await $fetch("/api/upgrades/complete", {
+      method: "POST",
+      body: {
+        character_id: characterStore.currentCharacter.id,
+        upgrade_id: upgradeId,
+      },
+    });
+
+    if (response.success) {
+      // Recarregar dados
+      await loadData();
+      // Atualizar personagem no store
+      await characterStore.loadCharacters();
+    }
+  } catch (error: any) {
+    console.error("Erro ao completar melhoria:", error);
+    // Aqui você pode adicionar um toast de erro
+  } finally {
+    upgrading.value = false;
+  }
+};
+
 onMounted(async () => {
   if (!characterStore.currentCharacter) {
     await characterStore.loadCharacters();
@@ -436,8 +621,8 @@ onMounted(async () => {
 
   await loadData();
 
-  // Atualizar dados a cada 30 segundos para mostrar progresso
-  refreshInterval.value = setInterval(loadData, 30000);
+  // Atualizar contadores de tempo a cada segundo
+  refreshInterval.value = setInterval(updateTimers, 1000);
 });
 
 onUnmounted(() => {

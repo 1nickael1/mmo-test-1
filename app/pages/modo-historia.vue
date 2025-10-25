@@ -1,10 +1,12 @@
 <template>
   <div class="space-y-8">
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Modo História
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Viva uma aventura épica através de capítulos desafiadores
       </p>
     </div>
@@ -12,26 +14,26 @@
     <!-- Character Info -->
     <div
       v-if="characterStore.currentCharacter"
-      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow"
+      class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow"
     >
-      <div class="flex items-center justify-between">
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+      >
         <div>
-          <h2 class="text-xl font-semibold text-white">
+          <h2
+            class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white"
+          >
             {{ characterStore.currentCharacter.name }}
           </h2>
-          <p class="text-white">
+          <p class="text-gray-700 dark:text-white text-sm md:text-base">
             Nível {{ characterStore.currentCharacter.level }}
           </p>
         </div>
-        <div class="text-right">
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center space-x-2">
-              <span class="text-yellow-500">💰</span>
-              <span class="font-semibold text-black dark:text-white">
-                {{ currentGold }}
-              </span>
-            </div>
-          </div>
+        <div class="flex items-center space-x-2">
+          <span class="text-yellow-500">💰</span>
+          <span class="font-semibold text-black dark:text-white text-lg">
+            {{ currentGold }}
+          </span>
         </div>
       </div>
     </div>
@@ -44,11 +46,13 @@
     </div>
 
     <!-- Story Chapters -->
-    <div v-else-if="storyChapters.length > 0" class="space-y-6">
+    <div v-else class="space-y-6">
       <h2 class="text-2xl font-bold text-black dark:text-white mb-4">
-        Capítulos da História
+        Capítulos da História ({{ storyChapters.length }})
       </h2>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+      >
         <Card
           v-for="chapter in storyChapters"
           :key="chapter.id"
@@ -66,13 +70,13 @@
         >
           <CardHeader>
             <div class="flex items-center justify-between">
-              <CardTitle class="text-lg text-white">{{
+              <CardTitle class="text-lg text-gray-900 dark:text-white">{{
                 chapter.title
               }}</CardTitle>
               <div class="flex items-center space-x-2">
                 <Badge
                   :variant="getChapterBadgeVariant(chapter)"
-                  class="text-white"
+                  class="text-gray-900 dark:text-white"
                 >
                   Cap. {{ chapter.chapter }}
                 </Badge>
@@ -90,37 +94,39 @@
                 <Badge v-else variant="secondary"> ▶️ Disponível </Badge>
               </div>
             </div>
-            <CardDescription class="text-white">
+            <CardDescription class="text-gray-700 dark:text-white">
               {{ chapter.description }}
             </CardDescription>
           </CardHeader>
 
           <CardContent class="space-y-4">
             <!-- NPC Info -->
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-white">
-              <h4 class="font-medium text-white mb-2">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-2">
                 Oponente: {{ chapter.npc.name }}
               </h4>
               <div class="grid grid-cols-2 gap-2 text-sm">
                 <div class="flex justify-between">
                   <span class="text-gray-600 dark:text-gray-400">Nível:</span>
-                  <span class="font-medium">{{ chapter.npc.level }}</span>
+                  <span class="font-medium text-gray-900 dark:text-white">{{
+                    chapter.npc.level
+                  }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600 dark:text-gray-400">Vida:</span>
-                  <span class="font-medium">{{
+                  <span class="font-medium text-gray-900 dark:text-white">{{
                     chapter.npc.stats.health
                   }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600 dark:text-gray-400">Força:</span>
-                  <span class="font-medium">{{
+                  <span class="font-medium text-gray-900 dark:text-white">{{
                     chapter.npc.stats.strength
                   }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600 dark:text-gray-400">Defesa:</span>
-                  <span class="font-medium">{{
+                  <span class="font-medium text-gray-900 dark:text-white">{{
                     chapter.npc.stats.defense
                   }}</span>
                 </div>
@@ -135,11 +141,13 @@
               <div class="flex items-center space-x-4 text-sm">
                 <div class="flex items-center space-x-1">
                   <span class="text-blue-500">⭐</span>
-                  <span class="text-white">{{ chapter.rewards.xp }} XP</span>
+                  <span class="text-gray-900 dark:text-white"
+                    >{{ chapter.rewards.xp }} XP</span
+                  >
                 </div>
                 <div class="flex items-center space-x-1">
                   <span class="text-yellow-500">💰</span>
-                  <span class="text-white"
+                  <span class="text-gray-900 dark:text-white"
                     >{{ chapter.rewards.gold }} Ouro</span
                   >
                 </div>
@@ -148,7 +156,7 @@
                   class="flex items-center space-x-1"
                 >
                   <span class="text-green-500">🎁</span>
-                  <span class="text-white"
+                  <span class="text-gray-900 dark:text-white"
                     >{{ chapter.rewards.items.length }} Itens</span
                   >
                 </div>
@@ -157,14 +165,14 @@
                   class="flex items-center space-x-1"
                 >
                   <span class="text-purple-500">⚔️</span>
-                  <span>Equipamento</span>
+                  <span class="text-gray-900 dark:text-white">Equipamento</span>
                 </div>
               </div>
             </div>
 
             <!-- Level Requirement -->
             <div class="flex items-center justify-between">
-              <div class="text-sm text-white">
+              <div class="text-sm text-gray-900 dark:text-white">
                 Nível necessário: {{ chapter.level_required }}
               </div>
               <Button
@@ -199,17 +207,6 @@
       </div>
     </div>
 
-    <!-- No Chapters State -->
-    <div v-else class="text-center py-12">
-      <div class="text-6xl mb-4">📖</div>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-        Nenhum capítulo disponível
-      </h2>
-      <p class="text-gray-600 dark:text-gray-400">
-        Suba de nível para desbloquear novos capítulos da história!
-      </p>
-    </div>
-
     <!-- Chapter Detail Modal -->
     <div
       v-if="selectedChapter"
@@ -219,12 +216,16 @@
       <Card class="w-full max-w-2xl max-h-[90vh] overflow-y-auto" @click.stop>
         <CardHeader>
           <div class="flex items-center justify-between">
-            <CardTitle class="text-2xl">{{ selectedChapter.title }}</CardTitle>
+            <CardTitle class="text-2xl text-gray-900 dark:text-white">{{
+              selectedChapter.title
+            }}</CardTitle>
             <Button @click="selectedChapter = null" variant="ghost" size="sm">
               ✕
             </Button>
           </div>
-          <CardDescription>{{ selectedChapter.description }}</CardDescription>
+          <CardDescription class="text-gray-700 dark:text-white">{{
+            selectedChapter.description
+          }}</CardDescription>
         </CardHeader>
 
         <CardContent class="space-y-6">
@@ -315,6 +316,7 @@ const loadStoryChapters = async () => {
     });
 
     if (response.success) {
+      // Usar os dados da API que já incluem o status correto
       storyChapters.value = response.data || [];
     }
   } catch (error) {
@@ -339,7 +341,7 @@ const loadCurrentGold = async () => {
       },
     });
 
-    if (response.success) {
+    if (response.success && response.data) {
       const goldResource = response.data.find(
         (r: any) => r.resource_type === "ouro"
       );
@@ -357,13 +359,11 @@ const selectChapter = (chapter: StoryChapter) => {
 const startChapterBattle = async (chapter: StoryChapter) => {
   if (!characterStore.currentCharacter) return;
 
-  // Aqui você pode implementar a lógica de batalha
-  // Por enquanto, vamos simular uma batalha
-  const battleOutcome = Math.random() > 0.3 ? "victory" : "defeat"; // 70% chance de vitória
-
   try {
     const token = useCookie("token");
-    const response = await $fetch("/api/story/complete", {
+
+    // Iniciar batalha real do capítulo
+    const battleResponse = await $fetch("/api/story/start-battle", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token.value}`,
@@ -371,35 +371,16 @@ const startChapterBattle = async (chapter: StoryChapter) => {
       body: {
         character_id: characterStore.currentCharacter.id,
         chapter: chapter.chapter,
-        outcome: battleOutcome,
       },
     });
 
-    if (response.success) {
-      if (battleOutcome === "victory") {
-        alert(
-          `Vitória! Você ganhou ${response.data.xp_gained} XP e ${response.data.gold_gained} ouro!`
-        );
-        if (response.data.level_up) {
-          alert(`Level up! Agora você é nível ${response.data.new_level}!`);
-        }
-        if (response.data.items_gained.length > 0) {
-          alert(`Itens obtidos: ${response.data.items_gained.join(", ")}`);
-        }
-        if (response.data.equipment_gained) {
-          alert(`Equipamento obtido: ${response.data.equipment_gained}`);
-        }
-      } else {
-        alert("Derrota! Tente novamente quando estiver mais forte.");
-      }
-
-      // Recarregar dados
-      await loadStoryChapters();
-      await loadCurrentGold();
+    if (battleResponse.success && battleResponse.data) {
+      // Redirecionar para a página de batalhas
+      await navigateTo("/batalhas");
     }
   } catch (error: any) {
-    console.error("Erro ao completar capítulo:", error);
-    alert(error.data?.message || "Erro ao completar capítulo");
+    console.error("Erro ao iniciar batalha do capítulo:", error);
+    alert(error.data?.message || "Erro ao iniciar batalha do capítulo");
   }
 
   selectedChapter.value = null;

@@ -1,11 +1,13 @@
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900"
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 p-4"
   >
-    <div class="max-w-md w-full space-y-8 p-8">
+    <div class="max-w-md w-full space-y-8 p-4 md:p-8">
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-white mb-2">Ninja Space RPG</h1>
-        <p class="text-gray-300">
+        <h1 class="text-2xl md:text-4xl font-bold text-white mb-2">
+          Ninja Space RPG
+        </h1>
+        <p class="text-gray-300 text-sm md:text-base">
           Entre em sua conta para continuar sua jornada
         </p>
       </div>
@@ -67,12 +69,20 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import type { LoginRequest } from "~/types";
 
 definePageMeta({
   layout: false,
-  middleware: [],
+});
+
+// Verificar se usuário já está logado e redirecionar
+onMounted(() => {
+  const token = useCookie("token");
+  if (token.value) {
+    console.log("Usuário já logado, redirecionando para /home");
+    navigateTo("/home");
+  }
 });
 
 const form = ref<LoginRequest>({

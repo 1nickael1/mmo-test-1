@@ -1,17 +1,31 @@
 <script lang="ts" setup>
-import type { ToasterProps } from "vue-sonner"
-import { Toaster as Sonner } from "vue-sonner"
+import { Toaster } from "vue-sonner";
 
-const props = defineProps<ToasterProps>()
+interface ToasterProps {
+  position?:
+    | "top-left"
+    | "top-center"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "bottom-right";
+  toastOptions?: any;
+}
+
+const props = withDefaults(defineProps<ToasterProps>(), {
+  position: "top-right",
+});
 </script>
 
 <template>
-  <Sonner
+  <Toaster
     class="toaster group"
-    v-bind="props"
+    :position="props.position"
     :toast-options="{
+      duration: 4000,
       classes: {
-        toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
+        toast:
+          'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
         description: 'group-[.toast]:text-muted-foreground',
         actionButton:
           'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',

@@ -1,10 +1,12 @@
 <template>
   <div class="space-y-8">
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Loja
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Compre itens e equipamentos para fortalecer seu personagem
       </p>
     </div>
@@ -12,26 +14,26 @@
     <!-- Character Info -->
     <div
       v-if="characterStore.currentCharacter"
-      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow"
+      class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow"
     >
-      <div class="flex items-center justify-between">
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+      >
         <div>
-          <h2 class="text-xl font-semibold text-black dark:text-white">
+          <h2
+            class="text-lg md:text-xl font-semibold text-black dark:text-white"
+          >
             {{ characterStore.currentCharacter.name }}
           </h2>
-          <p class="text-gray-600 dark:text-gray-400">
+          <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
             Nível {{ characterStore.currentCharacter.level }}
           </p>
         </div>
-        <div class="text-right">
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center space-x-2">
-              <span class="text-yellow-500">💰</span>
-              <span class="font-semibold text-black dark:text-white">
-                {{ currentGold }}
-              </span>
-            </div>
-          </div>
+        <div class="flex items-center space-x-2">
+          <span class="text-yellow-500">💰</span>
+          <span class="font-semibold text-black dark:text-white text-lg">
+            {{ currentGold }}
+          </span>
         </div>
       </div>
     </div>
@@ -64,7 +66,9 @@
       </div>
 
       <!-- Items Grid -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+      >
         <Card
           v-for="item in filteredItems"
           :key="item.id"
@@ -73,14 +77,18 @@
         >
           <CardHeader>
             <div class="flex items-center justify-between">
-              <CardTitle class="text-lg">{{ item.name }}</CardTitle>
+              <CardTitle class="text-lg text-gray-900 dark:text-white">{{
+                item.name
+              }}</CardTitle>
               <Badge
                 :variant="item.type === 'potion' ? 'default' : 'secondary'"
               >
                 {{ item.type === "potion" ? "🧪" : "⚔️" }}
               </Badge>
             </div>
-            <CardDescription>{{ item.description }}</CardDescription>
+            <CardDescription class="text-gray-700 dark:text-white">{{
+              item.description
+            }}</CardDescription>
           </CardHeader>
 
           <CardContent class="space-y-4">
@@ -132,7 +140,7 @@
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-2">
                 <span class="text-yellow-500">💰</span>
-                <span class="font-semibold text-black dark:text-black">
+                <span class="font-semibold text-gray-900 dark:text-white">
                   {{ item.price }}
                 </span>
               </div>
@@ -235,7 +243,7 @@ const loadShopItems = async () => {
         Authorization: `Bearer ${token.value}`,
       },
       query: {
-        character_id: characterStore.currentCharacter.id,
+        level: characterStore.currentCharacter.level,
       },
     });
 

@@ -2,10 +2,12 @@
   <div class="space-y-8">
     <!-- Welcome Section -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Bem-vindo, {{ characterStore.currentCharacter?.name }}!
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
         Nível {{ characterStore.currentCharacter?.level }} -
         {{
           characterStore.currentCharacter?.class === "ninja"
@@ -18,7 +20,7 @@
     <!-- Character Stats Overview -->
     <div
       v-if="characterStore.currentCharacter"
-      class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
     >
       <!-- Level & XP -->
       <Card>
@@ -259,6 +261,15 @@ definePageMeta({
 });
 
 const characterStore = useCharacterStore();
+const { showSuccess, showError, showInfo, showWarning } = useToast();
+
+// Função para testar notificações
+const testNotifications = () => {
+  showSuccess("✅ Notificação de sucesso funcionando!");
+  setTimeout(() => showError("❌ Notificação de erro funcionando!"), 500);
+  setTimeout(() => showInfo("ℹ️ Notificação de informação funcionando!"), 1000);
+  setTimeout(() => showWarning("⚠️ Notificação de aviso funcionando!"), 1500);
+};
 
 // Computed properties para progresso
 const xpForNextLevel = computed(() => {

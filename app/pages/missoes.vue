@@ -50,16 +50,10 @@
         <Card
           v-for="mission in dailyMissions"
           :key="mission.id"
-          class="hover:shadow-lg transition-all duration-200"
-          :class="
-            mission.completed
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-              : ''
-          "
+          class="hover:shadow-lg transition-shadow"
         >
           <CardHeader class="pb-2">
             <CardTitle class="text-lg flex items-center gap-2">
-              <span class="text-blue-600 dark:text-blue-400">📋</span>
               {{ mission.title }}
             </CardTitle>
           </CardHeader>
@@ -67,58 +61,36 @@
             <p class="text-sm text-gray-600 dark:text-gray-400">
               {{ mission.description }}
             </p>
-
-            <!-- Progress -->
-            <div class="space-y-2">
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-600 dark:text-gray-400">Progresso:</span>
-                <span class="font-medium"
-                  >{{ mission.progress }}/{{ mission.target }}</span
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Progresso:</span>
+              <span class="font-medium"
+                >{{ mission.progress }}/{{ mission.target }}</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Recompensas:</span>
+              <span class="font-medium">
+                {{ mission.rewards.xp }} XP, {{ mission.rewards.gold }} 🪙
+                <span v-if="mission.rewards.materials"
+                  >, {{ mission.rewards.materials }} ⚙️</span
                 >
-              </div>
-              <Progress
-                :value="(mission.progress / mission.target) * 100"
-                class="h-2"
-              />
+              </span>
             </div>
-
-            <!-- Rewards -->
-            <div class="space-y-2 text-sm">
-              <h4 class="font-medium text-gray-900 dark:text-white">
-                Recompensas:
-              </h4>
-              <div class="flex flex-wrap gap-2">
-                <Badge v-if="mission.rewards.xp > 0" variant="secondary">
-                  {{ mission.rewards.xp }} XP
-                </Badge>
-                <Badge v-if="mission.rewards.gold > 0" variant="outline">
-                  {{ mission.rewards.gold }} 🪙
-                </Badge>
-                <Badge v-if="mission.rewards.materials > 0" variant="outline">
-                  {{ mission.rewards.materials }} ⚙️
-                </Badge>
-                <Badge v-if="mission.rewards.crystals > 0" variant="outline">
-                  {{ mission.rewards.crystals }} 💎
-                </Badge>
-              </div>
-            </div>
-
-            <!-- Action Button -->
             <Button
               v-if="mission.completed"
               disabled
-              variant="outline"
+              variant="success"
               class="w-full"
             >
               ✅ Concluída
             </Button>
             <Button
               v-else-if="mission.progress >= mission.target"
-              @click="claimReward(mission.id)"
+              @click="claimDailyMission(mission.id)"
               :disabled="claiming"
               class="w-full"
             >
-              {{ claiming ? "Reivindicando..." : "Reivindicar Recompensa" }}
+              {{ claiming ? "Resgatando..." : "Resgatar Recompensa" }}
             </Button>
             <Button v-else disabled variant="outline" class="w-full">
               Em Progresso
@@ -133,70 +105,56 @@
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
         Missões da História
       </h2>
-      <div class="grid md:grid-cols-2 gap-4">
+      <div v-if="loading" class="text-center py-8">
+        <p class="text-gray-500 dark:text-gray-400">Carregando missões...</p>
+      </div>
+      <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card
-          v-for="mission in storyMissions"
+          v-for="mission in missions"
           :key="mission.id"
-          class="hover:shadow-lg transition-all duration-200"
-          :class="
-            mission.completed
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-              : ''
+          :class="{
+            'hover:shadow-lg transition-shadow cursor-pointer':
+              mission.available && !mission.completed,
+            'opacity-60 cursor-not-allowed':
+              !mission.available || mission.completed,
+          }"
+          @click="
+            mission.available && !mission.completed
+              ? startStoryMission(mission.id)
+              : null
           "
         >
           <CardHeader class="pb-2">
             <CardTitle class="text-lg flex items-center gap-2">
-              <span class="text-purple-600 dark:text-purple-400">📖</span>
-              {{ mission.title }}
+              📖 {{ mission.title }}
             </CardTitle>
           </CardHeader>
           <CardContent class="space-y-3">
             <p class="text-sm text-gray-600 dark:text-gray-400">
               {{ mission.description }}
             </p>
-
-            <!-- Requirements -->
-            <div v-if="mission.requirements" class="space-y-2 text-sm">
-              <h4 class="font-medium text-gray-900 dark:text-white">
-                Requisitos:
-              </h4>
-              <ul class="space-y-1">
-                <li
-                  v-for="req in mission.requirements"
-                  :key="req"
-                  class="flex items-center gap-2"
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Requisitos:</span>
+              <span class="font-medium"
+                >Nível {{ mission.required_level }}</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Recompensas:</span>
+              <span class="font-medium">
+                {{ mission.rewards.xp }} XP, {{ mission.rewards.gold }} 🪙
+                <span v-if="mission.rewards.materials"
+                  >, {{ mission.rewards.materials }} ⚙️</span
                 >
-                  <span class="text-green-600">✅</span>
-                  <span class="text-gray-600 dark:text-gray-400">{{
-                    req
-                  }}</span>
-                </li>
-              </ul>
+                <span v-if="mission.rewards.crystals"
+                  >, {{ mission.rewards.crystals }} 💎</span
+                >
+              </span>
             </div>
-
-            <!-- Rewards -->
-            <div class="space-y-2 text-sm">
-              <h4 class="font-medium text-gray-900 dark:text-white">
-                Recompensas:
-              </h4>
-              <div class="flex flex-wrap gap-2">
-                <Badge v-if="mission.rewards.xp > 0" variant="secondary">
-                  {{ mission.rewards.xp }} XP
-                </Badge>
-                <Badge v-if="mission.rewards.gold > 0" variant="outline">
-                  {{ mission.rewards.gold }} 🪙
-                </Badge>
-                <Badge v-if="mission.rewards.items" variant="outline">
-                  {{ mission.rewards.items.join(", ") }}
-                </Badge>
-              </div>
-            </div>
-
-            <!-- Action Button -->
             <Button
               v-if="mission.completed"
               disabled
-              variant="outline"
+              variant="success"
               class="w-full"
             >
               ✅ Concluída
@@ -231,6 +189,8 @@ const characterStore = useCharacterStore();
 
 const claiming = ref(false);
 const starting = ref(false);
+const loading = ref(false);
+const missions = ref<any[]>([]);
 
 // Missões diárias (simuladas)
 const dailyMissions = ref([
@@ -263,74 +223,119 @@ const dailyMissions = ref([
   },
 ]);
 
-// Missões da história (simuladas)
-const storyMissions = ref([
-  {
-    id: "story_1",
-    title: "Primeiros Passos",
-    description:
-      "Complete seu primeiro treinamento e torne-se um verdadeiro ninja espacial.",
-    completed: false,
-    available: true,
-    requirements: ["Nível 2", "Aprender 2 habilidades"],
-    rewards: { xp: 500, gold: 300, items: ["Espada de Energia"] },
-  },
-  {
-    id: "story_2",
-    title: "Ameaça Espacial",
-    description: "Derrote o Lorde das Sombras e proteja a galáxia.",
-    completed: false,
-    available: false,
-    requirements: ["Nível 5", "Derrotar 10 oponentes"],
-    rewards: { xp: 1000, gold: 500, items: ["Armadura Espacial"] },
-  },
-  {
-    id: "story_3",
-    title: "Mestre das Artes",
-    description:
-      "Domine todas as técnicas ninja e torne-se um verdadeiro mestre.",
-    completed: false,
-    available: false,
-    requirements: ["Nível 8", "Aprender todas as habilidades"],
-    rewards: { xp: 2000, gold: 1000, items: ["Cristal do Poder"] },
-  },
-]);
-
-const claimReward = async (missionId: string) => {
+const claimDailyMission = async (missionId: string) => {
   claiming.value = true;
-
   try {
-    // Simular reivindicação de recompensa
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    // Lógica para resgatar recompensa da missão diária
+    console.log(`Resgatando missão diária: ${missionId}`);
     const mission = dailyMissions.value.find((m) => m.id === missionId);
     if (mission) {
       mission.completed = true;
-      // Aqui você adicionaria a lógica para dar as recompensas ao jogador
+      // Adicionar XP e ouro ao personagem (simulado)
+      if (characterStore.currentCharacter) {
+        await characterStore.addXp(
+          characterStore.currentCharacter.id,
+          mission.rewards.xp
+        );
+        // Lógica para adicionar ouro e materiais
+      }
     }
+    // Notificação de sucesso
   } catch (error) {
-    console.error("Erro ao reivindicar recompensa:", error);
+    console.error("Erro ao resgatar missão diária:", error);
+    // Notificação de erro
   } finally {
     claiming.value = false;
   }
 };
 
 const startStoryMission = async (missionId: string) => {
+  if (!characterStore.currentCharacter) return;
+
   starting.value = true;
-
   try {
-    // Simular início de missão
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const token = useCookie("token");
+    const response = await $fetch("/api/missions/complete", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: {
+        character_id: characterStore.currentCharacter.id,
+        mission_id: missionId,
+      },
+    });
 
-    const mission = storyMissions.value.find((m) => m.id === missionId);
-    if (mission) {
-      mission.available = false;
-      // Aqui você adicionaria a lógica para iniciar a missão
+    if (response.success) {
+      // Atualizar estado da missão
+      const completedMission = missions.value.find((m) => m.id === missionId);
+      if (completedMission) {
+        completedMission.completed = true;
+      }
+      // Atualizar personagem no store (XP, etc.)
+      await characterStore.loadCharacters();
+      // Notificação de sucesso
     }
   } catch (error) {
-    console.error("Erro ao iniciar missão:", error);
+    console.error("Erro ao iniciar/completar missão da história:", error);
+    // Notificação de erro
   } finally {
     starting.value = false;
+  }
+};
+
+const loadMissions = async () => {
+  if (!characterStore.currentCharacter) return;
+
+  loading.value = true;
+  try {
+    const token = useCookie("token");
+    const response = await $fetch(
+      `/api/missions?level=${characterStore.currentCharacter.level}&class=${characterStore.currentCharacter.class}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    );
+
+    if (response.success) {
+      missions.value = response.data || [];
+    }
+  } catch (error) {
+    console.error("Erro ao carregar missões:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const updateMissionProgress = () => {
+  if (!characterStore.currentCharacter) return;
+
+  const character = characterStore.currentCharacter;
+
+  // Missão de batalhas (simular progresso)
+  const battleMission = dailyMissions.value.find(
+    (m) => m.id === "daily_battle_1"
+  );
+  if (battleMission) {
+    battleMission.progress = Math.min(3, Math.floor(character.level / 2));
+  }
+
+  // Missão de habilidades (simular progresso)
+  const skillMission = dailyMissions.value.find(
+    (m) => m.id === "daily_skill_1"
+  );
+  if (skillMission) {
+    skillMission.progress = character.level >= 3 ? 1 : 0;
+  }
+
+  // Missão de melhorias (simular progresso)
+  const upgradeMission = dailyMissions.value.find(
+    (m) => m.id === "daily_upgrade_1"
+  );
+  if (upgradeMission) {
+    upgradeMission.progress = character.level >= 4 ? 1 : 0;
   }
 };
 
@@ -342,50 +347,7 @@ onMounted(async () => {
     }
   }
 
-  // Simular progresso das missões baseado no personagem
-  if (characterStore.currentCharacter) {
-    // Atualizar missões baseado no progresso do personagem
-    const character = characterStore.currentCharacter;
-
-    // Missão de batalhas (simular progresso)
-    const battleMission = dailyMissions.value.find(
-      (m) => m.id === "daily_battle_1"
-    );
-    if (battleMission) {
-      battleMission.progress = Math.min(3, Math.floor(character.level / 2));
-    }
-
-    // Missão de habilidades (simular progresso)
-    const skillMission = dailyMissions.value.find(
-      (m) => m.id === "daily_skill_1"
-    );
-    if (skillMission) {
-      skillMission.progress = character.level >= 3 ? 1 : 0;
-    }
-
-    // Missão de melhorias (simular progresso)
-    const upgradeMission = dailyMissions.value.find(
-      (m) => m.id === "daily_upgrade_1"
-    );
-    if (upgradeMission) {
-      upgradeMission.progress = character.level >= 4 ? 1 : 0;
-    }
-
-    // Atualizar disponibilidade das missões da história
-    const story1 = storyMissions.value.find((m) => m.id === "story_1");
-    if (story1) {
-      story1.available = character.level >= 2;
-    }
-
-    const story2 = storyMissions.value.find((m) => m.id === "story_2");
-    if (story2) {
-      story2.available = character.level >= 5;
-    }
-
-    const story3 = storyMissions.value.find((m) => m.id === "story_3");
-    if (story3) {
-      story3.available = character.level >= 8;
-    }
-  }
+  await loadMissions();
+  updateMissionProgress();
 });
 </script>

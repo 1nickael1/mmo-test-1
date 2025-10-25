@@ -78,11 +78,20 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 definePageMeta({
   layout: false,
-  middleware: [],
+});
+
+// Verificar se usuário já está logado e redirecionar
+onMounted(() => {
+  const token = useCookie("token");
+  if (token.value) {
+    console.log("Usuário já logado, redirecionando para /home");
+    navigateTo("/home");
+  }
 });
 </script>

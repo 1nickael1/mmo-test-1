@@ -111,6 +111,9 @@ export interface StoryChapter {
     equipment?: string;
   };
   level_required: number;
+  can_play?: boolean;
+  is_completed?: boolean;
+  is_locked?: boolean;
 }
 
 export interface StoryProgress {
