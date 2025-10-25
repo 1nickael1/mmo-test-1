@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       WHERE id = ? AND user_id = ?
     `
       )
-      .get(characterId, payload.userId);
+      .get(characterId, payload.id);
 
     if (!character) {
       throw createError({
@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
           INSERT INTO resources (character_id, resource_type, amount)
           VALUES (?, ?, 0)
         `
-        ).run(characterId, type);
+        ).run(characterId, type as "ouro" | "cristais" | "materiais");
       }
     }
 

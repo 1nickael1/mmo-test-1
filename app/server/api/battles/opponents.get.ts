@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event);
     const characterLevel = parseInt(query.level as string) || 1;
+    const characterClass = (query.class as string) || "ninja";
 
     // Definir NPCs por nível (1-50)
     const npcsByLevel: Record<number, NPC[]> = {
@@ -869,6 +870,335 @@ export default defineEventHandler(async (event) => {
       ],
     };
 
+    // Adicionar oponentes específicos por classe
+    const getClassSpecificOpponents = (
+      level: number,
+      characterClass: string
+    ): NPC[] => {
+      const classOpponents: Record<string, Record<number, NPC[]>> = {
+        ninja: {
+          1: [
+            {
+              id: "ninja_trainee_1",
+              name: "Ninja Aprendiz",
+              level: 1,
+              stats: {
+                strength: 6,
+                agility: 8,
+                defense: 4,
+                health: 45,
+                max_health: 45,
+              },
+              xp_reward: 120,
+              gold_reward: 30,
+              difficulty: "easy",
+            },
+          ],
+          3: [
+            {
+              id: "ninja_assassin_3",
+              name: "Ninja Assassino",
+              level: 3,
+              stats: {
+                strength: 10,
+                agility: 12,
+                defense: 6,
+                health: 85,
+                max_health: 85,
+              },
+              xp_reward: 220,
+              gold_reward: 70,
+              difficulty: "easy",
+            },
+          ],
+          5: [
+            {
+              id: "ninja_master_5",
+              name: "Mestre Ninja",
+              level: 5,
+              stats: {
+                strength: 14,
+                agility: 16,
+                defense: 8,
+                health: 125,
+                max_health: 125,
+              },
+              xp_reward: 350,
+              gold_reward: 120,
+              difficulty: "medium",
+            },
+          ],
+        },
+        guerreiro_espacial: {
+          1: [
+            {
+              id: "space_marine_1",
+              name: "Marine Espacial",
+              level: 1,
+              stats: {
+                strength: 8,
+                agility: 5,
+                defense: 7,
+                health: 60,
+                max_health: 60,
+              },
+              xp_reward: 110,
+              gold_reward: 28,
+              difficulty: "easy",
+            },
+          ],
+          3: [
+            {
+              id: "space_commando_3",
+              name: "Comando Espacial",
+              level: 3,
+              stats: {
+                strength: 12,
+                agility: 8,
+                defense: 10,
+                health: 95,
+                max_health: 95,
+              },
+              xp_reward: 210,
+              gold_reward: 65,
+              difficulty: "easy",
+            },
+          ],
+          5: [
+            {
+              id: "space_captain_5",
+              name: "Capitão Espacial",
+              level: 5,
+              stats: {
+                strength: 16,
+                agility: 10,
+                defense: 14,
+                health: 140,
+                max_health: 140,
+              },
+              xp_reward: 320,
+              gold_reward: 110,
+              difficulty: "medium",
+            },
+          ],
+        },
+        mago_elemental: {
+          1: [
+            {
+              id: "apprentice_mage_1",
+              name: "Aprendiz Mago",
+              level: 1,
+              stats: {
+                strength: 4,
+                agility: 6,
+                defense: 5,
+                health: 40,
+                max_health: 40,
+              },
+              xp_reward: 130,
+              gold_reward: 32,
+              difficulty: "easy",
+            },
+          ],
+          3: [
+            {
+              id: "elemental_mage_3",
+              name: "Mago Elemental",
+              level: 3,
+              stats: {
+                strength: 7,
+                agility: 9,
+                defense: 7,
+                health: 80,
+                max_health: 80,
+              },
+              xp_reward: 230,
+              gold_reward: 75,
+              difficulty: "easy",
+            },
+          ],
+          5: [
+            {
+              id: "archmage_5",
+              name: "Arquimago",
+              level: 5,
+              stats: {
+                strength: 10,
+                agility: 12,
+                defense: 9,
+                health: 120,
+                max_health: 120,
+              },
+              xp_reward: 380,
+              gold_reward: 130,
+              difficulty: "medium",
+            },
+          ],
+        },
+        arqueiro_elfo: {
+          1: [
+            {
+              id: "elf_scout_1",
+              name: "Batedor Élfico",
+              level: 1,
+              stats: {
+                strength: 5,
+                agility: 9,
+                defense: 4,
+                health: 42,
+                max_health: 42,
+              },
+              xp_reward: 125,
+              gold_reward: 30,
+              difficulty: "easy",
+            },
+          ],
+          3: [
+            {
+              id: "elf_ranger_3",
+              name: "Patrulheiro Élfico",
+              level: 3,
+              stats: {
+                strength: 8,
+                agility: 13,
+                defense: 6,
+                health: 82,
+                max_health: 82,
+              },
+              xp_reward: 225,
+              gold_reward: 70,
+              difficulty: "easy",
+            },
+          ],
+          5: [
+            {
+              id: "elf_archer_master_5",
+              name: "Mestre Arqueiro Élfico",
+              level: 5,
+              stats: {
+                strength: 11,
+                agility: 17,
+                defense: 8,
+                health: 122,
+                max_health: 122,
+              },
+              xp_reward: 370,
+              gold_reward: 125,
+              difficulty: "medium",
+            },
+          ],
+        },
+        paladino_sagrado: {
+          1: [
+            {
+              id: "holy_warrior_1",
+              name: "Guerreiro Sagrado",
+              level: 1,
+              stats: {
+                strength: 7,
+                agility: 5,
+                defense: 8,
+                health: 55,
+                max_health: 55,
+              },
+              xp_reward: 115,
+              gold_reward: 28,
+              difficulty: "easy",
+            },
+          ],
+          3: [
+            {
+              id: "templar_3",
+              name: "Templário",
+              level: 3,
+              stats: {
+                strength: 11,
+                agility: 7,
+                defense: 12,
+                health: 90,
+                max_health: 90,
+              },
+              xp_reward: 215,
+              gold_reward: 68,
+              difficulty: "easy",
+            },
+          ],
+          5: [
+            {
+              id: "paladin_5",
+              name: "Paladino",
+              level: 5,
+              stats: {
+                strength: 15,
+                agility: 9,
+                defense: 16,
+                health: 135,
+                max_health: 135,
+              },
+              xp_reward: 340,
+              gold_reward: 115,
+              difficulty: "medium",
+            },
+          ],
+        },
+        ladrao_sombrio: {
+          1: [
+            {
+              id: "thief_1",
+              name: "Ladrão",
+              level: 1,
+              stats: {
+                strength: 5,
+                agility: 10,
+                defense: 3,
+                health: 38,
+                max_health: 38,
+              },
+              xp_reward: 120,
+              gold_reward: 35,
+              difficulty: "easy",
+            },
+          ],
+          3: [
+            {
+              id: "rogue_3",
+              name: "Ladino",
+              level: 3,
+              stats: {
+                strength: 8,
+                agility: 14,
+                defense: 5,
+                health: 78,
+                max_health: 78,
+              },
+              xp_reward: 220,
+              gold_reward: 80,
+              difficulty: "easy",
+            },
+          ],
+          5: [
+            {
+              id: "assassin_5",
+              name: "Assassino",
+              level: 5,
+              stats: {
+                strength: 11,
+                agility: 18,
+                defense: 7,
+                health: 118,
+                max_health: 118,
+              },
+              xp_reward: 360,
+              gold_reward: 140,
+              difficulty: "medium",
+            },
+          ],
+        },
+      };
+
+      return classOpponents[characterClass]?.[level] || [];
+    };
+
     // Retornar NPCs disponíveis para o nível do personagem
     const availableNpcs: NPC[] = [];
 
@@ -881,6 +1211,10 @@ export default defineEventHandler(async (event) => {
       if (npcsByLevel[level]) {
         availableNpcs.push(...npcsByLevel[level]);
       }
+
+      // Adicionar oponentes específicos da classe
+      const classOpponents = getClassSpecificOpponents(level, characterClass);
+      availableNpcs.push(...classOpponents);
     }
 
     const response: ApiResponse<NPC[]> = {

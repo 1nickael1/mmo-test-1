@@ -31,8 +31,7 @@ export const useHealthRegeneration = () => {
           // Recarregar personagem para atualizar a vida
           await characterStore.loadCharacters();
         } catch (error) {
-          console.error("Erro na regeneração de vida:", error);
-        }
+          }
       }
     }, 15000); // 15 segundos
   };

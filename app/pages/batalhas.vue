@@ -511,8 +511,7 @@ const loadOpponents = async () => {
     );
     opponents.value = response.data || [];
   } catch (error) {
-    console.error("Erro ao carregar oponentes:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };
@@ -552,8 +551,7 @@ const loadSkills = async () => {
       }
     });
   } catch (error) {
-    console.error("Erro ao carregar habilidades:", error);
-  }
+    }
 };
 
 const saveBattleState = async () => {
@@ -580,8 +578,7 @@ const saveBattleState = async () => {
       },
     });
   } catch (error) {
-    console.error("Erro ao salvar batalha:", error);
-  }
+    }
 };
 
 const loadActiveBattle = async () => {
@@ -630,8 +627,7 @@ const loadActiveBattle = async () => {
       startCooldownTimer();
     }
   } catch (error) {
-    console.error("Erro ao carregar batalha ativa:", error);
-  }
+    }
 };
 
 const finishBattle = async () => {
@@ -649,8 +645,7 @@ const finishBattle = async () => {
       },
     });
   } catch (error) {
-    console.error("Erro ao finalizar batalha:", error);
-  }
+    }
 };
 
 const startBattle = async (opponent: NPC) => {
@@ -684,8 +679,7 @@ const startBattle = async (opponent: NPC) => {
       await saveBattleState();
     }
   } catch (error) {
-    console.error("Erro ao iniciar batalha:", error);
-  } finally {
+    } finally {
     battleLoading.value = false;
   }
 };
@@ -782,7 +776,6 @@ const useSkill = async (skill: any) => {
       }
     }
   } catch (error: any) {
-    console.error("Erro ao usar habilidade:", error);
     battleMessage.value = error.data?.message || "Erro ao usar habilidade";
   } finally {
     battleLoading.value = false;
@@ -900,8 +893,7 @@ const resolveBattle = async (outcome: "victory" | "defeat") => {
       await characterStore.loadCharacters();
     }
   } catch (error) {
-    console.error("Erro ao resolver batalha:", error);
-  }
+    }
 };
 
 const resetBattle = () => {
@@ -940,13 +932,12 @@ const stopCooldownTimer = () => {
   }
 };
 
+// Usar o composable de gerenciamento de personagem
+const { ensureCharacterSelected, onCharacterChange } = useCharacterManager();
+
 onMounted(async () => {
-  if (!characterStore.currentCharacter) {
-    await characterStore.loadCharacters();
-    if (characterStore.characters.length > 0) {
-      characterStore.selectCharacter(characterStore.characters[0]);
-    }
-  }
+  // Garantir que há um personagem selecionado
+  await ensureCharacterSelected();
 
   // Carregar batalha ativa primeiro
   await loadActiveBattle();
@@ -958,5 +949,14 @@ onMounted(async () => {
   if (battleState.value === "selecting") {
     await loadOpponents();
   }
+
+  // Escutar mudanças de personagem
+  onCharacterChange(async (character) => {
+    await loadActiveBattle();
+    await loadSkills();
+    if (battleState.value === "selecting") {
+      await loadOpponents();
+    }
+  });
 });
 </script>

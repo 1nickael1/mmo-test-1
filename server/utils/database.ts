@@ -200,8 +200,7 @@ export function initializeDatabase() {
     // Coluna já existe
   }
 
-  console.log("Database initialized successfully");
-}
+  }
 
 // Initialize database on import
 initializeDatabase();

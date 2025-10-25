@@ -370,7 +370,7 @@ export default defineEventHandler(async (event) => {
       WHERE id = ? AND user_id = ?
     `
       )
-      .get(character_id, payload.userId) as any;
+      .get(character_id, payload.id) as any;
 
     if (!character) {
       throw createError({
@@ -445,7 +445,7 @@ export default defineEventHandler(async (event) => {
           SET quantity = quantity + 1, created_at = CURRENT_TIMESTAMP
           WHERE id = ?
         `
-        ).run(existingItem.id);
+        ).run((existingItem as any).id);
       } else {
         // Criar novo item
         db.prepare(

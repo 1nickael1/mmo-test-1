@@ -73,7 +73,9 @@
             <CardContent>
               <div class="space-y-2">
                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ getSkillDescription(skill.skill_name) }}
+                  {{
+                    skill.description || getSkillDescription(skill.skill_name)
+                  }}
                 </p>
                 <div class="flex items-center justify-between text-sm">
                   <span class="text-gray-600 dark:text-gray-400">Nível:</span>
@@ -125,7 +127,13 @@
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
                     <span class="text-gray-600 dark:text-gray-400">Custo:</span>
-                    <span class="font-medium">{{ skill.cost }} XP</span>
+                    <span class="font-medium">{{ skill.cost }} 🪙</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-400"
+                      >XP necessário:</span
+                    >
+                    <span class="font-medium">{{ skill.xp_required }} XP</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-gray-600 dark:text-gray-400"
@@ -167,25 +175,28 @@
                   <div class="flex items-center gap-2">
                     <span
                       :class="
-                        (characterStore.currentCharacter?.xp || 0) >= skill.cost
+                        (characterStore.currentCharacter?.xp || 0) >=
+                        skill.xp_required
                           ? 'text-green-600'
                           : 'text-red-600'
                       "
                     >
                       {{
-                        (characterStore.currentCharacter?.xp || 0) >= skill.cost
+                        (characterStore.currentCharacter?.xp || 0) >=
+                        skill.xp_required
                           ? "✅"
                           : "❌"
                       }}
                     </span>
                     <span
                       :class="
-                        (characterStore.currentCharacter?.xp || 0) >= skill.cost
+                        (characterStore.currentCharacter?.xp || 0) >=
+                        skill.xp_required
                           ? 'text-green-600'
                           : 'text-red-600'
                       "
                     >
-                      {{ skill.cost }} XP
+                      {{ skill.xp_required }} XP
                     </span>
                   </div>
                 </div>
@@ -277,14 +288,21 @@ const loadSkills = async () => {
     const learnedSkillNames = learnedSkills.value.map(
       (skill) => skill.skill_name
     );
-    availableSkills.value = allSkills.map((skill) => ({
-      ...skill,
-      learned: learnedSkillNames.includes(skill.name),
-      can_learn: skill.can_learn && !learnedSkillNames.includes(skill.name),
-    }));
+    availableSkills.value = allSkills.map((skill) => {
+      const hasLevel =
+        (characterStore.currentCharacter?.level || 0) >= skill.level_required;
+      const hasXp =
+        (characterStore.currentCharacter?.xp || 0) >= skill.xp_required;
+      const isLearned = learnedSkillNames.includes(skill.name);
+
+      return {
+        ...skill,
+        learned: isLearned,
+        can_learn: hasLevel && hasXp && !isLearned,
+      };
+    });
   } catch (error) {
-    console.error("Erro ao carregar habilidades:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };
@@ -310,21 +328,24 @@ const learnSkill = async (skillName: string) => {
       await characterStore.loadCharacters();
     }
   } catch (error: any) {
-    console.error("Erro ao aprender habilidade:", error);
     // Aqui você pode adicionar um toast de erro
   } finally {
     learning.value = false;
   }
 };
 
+// Usar o composable de gerenciamento de personagem
+const { ensureCharacterSelected, onCharacterChange } = useCharacterManager();
+
 onMounted(async () => {
-  if (!characterStore.currentCharacter) {
-    await characterStore.loadCharacters();
-    if (characterStore.characters.length > 0) {
-      characterStore.selectCharacter(characterStore.characters[0]);
-    }
-  }
+  // Garantir que há um personagem selecionado
+  await ensureCharacterSelected();
 
   await loadSkills();
+
+  // Escutar mudanças de personagem
+  onCharacterChange(async (character) => {
+    await loadSkills();
+  });
 });
 </script>

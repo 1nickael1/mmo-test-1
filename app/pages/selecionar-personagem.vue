@@ -2,7 +2,9 @@
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <h1 class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+      <h1
+        class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         Selecionar Personagem
       </h1>
       <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
@@ -19,7 +21,9 @@
 
     <!-- Characters Grid -->
     <div v-else-if="characters.length > 0" class="space-y-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+      >
         <Card
           v-for="character in characters"
           :key="character.id"
@@ -39,11 +43,7 @@
               <Badge
                 :variant="character.class === 'ninja' ? 'default' : 'secondary'"
               >
-                {{
-                  character.class === "ninja"
-                    ? "🥷 Ninja"
-                    : "🚀 Guerreiro"
-                }}
+                {{ character.class === "ninja" ? "🥷 Ninja" : "🚀 Guerreiro" }}
               </Badge>
             </div>
             <CardDescription class="text-gray-700 dark:text-white">
@@ -83,7 +83,9 @@
             <!-- XP Progress -->
             <div class="space-y-2">
               <div class="flex justify-between text-sm">
-                <span class="text-gray-600 dark:text-gray-400">Progresso XP:</span>
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Progresso XP:</span
+                >
                 <span class="font-medium">
                   {{ xpForNextLevel(character) }} para próximo nível
                 </span>
@@ -96,7 +98,10 @@
               <div class="text-sm text-gray-600 dark:text-gray-400">
                 Criado em: {{ formatDate(character.created_at) }}
               </div>
-              <div v-if="currentCharacter?.id === character.id" class="flex items-center gap-1">
+              <div
+                v-if="currentCharacter?.id === character.id"
+                class="flex items-center gap-1"
+              >
                 <Badge variant="default" class="bg-green-600 text-white">
                   ✅ Ativo
                 </Badge>
@@ -136,7 +141,10 @@
     </div>
 
     <!-- Current Character Info -->
-    <div v-if="currentCharacter" class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+    <div
+      v-if="currentCharacter"
+      class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+    >
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100">
@@ -173,14 +181,18 @@ onMounted(async () => {
   await characterStore.loadCharacters();
 });
 
+// Usar o composable de gerenciamento de personagem
+const { switchCharacter } = useCharacterManager();
+
 // Selecionar personagem
 const selectCharacter = async (character: Character) => {
-  characterStore.selectCharacter(character);
-  
+  // Trocar personagem usando o composable
+  await switchCharacter(character);
+
   // Mostrar notificação de sucesso
   const { showSuccess } = useToast();
   showSuccess(`Personagem ${character.name} selecionado!`);
-  
+
   // Redirecionar para home após um pequeno delay
   setTimeout(() => {
     router.push("/home");
@@ -207,7 +219,8 @@ const xpForNextLevel = (character: Character): number => {
 const getXpProgress = (character: Character): number => {
   const currentLevelXp = characterStore.getXpForLevel(character.level - 1);
   const nextLevelXp = characterStore.getXpForLevel(character.level);
-  const progress = ((character.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
+  const progress =
+    ((character.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
   return Math.max(0, Math.min(100, progress));
 };
 

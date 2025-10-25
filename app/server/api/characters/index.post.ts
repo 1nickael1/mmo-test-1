@@ -9,7 +9,12 @@ import db from "../../utils/database";
 export default defineEventHandler(async (event) => {
   try {
     const authHeader = getHeader(event, "authorization");
-    const token = extractTokenFromHeader(authHeader);
+    let token = extractTokenFromHeader(authHeader);
+    // Fallback: usa cookie "token" se não houver Authorization header
+    if (!token) {
+      const cookieToken = getCookie(event, "token");
+      token = cookieToken || null;
+    }
 
     if (!token) {
       throw createError({
@@ -44,7 +49,7 @@ export default defineEventHandler(async (event) => {
       WHERE user_id = ? AND name = ?
     `
       )
-      .get(payload.userId, name);
+      .get(payload.id, name);
 
     if (existingCharacter) {
       throw createError({
@@ -54,22 +59,66 @@ export default defineEventHandler(async (event) => {
     }
 
     // Stats base por classe
-    const baseStats =
-      characterClass === "ninja"
-        ? {
-            strength: 8,
-            agility: 12,
-            defense: 6,
-            health: 80,
-            max_health: 80,
-          }
-        : {
-            strength: 12,
-            agility: 6,
-            defense: 10,
-            health: 100,
-            max_health: 100,
-          };
+    const getBaseStats = (characterClass: string) => {
+      const statsByClass = {
+        ninja: {
+          strength: 8,
+          agility: 12,
+          defense: 6,
+          health: 80,
+          max_health: 80,
+        },
+        guerreiro_espacial: {
+          strength: 12,
+          agility: 6,
+          defense: 10,
+          health: 100,
+          max_health: 100,
+        },
+        mago_cosmico: {
+          strength: 5,
+          agility: 8,
+          defense: 4,
+          health: 70,
+          max_health: 70,
+        },
+        arqueiro_estelar: {
+          strength: 7,
+          agility: 10,
+          defense: 5,
+          health: 75,
+          max_health: 75,
+        },
+        clerigo_divino: {
+          strength: 6,
+          agility: 7,
+          defense: 8,
+          health: 90,
+          max_health: 90,
+        },
+        assassino_sombrio: {
+          strength: 6,
+          agility: 13,
+          defense: 4,
+          health: 65,
+          max_health: 65,
+        },
+        paladino_cosmico: {
+          strength: 11,
+          agility: 6,
+          defense: 12,
+          health: 110,
+          max_health: 110,
+        },
+      };
+
+      return (
+        statsByClass[characterClass as keyof typeof statsByClass] ||
+        statsByClass.ninja
+      );
+    };
+
+    const baseStats = getBaseStats(characterClass);
 
     // Inserir personagem
     const result = db
@@ -79,7 +128,7 @@ export default defineEventHandler(async (event) => {
       VALUES (?, ?, ?, 1, 0, ?)
     `
       )
-      .run(payload.userId, name, characterClass, JSON.stringify(baseStats));
+      .run(payload.id, name, characterClass, JSON.stringify(baseStats));
 
     // Buscar personagem criado
     const newCharacter = db

@@ -1,4 +1,4 @@
-import { defineNuxtPlugin } from "#app";
+import { defineNuxtPlugin } from "nuxt/app";
 
 export default defineNuxtPlugin(() => {
   // Este plugin garante que os componentes sejam carregados no lado do cliente

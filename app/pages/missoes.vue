@@ -231,7 +231,6 @@ const claimDailyMission = async (missionId: string) => {
   claiming.value = true;
   try {
     // Lógica para resgatar recompensa da missão diária
-    console.log(`Resgatando missão diária: ${missionId}`);
     const mission = dailyMissions.value.find((m) => m.id === missionId);
     if (mission) {
       mission.completed = true;
@@ -246,7 +245,6 @@ const claimDailyMission = async (missionId: string) => {
     }
     // Notificação de sucesso
   } catch (error) {
-    console.error("Erro ao resgatar missão diária:", error);
     // Notificação de erro
   } finally {
     claiming.value = false;
@@ -281,7 +279,6 @@ const startStoryMission = async (missionId: string) => {
       // Notificação de sucesso
     }
   } catch (error) {
-    console.error("Erro ao iniciar/completar missão da história:", error);
     // Notificação de erro
   } finally {
     starting.value = false;
@@ -307,8 +304,7 @@ const loadMissions = async () => {
       missions.value = response.data || [];
     }
   } catch (error) {
-    console.error("Erro ao carregar missões:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };

@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     // Buscar usuário no banco
     const user = db
       .prepare("SELECT * FROM users WHERE id = ?")
-      .get(payload.userId) as User;
+      .get(payload.id) as User;
 
     if (!user) {
       throw createError({

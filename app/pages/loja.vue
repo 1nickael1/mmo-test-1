@@ -251,8 +251,7 @@ const loadShopItems = async () => {
       shopItems.value = response.data || [];
     }
   } catch (error) {
-    console.error("Erro ao carregar itens da loja:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };
@@ -279,8 +278,7 @@ const loadCurrentGold = async () => {
       currentGold.value = goldResource ? goldResource.amount : 0;
     }
   } catch (error) {
-    console.error("Erro ao carregar ouro:", error);
-  }
+    }
 };
 
 const buyItem = async (item: ShopItem) => {
@@ -311,7 +309,6 @@ const buyItem = async (item: ShopItem) => {
       await loadCurrentGold();
     }
   } catch (error: any) {
-    console.error("Erro ao comprar item:", error);
     alert(error.data?.message || "Erro ao comprar item");
   } finally {
     loading.value = false;

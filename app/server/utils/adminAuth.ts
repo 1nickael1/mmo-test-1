@@ -38,7 +38,10 @@ export function verifyRootToken(token: string): any {
       process.env.JWT_SECRET || "your-secret-key"
     );
 
-    if (decoded.role !== "admin" || decoded.username !== "root") {
+    if (
+      (decoded as any).role !== "admin" ||
+      (decoded as any).username !== "root"
+    ) {
       return null;
     }
 
@@ -54,8 +57,5 @@ export function hashPassword(password: string): string {
 
 export function updateRootPassword(newPassword: string): void {
   // Em produção, isso deveria salvar em um arquivo de configuração ou banco de dados
-  console.log(`Nova senha root seria: ${hashPassword(newPassword)}`);
-  console.log(
-    "Em produção, atualize a variável ROOT_USER.password com o hash acima"
-  );
-}
+  }`);
+  }

@@ -1,0 +1,65 @@
+{
+  "user": {
+    "id": 6,
+    "email": "test@example.com",
+    "password_hash": "$2a$10$WE.Z65euMpgI2EDYUrf9X.tdFRGnkaBmR0SOFujpUYBN7Rev4SiQK",
+    "username": "testuser",
+    "created_at": "2025-10-25 13:12:37",
+    "updated_at": "2025-10-25 13:12:37"
+  },
+  "characters": [
+    {
+      "id": 2,
+      "user_id": 6,
+      "name": "TestNinja",
+      "class": "ninja",
+      "level": 1,
+      "xp": 1000,
+      "stats_json": "{\"strength\":8,\"agility\":12,\"defense\":6,\"health\":80,\"max_health\":80}",
+      "created_at": "2025-10-25 13:16:34",
+      "updated_at": "2025-10-25 13:17:15"
+    }
+  ],
+  "resources": [
+    {
+      "id": 17,
+      "character_id": 2,
+      "resource_type": "cristais",
+      "amount": 0,
+      "updated_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 16,
+      "character_id": 2,
+      "resource_type": "materiais",
+      "amount": 0,
+      "updated_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 15,
+      "character_id": 2,
+      "resource_type": "ouro",
+      "amount": 1000,
+      "updated_at": "2025-10-25 17:41:42"
+    }
+  ],
+  "skills": [
+    {
+      "id": 5,
+      "character_id": 2,
+      "skill_name": "Kunai Throw",
+      "level": 1,
+      "unlocked": 0,
+      "created_at": "2025-10-25 17:41:35",
+      "cooldown_seconds": 1,
+      "damage": 20,
+      "description": null,
+      "last_used": null
+    }
+  ],
+  "equipment": [],
+  "items": [],
+  "upgrades": [],
+  "battles": [],
+  "story_progress": []
+}

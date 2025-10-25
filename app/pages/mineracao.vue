@@ -279,8 +279,7 @@ const loadResources = async () => {
     );
     resources.value = response.data || [];
   } catch (error) {
-    console.error("Erro ao carregar recursos:", error);
-  }
+    }
 };
 
 const startMining = async (miningType: "materials" | "crystals") => {
@@ -306,8 +305,7 @@ const startMining = async (miningType: "materials" | "crystals") => {
       await loadResources(); // Recarregar recursos
     }
   } catch (error: any) {
-    console.error("Erro na mineração:", error);
-  } finally {
+    } finally {
     mining.value = false;
   }
 };

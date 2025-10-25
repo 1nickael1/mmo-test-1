@@ -7,7 +7,7 @@ export const useCharacterStore = defineStore("character", () => {
   const loading = ref(false);
 
   const getAuthHeaders = () => {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     if (!token.value) {
       throw new Error("Usuário não autenticado");
     }
@@ -105,8 +105,7 @@ export const useCharacterStore = defineStore("character", () => {
         }
       }
     } catch (error) {
-      console.error("Erro ao adicionar XP:", error);
-    } finally {
+      } finally {
       loading.value = false;
     }
   };
@@ -129,10 +128,22 @@ export const useCharacterStore = defineStore("character", () => {
         if (updatedCharacter) {
           currentCharacter.value = updatedCharacter;
         }
+      } else if (process.client) {
+        // Tentar restaurar personagem selecionado do localStorage
+        const selectedCharacterId = localStorage.getItem(
+          "@mmo/ninja/selectedCharacterId"
+        );
+        if (selectedCharacterId && data) {
+          const character = data.find(
+            (c: Character) => c.id.toString() === selectedCharacterId
+          );
+          if (character) {
+            currentCharacter.value = character;
+          }
+        }
       }
     } catch (error) {
-      console.error("Erro ao carregar personagens:", error);
-    } finally {
+      } finally {
       loading.value = false;
     }
   };
@@ -140,6 +151,58 @@ export const useCharacterStore = defineStore("character", () => {
   // Selecionar personagem atual
   const selectCharacter = (character: Character) => {
     currentCharacter.value = character;
+
+    // Persistir no localStorage
+    if (process.client) {
+      localStorage.setItem(
+        "@mmo/ninja/selectedCharacterId",
+        character.id.toString()
+      );
+    }
+
+    // Forçar atualização de todas as páginas que dependem do personagem
+    if (process.client) {
+      // Disparar evento customizado para notificar outras partes da aplicação
+      window.dispatchEvent(
+        new CustomEvent("characterChanged", {
+          detail: { character },
+        })
+      );
+    }
+  };
+
+  // Garantir que sempre haja um personagem selecionado
+  const ensureCharacterSelected = async () => {
+    if (!currentCharacter.value) {
+      await loadCharacters();
+
+      if (characters.value.length > 0) {
+        // Tentar restaurar do localStorage primeiro
+        if (process.client) {
+          const selectedCharacterId = localStorage.getItem(
+            "@mmo/ninja/selectedCharacterId"
+          );
+          if (selectedCharacterId) {
+            const character = characters.value.find(
+              (c: Character) => c.id.toString() === selectedCharacterId
+            );
+            if (character) {
+              currentCharacter.value = character;
+              return;
+            }
+          }
+        }
+
+        // Se não encontrou no localStorage, usar o primeiro
+        currentCharacter.value = characters.value[0];
+        if (process.client) {
+          localStorage.setItem(
+            "@mmo/ninja/selectedCharacterId",
+            characters.value[0].id.toString()
+          );
+        }
+      }
+    }
   };
 
   // Criar novo personagem
@@ -159,10 +222,16 @@ export const useCharacterStore = defineStore("character", () => {
       if (data) {
         characters.value.push(data);
         currentCharacter.value = data;
+        // Persistir no localStorage
+        if (process.client) {
+          localStorage.setItem(
+            "@mmo/ninja/selectedCharacterId",
+            data.id.toString()
+          );
+        }
         return data;
       }
     } catch (error) {
-      console.error("Erro ao criar personagem:", error);
       throw error;
     } finally {
       loading.value = false;
@@ -170,7 +239,7 @@ export const useCharacterStore = defineStore("character", () => {
   };
 
   return {
-    currentCharacter: readonly(currentCharacter),
+    currentCharacter,
     characters: readonly(characters),
     loading: readonly(loading),
     getBaseStats,
@@ -181,5 +250,6 @@ export const useCharacterStore = defineStore("character", () => {
     loadCharacters,
     selectCharacter,
     createCharacter,
+    ensureCharacterSelected,
   };
 });

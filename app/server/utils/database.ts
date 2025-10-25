@@ -27,9 +27,9 @@ export function initializeDatabase() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
       name TEXT NOT NULL,
-      class TEXT NOT NULL,
-      level INTEGER DEFAULT 1,
-      xp INTEGER DEFAULT 0,
+      class TEXT NOT NULL CHECK (class IN ('ninja', 'guerreiro_espacial', 'mago_elemental', 'arqueiro_elfo', 'paladino_sagrado', 'ladrao_sombrio')),
+      level INTEGER DEFAULT 1 CHECK (level >= 1 AND level <= 50),
+      xp INTEGER DEFAULT 0 CHECK (xp >= 0),
       stats_json TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -200,8 +200,53 @@ export function initializeDatabase() {
     // Coluna já existe
   }
 
-  console.log("Database initialized successfully");
-}
+  // Adicionar índices para melhor performance
+  try {
+    db.exec(
+      `CREATE INDEX IF NOT EXISTS idx_characters_class ON characters(class)`
+    );
+  } catch (e) {
+    // Índice já existe
+  }
+
+  try {
+    db.exec(
+      `CREATE INDEX IF NOT EXISTS idx_characters_level ON characters(level)`
+    );
+  } catch (e) {
+    // Índice já existe
+  }
+
+  try {
+    db.exec(
+      `CREATE INDEX IF NOT EXISTS idx_skills_character_id ON skills(character_id)`
+    );
+  } catch (e) {
+    // Índice já existe
+  }
+
+  try {
+    db.exec(
+      `CREATE INDEX IF NOT EXISTS idx_upgrades_character_id ON upgrades(character_id)`
+    );
+  } catch (e) {
+    // Índice já existe
+  }
+
+  // Função para validar classes de personagem
+  db.function("validate_character_class", (class_name: string) => {
+    const validClasses = [
+      "ninja",
+      "guerreiro_espacial",
+      "mago_elemental",
+      "arqueiro_elfo",
+      "paladino_sagrado",
+      "ladrao_sombrio",
+    ];
+    return validClasses.includes(class_name) ? 1 : 0;
+  });
+
+  }
 
 // Initialize database on import
 initializeDatabase();

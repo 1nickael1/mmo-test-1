@@ -34,15 +34,16 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Gerar token JWT
+    // Gerar token JWT com versão
     const token = generateToken({
-      userId: user.id,
+      id: user.id,
       email: user.email,
       username: user.username,
+      version: "1.0.0", // Versão atual da aplicação
     });
 
     // Definir cookie (Secure apenas em produção para funcionar em http://localhost)
-    setCookie(event, "token", token, {
+    setCookie(event, "@mmo/ninja/token", token, {
       httpOnly: false, // Permitir acesso via JavaScript
       secure: false, // Desabilitar secure para funcionar em http
       sameSite: "lax", // Mais permissivo para desenvolvimento
@@ -50,7 +51,7 @@ export default defineEventHandler(async (event) => {
       path: "/", // Garantir que seja válido em toda a aplicação
     });
 
-    const response: ApiResponse<User> = {
+    const response: ApiResponse<User & { token: string }> = {
       success: true,
       data: {
         id: user.id,
@@ -58,6 +59,7 @@ export default defineEventHandler(async (event) => {
         username: user.username,
         created_at: user.created_at,
         updated_at: user.updated_at,
+        token: token,
       },
       message: "Login realizado com sucesso",
     };

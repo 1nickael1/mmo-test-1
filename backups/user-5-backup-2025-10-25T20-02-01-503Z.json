@@ -1,0 +1,482 @@
+{
+  "user": {
+    "id": 5,
+    "email": "n@n.com",
+    "password_hash": "$2b$10$IAm4QPJjRMxT3PpZGRQIO.Sdnqlyne8g9.zHqYoUJyzhsl1A9BjxW",
+    "username": "1nickael1",
+    "created_at": "2025-10-20 12:55:18",
+    "updated_at": "2025-10-20 12:55:18"
+  },
+  "characters": [
+    {
+      "id": 1,
+      "user_id": 5,
+      "name": "Riki",
+      "class": "ninja",
+      "level": 3,
+      "xp": 2000,
+      "stats_json": "{\"strength\":10,\"agility\":14,\"defense\":8,\"health\":100,\"max_health\":100}",
+      "created_at": "2025-10-20 15:22:37",
+      "updated_at": "2025-10-25 19:49:33"
+    },
+    {
+      "id": 3,
+      "user_id": 5,
+      "name": "Riki 2",
+      "class": "guerreiro_espacial",
+      "level": 2,
+      "xp": 1200,
+      "stats_json": "{\"strength\":13,\"agility\":7,\"defense\":11,\"health\":110,\"max_health\":110}",
+      "created_at": "2025-10-25 17:15:07",
+      "updated_at": "2025-10-25 18:49:04"
+    }
+  ],
+  "resources": [
+    {
+      "id": 2,
+      "character_id": 1,
+      "resource_type": "cristais",
+      "amount": 111,
+      "updated_at": "2025-10-25 14:08:47"
+    },
+    {
+      "id": 3,
+      "character_id": 1,
+      "resource_type": "materiais",
+      "amount": 158,
+      "updated_at": "2025-10-25 16:38:13"
+    },
+    {
+      "id": 1,
+      "character_id": 1,
+      "resource_type": "ouro",
+      "amount": 550,
+      "updated_at": "2025-10-25 16:52:49"
+    },
+    {
+      "id": 20,
+      "character_id": 3,
+      "resource_type": "cristais",
+      "amount": 0,
+      "updated_at": "2025-10-25 17:41:53"
+    },
+    {
+      "id": 19,
+      "character_id": 3,
+      "resource_type": "materiais",
+      "amount": 0,
+      "updated_at": "2025-10-25 17:41:53"
+    },
+    {
+      "id": 18,
+      "character_id": 3,
+      "resource_type": "ouro",
+      "amount": 1010,
+      "updated_at": "2025-10-25 17:48:43"
+    }
+  ],
+  "skills": [
+    {
+      "id": 1,
+      "character_id": 1,
+      "skill_name": "Kunai Throw",
+      "level": 1,
+      "unlocked": 1,
+      "created_at": "2025-10-20 20:09:59",
+      "cooldown_seconds": 1,
+      "damage": 20,
+      "description": null,
+      "last_used": "2025-10-25 16:52:48"
+    },
+    {
+      "id": 3,
+      "character_id": 1,
+      "skill_name": "Shadow Step",
+      "level": 1,
+      "unlocked": 0,
+      "created_at": "2025-10-25 17:41:35",
+      "cooldown_seconds": 1,
+      "damage": 20,
+      "description": null,
+      "last_used": null
+    },
+    {
+      "id": 4,
+      "character_id": 1,
+      "skill_name": "Ninja Strike",
+      "level": 1,
+      "unlocked": 0,
+      "created_at": "2025-10-25 17:41:35",
+      "cooldown_seconds": 1,
+      "damage": 20,
+      "description": null,
+      "last_used": null
+    },
+    {
+      "id": 11,
+      "character_id": 1,
+      "skill_name": "Fire Jutsu",
+      "level": 1,
+      "unlocked": 1,
+      "created_at": "2025-10-25 18:49:31",
+      "cooldown_seconds": 2,
+      "damage": 35,
+      "description": "Técnica de fogo básica",
+      "last_used": null
+    },
+    {
+      "id": 10,
+      "character_id": 3,
+      "skill_name": "Plasma Blast",
+      "level": 1,
+      "unlocked": 0,
+      "created_at": "2025-10-25 17:41:53",
+      "cooldown_seconds": 1,
+      "damage": 20,
+      "description": null,
+      "last_used": null
+    }
+  ],
+  "equipment": [
+    {
+      "id": 1,
+      "character_id": 1,
+      "equipment_name": "Katana Básica",
+      "equipment_type": "weapon",
+      "equipped": 1,
+      "stats_json": "{\"strength\":2,\"damage\":5}",
+      "created_at": "2025-10-20 23:56:00"
+    },
+    {
+      "id": 2,
+      "character_id": 1,
+      "equipment_name": "Blaster Básico",
+      "equipment_type": "accessory",
+      "equipped": 1,
+      "stats_json": "{\"strength\":3,\"damage\":6}",
+      "created_at": "2025-10-20 23:56:14"
+    },
+    {
+      "id": 3,
+      "character_id": 1,
+      "equipment_name": "Armadura Básica",
+      "equipment_type": "armor",
+      "equipped": 0,
+      "stats_json": "{\"defense\":3,\"health\":20}",
+      "created_at": "2025-10-22 19:56:30"
+    },
+    {
+      "id": 4,
+      "character_id": 1,
+      "equipment_name": "Armadura Básica",
+      "equipment_type": "armor",
+      "equipped": 1,
+      "stats_json": "{\"defense\":3,\"health\":20}",
+      "created_at": "2025-10-22 19:59:27"
+    }
+  ],
+  "items": [
+    {
+      "id": 3,
+      "character_id": 1,
+      "item_name": "Potion de Cura",
+      "item_type": "potion",
+      "quantity": 5,
+      "stats_json": "{}",
+      "created_at": "2025-10-25 16:52:49"
+    },
+    {
+      "id": 4,
+      "character_id": 1,
+      "item_name": "Poção de Cura Pequena",
+      "item_type": "potion",
+      "quantity": 1,
+      "stats_json": "{}",
+      "created_at": "2025-10-20 23:58:41"
+    }
+  ],
+  "upgrades": [
+    {
+      "id": 13,
+      "character_id": 1,
+      "upgrade_type": "stat",
+      "upgrade_name": "Treinamento de Força",
+      "level": 1,
+      "cost_json": "{\"gold\":100,\"time_seconds\":30}",
+      "is_completed": 1,
+      "started_at": null,
+      "completed_at": "datetime(\"now\")",
+      "created_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 14,
+      "character_id": 1,
+      "upgrade_type": "stat",
+      "upgrade_name": "Treinamento de Agilidade",
+      "level": 1,
+      "cost_json": "{\"gold\":100,\"time_seconds\":30}",
+      "is_completed": 1,
+      "started_at": null,
+      "completed_at": "datetime(\"now\")",
+      "created_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 15,
+      "character_id": 1,
+      "upgrade_type": "stat",
+      "upgrade_name": "Armazém de Recursos",
+      "level": 1,
+      "cost_json": "{\"gold\":100,\"time_seconds\":30}",
+      "is_completed": 1,
+      "started_at": null,
+      "completed_at": "datetime(\"now\")",
+      "created_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 16,
+      "character_id": 1,
+      "upgrade_type": "stat",
+      "upgrade_name": "Treinamento de Resistência",
+      "level": 1,
+      "cost_json": "{\"gold\":100,\"time_seconds\":30}",
+      "is_completed": 1,
+      "started_at": null,
+      "completed_at": "datetime(\"now\")",
+      "created_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 17,
+      "character_id": 1,
+      "upgrade_type": "stat",
+      "upgrade_name": "Quartel de Treinamento",
+      "level": 1,
+      "cost_json": "{\"gold\":100,\"time_seconds\":30}",
+      "is_completed": 1,
+      "started_at": null,
+      "completed_at": "datetime(\"now\")",
+      "created_at": "2025-10-25 17:41:42"
+    },
+    {
+      "id": 7,
+      "character_id": 3,
+      "upgrade_type": "stat",
+      "upgrade_name": "Treinamento de Força",
+      "level": 1,
+      "cost_json": "{\"gold\":100,\"time_seconds\":30}",
+      "is_completed": 1,
+      "started_at": "2025-10-25T17:20:20.494Z",
+      "completed_at": "2025-10-25 17:41:53",
+      "created_at": "2025-10-25 17:20:20"
+    }
+  ],
+  "battles": [
+    {
+      "id": 1,
+      "character_id": 1,
+      "opponent_type": "bandit_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-20 20:09:53"
+    },
+    {
+      "id": 2,
+      "character_id": 1,
+      "opponent_type": "bandit_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"items\":[\"Potion de Cura\"],\"materials\":2}",
+      "battle_date": "2025-10-20 20:11:23"
+    },
+    {
+      "id": 3,
+      "character_id": 1,
+      "opponent_type": "bandit_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-20 21:43:19"
+    },
+    {
+      "id": 4,
+      "character_id": 1,
+      "opponent_type": "bandit_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-20 23:55:05"
+    },
+    {
+      "id": 5,
+      "character_id": 1,
+      "opponent_type": "bandit_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"items\":[\"Potion de Cura\"]}",
+      "battle_date": "2025-10-20 23:57:35"
+    },
+    {
+      "id": 6,
+      "character_id": 1,
+      "opponent_type": "bandit_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-22 19:38:35"
+    },
+    {
+      "id": 7,
+      "character_id": 1,
+      "opponent_type": "cyborg_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-22 20:38:40"
+    },
+    {
+      "id": 8,
+      "character_id": 1,
+      "opponent_type": "bandido_espacial_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-25 02:26:55"
+    },
+    {
+      "id": 9,
+      "character_id": 1,
+      "opponent_type": "ciborgue_rebelde_3",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-25 15:12:18"
+    },
+    {
+      "id": 10,
+      "character_id": 1,
+      "opponent_type": "pirata_espacial_2",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"items\":[\"Potion de Cura\"],\"materials\":1}",
+      "battle_date": "2025-10-25 15:39:34"
+    },
+    {
+      "id": 11,
+      "character_id": 1,
+      "opponent_type": "bandido_espacial_1",
+      "opponent_level": 2,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50}",
+      "battle_date": "2025-10-25 15:42:45"
+    },
+    {
+      "id": 12,
+      "character_id": 1,
+      "opponent_type": "ciborgue_rebelde_3",
+      "opponent_level": 2,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"items\":[\"Potion de Cura\"]}",
+      "battle_date": "2025-10-25 16:10:39"
+    },
+    {
+      "id": 13,
+      "character_id": 1,
+      "opponent_type": "bandido_espacial_1",
+      "opponent_level": 3,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"materials\":3}",
+      "battle_date": "2025-10-25 16:30:38"
+    },
+    {
+      "id": 14,
+      "character_id": 1,
+      "opponent_type": "ciborgue_rebelde_3",
+      "opponent_level": 3,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"materials\":3}",
+      "battle_date": "2025-10-25 16:38:13"
+    },
+    {
+      "id": 15,
+      "character_id": 1,
+      "opponent_type": "ninja_renegado_5",
+      "opponent_level": 3,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":50,\"items\":[\"Potion de Cura\"]}",
+      "battle_date": "2025-10-25 16:38:37"
+    },
+    {
+      "id": 16,
+      "character_id": 1,
+      "opponent_type": "ninja_renegado_5",
+      "opponent_level": 3,
+      "outcome": "victory",
+      "xp_gained": 300,
+      "rewards_json": "{\"xp\":300,\"gold\":100,\"items\":[\"Potion de Cura\"]}",
+      "battle_date": "2025-10-25 16:52:49"
+    },
+    {
+      "id": 17,
+      "character_id": 3,
+      "opponent_type": "bandido_espacial_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":25}",
+      "battle_date": "2025-10-25 17:15:31"
+    },
+    {
+      "id": 18,
+      "character_id": 3,
+      "opponent_type": "bandido_espacial_1",
+      "opponent_level": 1,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":25}",
+      "battle_date": "2025-10-25 17:36:06"
+    },
+    {
+      "id": 19,
+      "character_id": 3,
+      "opponent_type": "ciborgue_rebelde_3",
+      "opponent_level": 2,
+      "outcome": "victory",
+      "xp_gained": 200,
+      "rewards_json": "{\"xp\":200,\"gold\":60}",
+      "battle_date": "2025-10-25 17:48:43"
+    }
+  ],
+  "story_progress": [
+    {
+      "id": 1,
+      "character_id": 1,
+      "chapter": 1,
+      "completed": 1,
+      "completed_at": "2025-10-20 23:58:41",
+      "created_at": "2025-10-20 23:58:41"
+    },
+    {
+      "id": 2,
+      "character_id": 1,
+      "chapter": 2,
+      "completed": 0,
+      "completed_at": null,
+      "created_at": "2025-10-25 16:53:10"
+    }
+  ]
+}

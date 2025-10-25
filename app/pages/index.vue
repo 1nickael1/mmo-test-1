@@ -90,7 +90,6 @@ definePageMeta({
 onMounted(() => {
   const token = useCookie("token");
   if (token.value) {
-    console.log("Usuário já logado, redirecionando para /home");
     navigateTo("/home");
   }
 });

@@ -386,15 +386,11 @@ const loadEquipment = async () => {
 
     if (response.success) {
       equipment.value = response.data || [];
-      console.log("Equipamentos carregados:", equipment.value);
-      console.log(
-        "Equipamentos não equipados:",
-        equipment.value.filter((item) => !item.equipped)
+      => !item.equipped)
       );
     }
   } catch (error) {
-    console.error("Erro ao carregar equipamentos:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };
@@ -421,8 +417,7 @@ const loadCurrentGold = async () => {
       currentGold.value = goldResource ? goldResource.amount : 0;
     }
   } catch (error) {
-    console.error("Erro ao carregar ouro:", error);
-  }
+    }
 };
 
 const toggleEquipment = async (item: Equipment) => {
@@ -456,7 +451,6 @@ const toggleEquipment = async (item: Equipment) => {
       await loadEquipment();
     }
   } catch (error: any) {
-    console.error("Erro ao equipar/desequipar:", error);
     alert(error.data?.message || "Erro ao equipar/desequipar item");
   } finally {
     loading.value = false;

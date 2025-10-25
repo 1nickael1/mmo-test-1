@@ -54,8 +54,5 @@ export function hashPassword(password: string): string {
 
 export function updateRootPassword(newPassword: string): void {
   // Em produção, isso deveria salvar em um arquivo de configuração ou banco de dados
-  console.log(`Nova senha root seria: ${hashPassword(newPassword)}`);
-  console.log(
-    "Em produção, atualize a variável ROOT_USER.password com o hash acima"
-  );
-}
+  }`);
+  }

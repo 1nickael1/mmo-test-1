@@ -210,6 +210,13 @@ showSuccess("Personagem criado!", {
 
 Manter um fluxo de trabalho de alto nível entre pares de engenharia, garantindo que cada sugestão e geração de código reflita a experiência de um desenvolvedor sênior familiarizado com a stack específica do projeto MMO RPG, utilizando as versões mais recentes e otimizadas de 2025.
 
+**FOCO PRINCIPAL: PRODUÇÃO**
+
+- Todo código deve ser desenvolvido pensando em produção desde o início
+- Qualidade, performance e segurança são prioridades absolutas
+- Cada funcionalidade deve ser robusta, testada e pronta para usuários finais
+- Zero tolerância para código experimental ou "quick fixes" em produção
+
 ## Atualizações de Versão (2025)
 
 ### Principais Melhorias
@@ -225,3 +232,96 @@ Manter um fluxo de trabalho de alto nível entre pares de engenharia, garantindo
 ### Compatibilidade
 
 Todas as bibliotecas foram testadas e são compatíveis entre si, garantindo estabilidade e performance otimizada para o projeto MMO RPG.
+
+## Sistema de Versionamento e Testes Automatizados
+
+### Versionamento Automático
+
+- **Sempre atualizar versão**: Toda mudança significativa deve incrementar a versão da aplicação
+- **Script de atualização**: Usar `scripts/update-version.js` para incrementar versão automaticamente
+- **Validação de compatibilidade**: Sistema robusto de verificação de versão entre cliente e servidor
+- **Logout inteligente**: Apenas forçar logout quando realmente necessário (versões incompatíveis)
+
+### Testes Automatizados
+
+- **Cobertura completa**: Todos os testes devem ser executados após qualquer mudança
+- **Validação obrigatória**: Sempre executar `npm test` antes de considerar uma tarefa concluída
+- **Correção automática**: Se testes falharem, corrigir problemas antes de prosseguir
+- **Atualização de testes**: Novas funcionalidades devem incluir testes correspondentes
+
+### Fluxo de Trabalho Obrigatório
+
+1. **Implementar funcionalidade**
+2. **Atualizar versão** (se necessário): `node scripts/update-version.js patch "Descrição da mudança"`
+3. **Executar testes**: `npm test`
+4. **Corrigir falhas** (se houver)
+5. **Validar funcionamento** completo
+6. **Documentar mudanças**
+
+### Comandos Essenciais
+
+```bash
+# Executar todos os testes
+npm test
+
+# Atualizar versão (patch/minor/major)
+node scripts/update-version.js patch "Correção de bug"
+node scripts/update-version.js minor "Nova funcionalidade"
+node scripts/update-version.js major "Breaking change"
+
+# Executar testes com cobertura
+npm run test:coverage
+
+# Executar testes em modo watch
+npm run test:watch
+```
+
+### Regras de Versionamento
+
+- **Patch (1.0.1)**: Correções de bugs, ajustes menores
+- **Minor (1.1.0)**: Novas funcionalidades, melhorias
+- **Major (2.0.0)**: Breaking changes, refatorações significativas
+
+### Validação de Qualidade
+
+- **100% dos testes passando**: Obrigatório antes de qualquer deploy
+- **Cobertura mínima**: 80% de cobertura de código
+- **Linting limpo**: Sem erros de TypeScript ou ESLint
+- **Performance**: Tempo de resposta < 200ms para APIs críticas
+
+## Padrões de Produção
+
+### Qualidade de Código
+
+- **Código limpo**: Legível, bem documentado e seguindo padrões
+- **Tratamento de erros**: Todos os cenários de erro devem ser tratados
+- **Logs estruturados**: Sistema de logging para monitoramento em produção
+- **Métricas**: Implementar métricas de performance e uso
+
+### Segurança em Produção
+
+- **Validação rigorosa**: Todos os inputs devem ser validados e sanitizados
+- **Rate limiting**: Proteção contra abuso e ataques
+- **Headers de segurança**: CSP, HSTS, X-Frame-Options configurados
+- **Secrets management**: Variáveis sensíveis nunca hardcoded
+
+### Performance em Produção
+
+- **Otimização de queries**: Índices apropriados, queries otimizadas
+- **Caching estratégico**: Cache de dados frequentes e estáticos
+- **Bundle optimization**: Code splitting, tree shaking, lazy loading
+- **CDN ready**: Assets otimizados para distribuição global
+
+### Monitoramento e Observabilidade
+
+- **Health checks**: Endpoints para verificar saúde da aplicação
+- **Error tracking**: Sistema para capturar e reportar erros
+- **Performance monitoring**: Métricas de tempo de resposta e throughput
+- **User analytics**: Tracking de uso e comportamento (com privacidade)
+
+### Deployment e DevOps
+
+- **CI/CD robusto**: Pipeline automatizado com testes e validações
+- **Rollback strategy**: Capacidade de reverter deployments rapidamente
+- **Environment parity**: Desenvolvimento, staging e produção similares
+- **Backup strategy**: Backup automático e recuperação de dados

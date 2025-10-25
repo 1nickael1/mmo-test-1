@@ -5,11 +5,9 @@ import db from "../../utils/database";
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
-    console.log("Body recebido:", body);
     const { upgrade_id, character_id } = body;
 
     if (!upgrade_id || !character_id) {
-      console.log("Erro: upgrade_id ou character_id não encontrados");
       throw createError({
         statusCode: 400,
         message: "ID da melhoria e do personagem são obrigatórios",
@@ -18,13 +16,9 @@ export default defineEventHandler(async (event) => {
 
     const upgradeId = parseInt(upgrade_id);
     const characterId = parseInt(character_id);
-    console.log("IDs processados:", { upgradeId, characterId });
-    console.log("Tipo do upgradeId:", typeof upgradeId);
 
     // Verificar autenticação
     const token = getCookie(event, "token");
-    console.log("Token recebido:", token);
-    console.log("Headers:", getHeaders(event));
     if (!token) {
       throw createError({
         statusCode: 401,
@@ -43,7 +37,7 @@ export default defineEventHandler(async (event) => {
     // Verificar se o personagem pertence ao usuário
     const character = db
       .prepare("SELECT * FROM characters WHERE id = ? AND user_id = ?")
-      .get(characterId, payload.userId) as any;
+      .get(characterId, payload.id) as any;
 
     if (!character) {
       throw createError({

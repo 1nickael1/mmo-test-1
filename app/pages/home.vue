@@ -301,15 +301,12 @@ const healthProgress = computed(() => {
 });
 
 onMounted(async () => {
-  // Carregar personagens se não houver um selecionado
-  if (!characterStore.currentCharacter) {
-    await characterStore.loadCharacters();
-    if (characterStore.characters.length > 0) {
-      characterStore.selectCharacter(characterStore.characters[0]);
-    } else {
-      // Se não há personagens, redirecionar para criação
-      await navigateTo("/criar-personagem");
-    }
+  // Garantir que sempre haja um personagem selecionado
+  await characterStore.ensureCharacterSelected();
+
+  // Se não há personagens, redirecionar para criação
+  if (characterStore.characters.length === 0) {
+    await navigateTo("/criar-personagem");
   }
 });
 </script>

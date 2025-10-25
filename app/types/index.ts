@@ -10,10 +10,17 @@ export interface Character {
   id: number;
   user_id: number;
   name: string;
-  class: "ninja" | "guerreiro_espacial";
+  class:
+    | "ninja"
+    | "guerreiro_espacial"
+    | "mago_elemental"
+    | "arqueiro_elfo"
+    | "paladino_sagrado"
+    | "ladrao_sombrio";
   level: number;
   xp: number;
   stats: CharacterStats;
+  stats_json?: string;
   created_at: string;
   updated_at: string;
 }
@@ -63,6 +70,7 @@ export interface BattleRewards {
   gold: number;
   items?: string[];
   materials?: number;
+  crystals?: number;
 }
 
 export interface Item {
@@ -95,6 +103,19 @@ export interface EquipmentStats {
   health?: number;
   max_health?: number;
   damage?: number;
+  stealth?: number;
+  radiation_resistance?: number;
+  energy_shield?: number;
+  mobility?: number;
+  intelligence?: number;
+  magic_power?: number;
+  accuracy?: number;
+  nature_resistance?: number;
+  magic_damage?: number;
+  holy_damage?: number;
+  holy_resistance?: number;
+  holy_protection?: number;
+  holy_power?: number;
 }
 
 export interface StoryChapter {
@@ -157,11 +178,22 @@ export interface ItemStats {
 }
 
 export interface Upgrade {
-  id: number;
+  id: number | string;
   character_id: number;
-  upgrade_type: "building" | "stat" | "skill";
+  upgrade_type: "building" | "stat" | "skill" | "class_specific";
   upgrade_name: string;
+  name?: string;
+  type?: string;
+  description?: string;
   level: number;
+  max_level?: number;
+  current_level?: number;
+  current_cost?: UpgradeCost;
+  can_afford?: boolean;
+  can_upgrade?: boolean;
+  time_seconds?: number;
+  time_remaining?: number;
+  is_in_progress?: boolean;
   cost: UpgradeCost;
   is_completed: boolean;
   started_at?: string;
@@ -199,7 +231,13 @@ export interface RegisterRequest {
 
 export interface CreateCharacterRequest {
   name: string;
-  class: "ninja" | "guerreiro_espacial";
+  class:
+    | "ninja"
+    | "guerreiro_espacial"
+    | "mago_elemental"
+    | "arqueiro_elfo"
+    | "paladino_sagrado"
+    | "ladrao_sombrio";
 }
 
 export interface BattleRequest {
@@ -212,4 +250,21 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
   message?: string;
+}
+
+export interface JWTPayload {
+  id: number;
+  username: string;
+  email: string;
+  role?: string;
+  version?: string;
+}
+
+export interface AdminUser {
+  id: number;
+  username: string;
+  password_hash: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
 }

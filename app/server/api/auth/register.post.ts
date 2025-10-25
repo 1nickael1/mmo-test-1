@@ -54,15 +54,16 @@ export default defineEventHandler(async (event) => {
       .prepare("SELECT * FROM users WHERE id = ?")
       .get(result.lastInsertRowid) as User;
 
-    // Gerar token JWT
+    // Gerar token JWT com versão
     const token = generateToken({
-      userId: newUser.id,
+      id: newUser.id,
       email: newUser.email,
       username: newUser.username,
+      version: "1.0.0", // Versão atual da aplicação
     });
 
     // Definir cookie (Secure apenas em produção para funcionar em http://localhost)
-    setCookie(event, "token", token, {
+    setCookie(event, "@mmo/ninja/token", token, {
       httpOnly: false, // Permitir acesso via JavaScript
       secure: false, // Desabilitar secure para funcionar em http
       sameSite: "lax", // Mais permissivo para desenvolvimento

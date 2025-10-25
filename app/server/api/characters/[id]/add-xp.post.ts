@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     // Buscar personagem
     const character = db
       .prepare("SELECT * FROM characters WHERE id = ? AND user_id = ?")
-      .get(characterId, payload.userId) as any;
+      .get(characterId, payload.id) as any;
 
     if (!character) {
       throw createError({

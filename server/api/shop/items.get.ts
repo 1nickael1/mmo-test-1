@@ -4,10 +4,6 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event);
     const characterLevel = parseInt(query.level as string) || 1;
-    console.log(
-      `Character Level from query: ${query.level}, Parsed: ${characterLevel}`
-    );
-
     // Definir itens da loja por nível (1-50)
     const itemsByLevel: Record<number, ShopItem[]> = {
       // Níveis 1-10: Itens básicos
@@ -253,14 +249,11 @@ export default defineEventHandler(async (event) => {
           // Forçar can_buy como true para itens de nível 1 quando characterLevel é 1
           const canBuy =
             level === 1 ? true : characterLevel >= item.level_required;
-          console.log(
-            `Item: ${item.name}, Level Required: ${item.level_required}, Character Level: ${characterLevel}, Can Buy: ${canBuy}`
-          );
           const result = {
             ...item,
             can_buy: canBuy,
           };
-          console.log(`Result item:`, JSON.stringify(result, null, 2));
+          );
           return result;
         });
         availableItems.push(...itemsWithValidation);
@@ -278,9 +271,6 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    console.log(
-      `Final availableItems:`,
-      JSON.stringify(availableItems, null, 2)
     );
 
     const response: ApiResponse<ShopItem[]> = {

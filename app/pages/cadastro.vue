@@ -107,7 +107,6 @@ definePageMeta({
 onMounted(() => {
   const token = useCookie("token");
   if (token.value) {
-    console.log("Usuário já logado, redirecionando para /home");
     navigateTo("/home");
   }
 });
@@ -150,7 +149,6 @@ const handleRegister = async () => {
       await navigateTo("/criar-personagem");
     }
   } catch (error: any) {
-    console.error("Erro no cadastro:", error?.data || error?.message || error);
     showError("Dados inválidos. Verifique as informações fornecidas.");
   } finally {
     loading.value = false;

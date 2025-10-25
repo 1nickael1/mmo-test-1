@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
       WHERE id = ? AND user_id = ?
     `
       )
-      .get(characterId, payload.userId) as any;
+      .get(characterId, payload.id) as any;
 
     if (!character) {
       throw createError({
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
       .all(characterId) as Equipment[];
 
     // Parsear stats JSON
-    const equipmentWithStats = equipment.map((eq) => ({
+    const equipmentWithStats = equipment.map((eq: any) => ({
       ...eq,
       stats: JSON.parse(eq.stats_json),
     }));

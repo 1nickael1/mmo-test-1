@@ -4,8 +4,6 @@ import db from "../../utils/database";
 
 export default defineEventHandler(async (event) => {
   try {
-    console.log("=== ADMIN RESET SKILLS COOLDOWN ENDPOINT ===");
-
     // Verificar token administrativo
     let adminToken = getCookie(event, "admin_token");
 
@@ -31,13 +29,9 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    console.log("Admin authenticated:", adminPayload.username);
-
     const body = await readBody<{
       character_id: number;
     }>(event);
-
-    console.log("Request body:", body);
 
     const { character_id } = body;
 
@@ -76,9 +70,6 @@ export default defineEventHandler(async (event) => {
       )
       .run(character_id);
 
-    console.log("Skills cooldowns reset for character:", character_id);
-    console.log("Rows affected:", result.changes);
-
     // Buscar habilidades atualizadas para retornar
     const updatedSkills = db
       .prepare(
@@ -110,7 +101,6 @@ export default defineEventHandler(async (event) => {
 
     return response;
   } catch (error: any) {
-    console.error("Error resetting skills cooldowns:", error);
     throw createError({
       statusCode: error.statusCode || 500,
       message: error.message || "Erro interno do servidor",

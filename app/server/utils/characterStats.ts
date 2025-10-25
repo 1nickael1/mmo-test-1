@@ -48,11 +48,11 @@ export function calculateCharacterStatsWithEquipment(characterId: number): {
 
   // Stats finais (base + equipamentos)
   const finalStats: CharacterStats = {
-    strength: baseStats.strength + equipmentBonuses.strength,
-    agility: baseStats.agility + equipmentBonuses.agility,
-    defense: baseStats.defense + equipmentBonuses.defense,
-    health: baseStats.health + equipmentBonuses.health,
-    max_health: baseStats.max_health + equipmentBonuses.health,
+    strength: baseStats.strength + (equipmentBonuses.strength || 0),
+    agility: baseStats.agility + (equipmentBonuses.agility || 0),
+    defense: baseStats.defense + (equipmentBonuses.defense || 0),
+    health: baseStats.health + (equipmentBonuses.health || 0),
+    max_health: baseStats.max_health + (equipmentBonuses.health || 0),
   };
 
   return {

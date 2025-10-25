@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       WHERE id = ? AND user_id = ?
     `
       )
-      .get(characterId, payload.userId);
+      .get(characterId, payload.id);
 
     if (!character) {
       throw createError({

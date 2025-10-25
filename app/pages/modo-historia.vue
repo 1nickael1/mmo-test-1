@@ -320,8 +320,7 @@ const loadStoryChapters = async () => {
       storyChapters.value = response.data || [];
     }
   } catch (error) {
-    console.error("Erro ao carregar capítulos:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };
@@ -348,8 +347,7 @@ const loadCurrentGold = async () => {
       currentGold.value = goldResource ? goldResource.amount : 0;
     }
   } catch (error) {
-    console.error("Erro ao carregar ouro:", error);
-  }
+    }
 };
 
 const selectChapter = (chapter: StoryChapter) => {
@@ -379,7 +377,6 @@ const startChapterBattle = async (chapter: StoryChapter) => {
       await navigateTo("/batalhas");
     }
   } catch (error: any) {
-    console.error("Erro ao iniciar batalha do capítulo:", error);
     alert(error.data?.message || "Erro ao iniciar batalha do capítulo");
   }
 

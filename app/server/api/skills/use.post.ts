@@ -4,15 +4,11 @@ import db from "../../utils/database";
 
 export default defineEventHandler(async (event) => {
   try {
-    console.log("=== SKILL USE ENDPOINT ===");
-
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 
     if (!token) {
       token = getCookie(event, "token"); // Try to get token from cookie
     }
-
-    console.log("Token found:", !!token);
 
     if (!token) {
       throw createError({
@@ -22,7 +18,6 @@ export default defineEventHandler(async (event) => {
     }
 
     const payload = verifyToken(token);
-    console.log("Payload:", payload);
 
     if (!payload) {
       throw createError({
@@ -35,8 +30,6 @@ export default defineEventHandler(async (event) => {
       character_id: number;
       skill_name: string;
     }>(event);
-
-    console.log("Request body:", body);
 
     const { character_id, skill_name } = body;
 
@@ -55,7 +48,7 @@ export default defineEventHandler(async (event) => {
       WHERE id = ? AND user_id = ?
     `
       )
-      .get(character_id, payload.userId) as any;
+      .get(character_id, payload.id) as any;
 
     if (!character) {
       throw createError({
@@ -74,8 +67,6 @@ export default defineEventHandler(async (event) => {
       )
       .get(character_id, skill_name) as any;
 
-    console.log("Skill found:", skill);
-
     if (!skill) {
       // Verificar se a habilidade existe mas não está desbloqueada
       const skillExists = db
@@ -86,8 +77,6 @@ export default defineEventHandler(async (event) => {
       `
         )
         .get(character_id, skill_name);
-
-      console.log("Skill exists but not unlocked:", skillExists);
 
       throw createError({
         statusCode: 404,

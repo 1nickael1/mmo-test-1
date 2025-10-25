@@ -1,7 +1,7 @@
-import { defineNuxtRouteMiddleware, useCookie, navigateTo } from "nuxt/app";
+import { defineNuxtRouteMiddleware, navigateTo, useCookie } from "nuxt/app";
 
 export default defineNuxtRouteMiddleware((to) => {
-  const token = useCookie("token");
+  const token = useCookie("@mmo/ninja/token");
 
   // Rotas que não precisam de autenticação
   const publicRoutes = ["/login", "/cadastro", "/"];

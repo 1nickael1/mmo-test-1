@@ -4,8 +4,6 @@ import db from "../../utils/database";
 
 export default defineEventHandler(async (event) => {
   try {
-    console.log("=== ADMIN GET CHARACTERS ENDPOINT ===");
-
     // Verificar token administrativo
     let adminToken = getCookie(event, "admin_token");
 
@@ -30,8 +28,6 @@ export default defineEventHandler(async (event) => {
         message: "Token administrativo inválido",
       });
     }
-
-    console.log("Admin authenticated:", adminPayload.username);
 
     // Buscar todos os personagens com informações do usuário
     const characters = db
@@ -66,7 +62,6 @@ export default defineEventHandler(async (event) => {
 
     return response;
   } catch (error: any) {
-    console.error("Error getting characters:", error);
     throw createError({
       statusCode: error.statusCode || 500,
       message: error.message || "Erro interno do servidor",

@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Buscar personagens do usuário
-    const characters = db
+    let characters = db
       .prepare(
         `
       SELECT * FROM characters 
@@ -36,10 +36,52 @@ export default defineEventHandler(async (event) => {
       ORDER BY created_at DESC
     `
       )
-      .all(payload.userId) as Character[];
+      .all(payload.id) as Character[];
+
+    // Se não encontrou personagens, tentar migração automática
+    if (characters.length === 0) {
+      // Buscar personagens órfãos que podem pertencer ao usuário
+      const orphanedCharacters = db
+        .prepare(
+          `
+          SELECT * FROM characters 
+          WHERE user_id IS NULL OR user_id = 0
+          ORDER BY created_at DESC
+        `
+        )
+        .all();
+
+      if (orphanedCharacters.length > 0) {
+        // Migrar todos os órfãos para o usuário atual
+        for (const character of orphanedCharacters) {
+          try {
+            db.prepare(
+              `
+              UPDATE characters 
+              SET user_id = ?, updated_at = CURRENT_TIMESTAMP
+              WHERE id = ?
+            `
+            ).run(payload.id, character.id);
+          } catch (error) {
+            // Log de erro silencioso para produção
+          }
+        }
+
+        // Buscar personagens novamente após migração
+        characters = db
+          .prepare(
+            `
+            SELECT * FROM characters 
+            WHERE user_id = ? 
+            ORDER BY created_at DESC
+          `
+          )
+          .all(payload.id) as Character[];
+      }
+    }
 
     // Parsear stats JSON
-    const charactersWithStats = characters.map((char) => ({
+    const charactersWithStats = characters.map((char: any) => ({
       ...char,
       stats: JSON.parse(char.stats_json),
     }));

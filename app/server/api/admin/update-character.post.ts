@@ -4,8 +4,6 @@ import db from "../../utils/database";
 
 export default defineEventHandler(async (event) => {
   try {
-    console.log("=== ADMIN UPDATE CHARACTER ENDPOINT ===");
-
     // Verificar token administrativo
     let adminToken = getCookie(event, "admin_token");
 
@@ -31,8 +29,6 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    console.log("Admin authenticated:", adminPayload.username);
-
     const body = await readBody<{
       character_id: number;
       level?: number;
@@ -45,8 +41,6 @@ export default defineEventHandler(async (event) => {
         defense?: number;
       };
     }>(event);
-
-    console.log("Request body:", body);
 
     const { character_id, level, xp, stats } = body;
 
@@ -110,9 +104,6 @@ export default defineEventHandler(async (event) => {
 
     const result = db.prepare(updateQuery).run(...updateValues);
 
-    console.log("Character updated:", character_id);
-    console.log("Rows affected:", result.changes);
-
     // Buscar personagem atualizado
     const updatedCharacter = db
       .prepare(
@@ -145,7 +136,6 @@ export default defineEventHandler(async (event) => {
 
     return response;
   } catch (error: any) {
-    console.error("Error updating character:", error);
     throw createError({
       statusCode: error.statusCode || 500,
       message: error.message || "Erro interno do servidor",

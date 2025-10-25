@@ -6,14 +6,10 @@ import {
 
 export default defineEventHandler(async (event) => {
   try {
-    console.log("=== ADMIN LOGIN ENDPOINT ===");
-
     const body = await readBody<{
       username: string;
       password: string;
     }>(event);
-
-    console.log("Login attempt for:", body.username);
 
     if (!body.username || !body.password) {
       throw createError({
@@ -61,7 +57,6 @@ export default defineEventHandler(async (event) => {
 
     return response;
   } catch (error: any) {
-    console.error("Admin login error:", error);
     throw createError({
       statusCode: error.statusCode || 500,
       message: error.message || "Erro interno do servidor",

@@ -5,6 +5,7 @@
       class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700"
     >
       <div class="container mx-auto px-4">
+        <!-- Primeira linha: Logo e Mobile Menu Button -->
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
           <div class="flex items-center space-x-4">
@@ -38,88 +39,7 @@
             </svg>
           </Button>
 
-          <!-- Desktop Navigation -->
-          <nav class="hidden md:flex items-center space-x-6">
-            <a
-              href="/home"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Home
-            </a>
-            <a
-              href="/personagem"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Personagem
-            </a>
-            <a
-              href="/selecionar-personagem"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Trocar Personagem
-            </a>
-            <a
-              href="/habilidades"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Habilidades
-            </a>
-            <a
-              href="/batalhas"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Batalhas
-            </a>
-            <a
-              href="/melhorias"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Melhorias
-            </a>
-            <a
-              href="/modo-historia"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              História
-            </a>
-            <a
-              href="/loja"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Loja
-            </a>
-            <a
-              href="/equipamentos"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Equipamentos
-            </a>
-            <a
-              href="/inventario"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Inventário
-            </a>
-            <a
-              href="/mineracao"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Mineração
-            </a>
-          </nav>
-
-          <!-- Desktop User Info & Actions -->
+          <!-- Desktop User Info & Actions (Primeira linha) -->
           <div class="hidden md:flex items-center space-x-4">
             <!-- Server Time -->
             <div class="flex items-center space-x-2 text-sm">
@@ -151,11 +71,99 @@
               </span>
             </div>
 
+            <!-- Version Info -->
+            <VersionInfo />
+
             <!-- Logout Button -->
             <Button @click="handleLogout" variant="outline" size="sm">
               Sair
             </Button>
           </div>
+        </div>
+
+        <!-- Segunda linha: Desktop Navigation -->
+        <div
+          class="hidden md:block border-t border-gray-200 dark:border-gray-700 py-3"
+        >
+          <nav class="flex items-center justify-center space-x-8">
+            <a
+              href="/home"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              🏠 Home
+            </a>
+            <a
+              href="/personagem"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              👤 Personagem
+            </a>
+            <a
+              href="/selecionar-personagem"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              🔄 Trocar Personagem
+            </a>
+            <a
+              href="/habilidades"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              ⚡ Habilidades
+            </a>
+            <a
+              href="/batalhas"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              ⚔️ Batalhas
+            </a>
+            <a
+              href="/melhorias"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              🏗️ Melhorias
+            </a>
+            <a
+              href="/modo-historia"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              📖 História
+            </a>
+            <a
+              href="/loja"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              🛒 Loja
+            </a>
+            <a
+              href="/equipamentos"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              🛡️ Equipamentos
+            </a>
+            <a
+              href="/inventario"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              🎒 Inventário
+            </a>
+            <a
+              href="/mineracao"
+              @click="handleNavigation"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
+            >
+              ⛏️ Mineração
+            </a>
+          </nav>
         </div>
 
         <!-- Mobile Menu -->
@@ -260,13 +268,12 @@
             >
               ⛏️ Mineração
             </a>
-            <Button
-              @click="handleLogout"
-              variant="outline"
-              class="col-span-2 mt-2"
-            >
-              🚪 Sair
-            </Button>
+            <div class="col-span-2 mt-2 flex gap-2">
+              <VersionInfo />
+              <Button @click="handleLogout" variant="outline" class="flex-1">
+                🚪 Sair
+              </Button>
+            </div>
           </nav>
         </div>
       </div>
@@ -342,27 +349,52 @@ const handleLogout = async () => {
     });
     await navigateTo("/login");
   } catch (error) {
-    console.error("Erro no logout:", error);
-  }
+    }
 };
 
 onMounted(async () => {
   updateServerTime();
   timeInterval = setInterval(updateServerTime, 1000);
 
-  // Carregar personagem se não estiver carregado
-  if (!characterStore.currentCharacter) {
-    await characterStore.loadCharacters();
-    if (characterStore.characters.length > 0) {
-      characterStore.selectCharacter(characterStore.characters[0]);
-    }
-  }
+  // Garantir que sempre haja um personagem selecionado
+  await characterStore.ensureCharacterSelected();
 
   // Iniciar regeneração de vida se há um personagem
   if (characterStore.currentCharacter) {
     startHealthRegeneration();
   }
 });
+
+// Função para navegação desktop
+const handleNavigation = (event: Event) => {
+  const target = event.currentTarget as HTMLAnchorElement;
+  const href = target.getAttribute("href");
+
+  if (href === window.location.pathname) {
+    // Se for a mesma página, recarregar
+    window.location.reload();
+  } else {
+    // Se for página diferente, navegar normalmente
+    navigateTo(href);
+  }
+};
+
+// Função para navegação mobile
+const handleMobileNavigation = (event: Event) => {
+  const target = event.currentTarget as HTMLAnchorElement;
+  const href = target.getAttribute("href");
+
+  // Fechar menu mobile
+  mobileMenuOpen.value = false;
+
+  if (href === window.location.pathname) {
+    // Se for a mesma página, recarregar
+    window.location.reload();
+  } else {
+    // Se for página diferente, navegar normalmente
+    navigateTo(href);
+  }
+};
 
 onUnmounted(() => {
   if (timeInterval) {

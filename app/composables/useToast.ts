@@ -36,11 +36,26 @@ export const useToast = () => {
     });
   };
 
+  const showConfirm = (title: string, message: string, onConfirm: () => void) => {
+    return toast(message, {
+      duration: 0, // Não desaparece automaticamente
+      action: {
+        label: 'Confirmar',
+        onClick: onConfirm,
+      },
+      cancel: {
+        label: 'Cancelar',
+        onClick: () => {},
+      },
+    });
+  };
+
   return {
     showSuccess,
     showError,
     showInfo,
     showWarning,
     showToast,
+    showConfirm,
   };
 };

@@ -218,8 +218,7 @@ const loadInventory = async () => {
     );
     inventory.value = response.data || [];
   } catch (error) {
-    console.error("Erro ao carregar inventário:", error);
-  } finally {
+    } finally {
     loading.value = false;
   }
 };
@@ -253,7 +252,6 @@ const useItem = async (item: Item) => {
       alert(response.data.effect);
     }
   } catch (error: any) {
-    console.error("Erro ao usar item:", error);
     alert(error.data?.message || "Erro ao usar item");
   } finally {
     loading.value = false;

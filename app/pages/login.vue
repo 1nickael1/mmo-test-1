@@ -80,7 +80,6 @@ definePageMeta({
 onMounted(() => {
   const token = useCookie("token");
   if (token.value) {
-    console.log("Usuário já logado, redirecionando para /home");
     navigateTo("/home");
   }
 });
@@ -131,7 +130,6 @@ const handleLogin = async () => {
       }
     }
   } catch (error: any) {
-    console.error("Erro no login:", error);
     showError("Dados inválidos. Verifique seu login e senha.");
   } finally {
     loading.value = false;

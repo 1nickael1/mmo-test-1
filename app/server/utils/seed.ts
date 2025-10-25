@@ -2,8 +2,6 @@ import { hashPassword } from "./auth";
 import db from "./database";
 
 export function seedDatabase() {
-  console.log("🌱 Iniciando seed do banco de dados...");
-
   // Limpar dados existentes
   db.exec("DELETE FROM upgrades");
   db.exec("DELETE FROM items");
@@ -24,8 +22,6 @@ export function seedDatabase() {
     )
     .run("admin@ninjarpg.com", adminPassword, "Admin");
 
-  console.log("✅ Usuário admin criado");
-
   // Criar usuário de teste
   const testPassword = hashPassword("test123");
   const testResult = db
@@ -36,8 +32,6 @@ export function seedDatabase() {
   `
     )
     .run("test@ninjarpg.com", testPassword, "TestUser");
-
-  console.log("✅ Usuário de teste criado");
 
   // Criar personagens de exemplo
   const ninjaStats = JSON.stringify({
@@ -100,8 +94,6 @@ export function seedDatabase() {
     )
     .run(testResult.lastInsertRowid, "TestNinja", "ninja", 2, 800, ninjaStats);
 
-  console.log("✅ Personagens criados");
-
   // Inicializar recursos para os personagens
   const characterIds = [
     ninjaResult.lastInsertRowid,
@@ -117,8 +109,6 @@ export function seedDatabase() {
     `
     ).run(characterId, characterId, characterId);
   });
-
-  console.log("✅ Recursos inicializados");
 
   // Criar algumas habilidades para os personagens
   const skills = [
@@ -156,8 +146,6 @@ export function seedDatabase() {
     `
     ).run(skill.character_id, skill.skill_name, skill.level, skill.unlocked);
   });
-
-  console.log("✅ Habilidades criadas");
 
   // Criar algumas batalhas de exemplo
   const battles = [
@@ -203,8 +191,6 @@ export function seedDatabase() {
     );
   });
 
-  console.log("✅ Batalhas de exemplo criadas");
-
   // Criar algumas melhorias de exemplo
   const upgrades = [
     {
@@ -241,10 +227,6 @@ export function seedDatabase() {
     );
   });
 
-  console.log("✅ Melhorias de exemplo criadas");
-
-  console.log("🎉 Seed do banco de dados concluído!");
-  console.log("📧 Usuários criados:");
-  console.log("   - admin@ninjarpg.com (senha: admin123)");
-  console.log("   - test@ninjarpg.com (senha: test123)");
+  ");
+  ");
 }
