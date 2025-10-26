@@ -1,0 +1,1 @@
+import{R as n,k as o,n as a}from"#entry";const s=n(async e=>{const t=o("@mmo/ninja/token");if(!["/login","/cadastro","/","/admin"].includes(e.path)&&!t.value)return a("/login")});export{s as default};

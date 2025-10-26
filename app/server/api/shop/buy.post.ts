@@ -1,6 +1,6 @@
 import type { ApiResponse } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/database";
+import db from "../../utils/databaseAdapter";
 import { findShopItemById } from "../../utils/shopItems";
 
 export default defineEventHandler(async (event) => {

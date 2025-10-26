@@ -1,5 +1,5 @@
 import type { CharacterStats, EquipmentStats } from "../../types";
-import db from "./database";
+import db from "./databaseAdapter";
 
 export function calculateCharacterStatsWithEquipment(characterId: number): {
   baseStats: CharacterStats;

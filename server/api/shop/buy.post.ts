@@ -1,6 +1,6 @@
 import type { ApiResponse } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/database";
+import db from "../../utils/databaseAdapter";
 
 // Itens da loja (mesmo do items.get.ts)
 const SHOP_ITEMS = [

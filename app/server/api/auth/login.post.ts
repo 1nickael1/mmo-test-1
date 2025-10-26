@@ -1,6 +1,6 @@
 import type { ApiResponse, LoginRequest, User } from "../../../types";
 import { generateToken, verifyPassword } from "../../utils/auth";
-import db from "../../utils/database";
+import db from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
   try {

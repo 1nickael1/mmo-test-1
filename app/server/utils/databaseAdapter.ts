@@ -5,7 +5,9 @@ interface DatabaseAdapter {
   prepare(query: string): {
     get(...params: any[]): Promise<any>;
     all(...params: any[]): Promise<any[]>;
-    run(...params: any[]): Promise<{ lastInsertRowid: number; changes: number }>;
+    run(
+      ...params: any[]
+    ): Promise<{ lastInsertRowid: number; changes: number }>;
   };
   exec(query: string): Promise<void>;
   close(): Promise<void>;
@@ -100,18 +102,18 @@ const db = createDatabase();
 export async function initializeDatabase() {
   try {
     console.log("🔍 Verificando conexão com Supabase...");
-    
+
     // Testar conexão com uma query simples
     const testQuery = db.prepare("SELECT NOW() as current_time");
     const result = await testQuery.get();
-    
+
     if (result) {
       console.log("✅ Conexão com Supabase estabelecida com sucesso!");
       console.log(`   Hora atual: ${result.current_time}`);
     } else {
       throw new Error("Falha ao conectar com Supabase");
     }
-    
+
     // Verificar se as tabelas existem
     const tablesQuery = db.prepare(`
       SELECT table_name 
@@ -119,19 +121,20 @@ export async function initializeDatabase() {
       WHERE table_schema = 'public' 
       ORDER BY table_name
     `);
-    
+
     const tables = await tablesQuery.all();
-    
+
     if (tables.length === 0) {
       console.log("⚠️  Nenhuma tabela encontrada no Supabase");
-      console.log("   Execute o script supabase-schema.sql no Supabase SQL Editor");
+      console.log(
+        "   Execute o script supabase-schema.sql no Supabase SQL Editor"
+      );
     } else {
       console.log(`✅ ${tables.length} tabelas encontradas no Supabase:`);
       tables.forEach((table: any) => {
         console.log(`   - ${table.table_name}`);
       });
     }
-    
   } catch (error) {
     console.error("❌ Erro ao inicializar banco de dados:", error);
     throw error;

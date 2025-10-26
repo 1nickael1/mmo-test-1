@@ -1,6 +1,6 @@
 import type { ApiResponse, StoryChapter } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/database";
+import db from "../../utils/databaseAdapter";
 
 // Capítulos da história - Expandido até nível 50
 const STORY_CHAPTERS: StoryChapter[] = [

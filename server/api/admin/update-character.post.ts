@@ -1,6 +1,6 @@
 import type { ApiResponse } from "../../../types";
 import { verifyRootToken } from "../../utils/adminAuth";
-import db from "../../utils/database";
+import db from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
   try {

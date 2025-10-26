@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import db from "./database";
+import db from "./databaseAdapter";
 
 // Sistema de backup automático
 export class AutoBackup {

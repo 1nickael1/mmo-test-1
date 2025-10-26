@@ -1,6 +1,6 @@
 import type { ApiResponse, Upgrade } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/database";
+import db from "../../utils/databaseAdapter";
 
 // Melhorias disponíveis
 const AVAILABLE_UPGRADES = [

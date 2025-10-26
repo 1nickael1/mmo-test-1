@@ -1,5 +1,5 @@
 import { hashPassword } from "./auth";
-import db from "./database";
+import db from "./databaseAdapter";
 
 export function seedDatabase() {
   // Limpar dados existentes
