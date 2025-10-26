@@ -18,6 +18,10 @@ logs
 .fleet
 .idea
 
+# Database files (SQLite removed - using Supabase only)
+*.sqlite
+*.db
+
 # Local env files
 .env
 .env.*

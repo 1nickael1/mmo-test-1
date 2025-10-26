@@ -16,10 +16,10 @@ Um RPG de browser single-player que combina elementos de ninjas (inspirado em Na
 
 ## 🛠️ Tecnologias
 
-- **Frontend**: Nuxt 4 + Vue 3
+- **Frontend**: Nuxt 3 + Vue 3
 - **Styling**: Tailwind CSS + shadcn-vue
 - **Backend**: Nitro (servidor integrado do Nuxt)
-- **Banco de Dados**: SQLite (better-sqlite3)
+- **Banco de Dados**: Supabase PostgreSQL
 - **Autenticação**: JWT
 - **Estado**: Pinia
 - **Notificações**: Vue Sonner
