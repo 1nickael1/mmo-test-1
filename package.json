@@ -12,12 +12,19 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:watch": "vitest --watch",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "prepare-deploy": "node scripts/prepare-deploy.js",
+    "deploy:check": "npm run prepare-deploy",
+    "test:supabase": "node scripts/test-supabase.js",
+    "seed:supabase": "node scripts/seed-supabase.js",
+    "populate:game": "node scripts/populate-game-data.js",
+    "seed:complete": "node scripts/complete-seed.js"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.1",
     "@vee-validate/zod": "^4.15.1",
+    "@vercel/postgres": "^0.10.0",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
     "bcryptjs": "^2.4.3",

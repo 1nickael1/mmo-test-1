@@ -17,9 +17,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private keys (only available on server-side)
     jwtSecret: process.env.JWT_SECRET || "your-secret-key",
+    databaseUrl: process.env.DATABASE_URL,
     // Public keys (exposed to client-side)
     public: {
       apiBase: "/api",
+      nodeEnv: process.env.NODE_ENV || "development",
     },
   },
   build: {
@@ -33,5 +35,7 @@ export default defineNuxtConfig({
     experimental: {
       wasm: true,
     },
+    // Configurações específicas para Vercel
+    preset: "vercel",
   },
 });

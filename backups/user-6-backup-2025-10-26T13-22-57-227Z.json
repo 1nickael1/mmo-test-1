@@ -13,7 +13,7 @@
       "user_id": 6,
       "name": "TestNinja",
       "class": "ninja",
-      "level": 1,
+      "level": 5,
       "xp": 1000,
       "stats_json": "{\"strength\":8,\"agility\":12,\"defense\":6,\"health\":80,\"max_health\":80}",
       "created_at": "2025-10-25 13:16:34",
@@ -39,8 +39,8 @@
       "id": 15,
       "character_id": 2,
       "resource_type": "ouro",
-      "amount": 780,
-      "updated_at": "2025-10-26 13:04:06"
+      "amount": 600,
+      "updated_at": "2025-10-26 13:05:38"
     }
   ],
   "skills": [
@@ -59,22 +59,31 @@
   ],
   "equipment": [
     {
-      "id": 7,
+      "id": 11,
       "character_id": 2,
       "equipment_name": "Espada Básica",
       "equipment_type": "weapon",
-      "equipped": 0,
+      "equipped": 1,
       "stats_json": "{\"strength\":5,\"damage\":10}",
-      "created_at": "2025-10-26 13:04:06"
+      "created_at": "2025-10-26 13:05:06"
     },
     {
-      "id": 8,
+      "id": 12,
       "character_id": 2,
       "equipment_name": "Uniforme Ninja",
-      "equipment_type": "weapon",
+      "equipment_type": "armor",
       "equipped": 1,
       "stats_json": "{\"agility\":10,\"stealth\":5}",
-      "created_at": "2025-10-26 13:04:06"
+      "created_at": "2025-10-26 13:05:06"
+    },
+    {
+      "id": 13,
+      "character_id": 2,
+      "equipment_name": "Máscara Ninja",
+      "equipment_type": "accessory",
+      "equipped": 1,
+      "stats_json": "{\"stealth\":15,\"intimidation\":10}",
+      "created_at": "2025-10-26 13:05:38"
     }
   ],
   "items": [],

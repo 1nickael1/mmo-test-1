@@ -62,11 +62,12 @@ export default defineEventHandler(async (event) => {
       version: "1.0.0", // Versão atual da aplicação
     });
 
-    // Definir cookie (Secure apenas em produção para funcionar em http://localhost)
+    // Definir cookie com configurações apropriadas para produção
+    const isProduction = process.env.NODE_ENV === "production";
     setCookie(event, "@mmo/ninja/token", token, {
       httpOnly: false, // Permitir acesso via JavaScript
-      secure: false, // Desabilitar secure para funcionar em http
-      sameSite: "lax", // Mais permissivo para desenvolvimento
+      secure: isProduction, // Secure apenas em produção (HTTPS)
+      sameSite: isProduction ? "strict" : "lax", // Strict em produção, lax em desenvolvimento
       maxAge: 60 * 60 * 24 * 7, // 7 dias
       path: "/", // Garantir que seja válido em toda a aplicação
     });
