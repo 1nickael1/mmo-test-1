@@ -1,7 +1,7 @@
 import type { ApiResponse } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
 import { calculateCharacterStatsWithEquipment } from "../../utils/characterStats";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 interface StoryOpponent {
   id: string;
@@ -175,6 +175,7 @@ const STORY_OPPONENTS: Record<number, StoryOpponent> = {
 };
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 

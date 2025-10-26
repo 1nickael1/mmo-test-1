@@ -1,6 +1,6 @@
 import { d as defineEventHandler, c as createError } from '../../nitro/nitro.mjs';
 import { h as hashPassword } from '../../_/auth.mjs';
-import { d as db } from '../../_/databaseAdapter.mjs';
+import { g as getDatabase$1 } from '../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,22 +13,22 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 function seedDatabase() {
-  db.exec("DELETE FROM upgrades");
-  db.exec("DELETE FROM items");
-  db.exec("DELETE FROM battles");
-  db.exec("DELETE FROM resources");
-  db.exec("DELETE FROM skills");
-  db.exec("DELETE FROM characters");
-  db.exec("DELETE FROM users");
+  getDatabase$1.exec("DELETE FROM upgrades");
+  getDatabase$1.exec("DELETE FROM items");
+  getDatabase$1.exec("DELETE FROM battles");
+  getDatabase$1.exec("DELETE FROM resources");
+  getDatabase$1.exec("DELETE FROM skills");
+  getDatabase$1.exec("DELETE FROM characters");
+  getDatabase$1.exec("DELETE FROM users");
   const adminPassword = hashPassword("admin123");
-  const adminResult = db.prepare(
+  const adminResult = getDatabase$1.prepare(
     `
     INSERT INTO users (email, password_hash, username)
     VALUES (?, ?, ?)
   `
   ).run("admin@ninjarpg.com", adminPassword, "Admin");
   const testPassword = hashPassword("test123");
-  const testResult = db.prepare(
+  const testResult = getDatabase$1.prepare(
     `
     INSERT INTO users (email, password_hash, username)
     VALUES (?, ?, ?)
@@ -48,7 +48,7 @@ function seedDatabase() {
     health: 100,
     max_health: 100
   });
-  const ninjaResult = db.prepare(
+  const ninjaResult = getDatabase$1.prepare(
     `
     INSERT INTO characters (user_id, name, class, level, xp, stats_json)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -61,7 +61,7 @@ function seedDatabase() {
     2500,
     ninjaStats
   );
-  const warriorResult = db.prepare(
+  const warriorResult = getDatabase$1.prepare(
     `
     INSERT INTO characters (user_id, name, class, level, xp, stats_json)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -74,7 +74,7 @@ function seedDatabase() {
     1200,
     warriorStats
   );
-  const testNinjaResult = db.prepare(
+  const testNinjaResult = getDatabase$1.prepare(
     `
     INSERT INTO characters (user_id, name, class, level, xp, stats_json)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -86,7 +86,7 @@ function seedDatabase() {
     testNinjaResult.lastInsertRowid
   ];
   characterIds.forEach((characterId) => {
-    db.prepare(
+    getDatabase$1.prepare(
       `
       INSERT INTO resources (character_id, resource_type, amount)
       VALUES (?, 'ouro', 1000), (?, 'cristais', 10), (?, 'materiais', 25)
@@ -120,7 +120,7 @@ function seedDatabase() {
     }
   ];
   skills.forEach((skill) => {
-    db.prepare(
+    getDatabase$1.prepare(
       `
       INSERT INTO skills (character_id, skill_name, level, unlocked)
       VALUES (?, ?, ?, ?)
@@ -154,7 +154,7 @@ function seedDatabase() {
     }
   ];
   battles.forEach((battle) => {
-    db.prepare(
+    getDatabase$1.prepare(
       `
       INSERT INTO battles (character_id, opponent_type, opponent_level, outcome, xp_gained, rewards_json)
       VALUES (?, ?, ?, ?, ?, ?)
@@ -187,7 +187,7 @@ function seedDatabase() {
     }
   ];
   upgrades.forEach((upgrade) => {
-    db.prepare(
+    getDatabase$1.prepare(
       `
       INSERT INTO upgrades (character_id, upgrade_type, upgrade_name, level, cost_json, is_completed)
       VALUES (?, ?, ?, ?, ?, ?)
@@ -204,6 +204,7 @@ function seedDatabase() {
 }
 
 const seed_post = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     if (true) {
       throw createError({

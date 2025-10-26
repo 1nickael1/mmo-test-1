@@ -1,6 +1,6 @@
 import { d as defineEventHandler, a as getHeader, g as getCookie, c as createError } from '../../nitro/nitro.mjs';
 import { e as extractTokenFromHeader, v as verifyToken } from '../../_/auth.mjs';
-import { d as db } from '../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,6 +13,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const index_get = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

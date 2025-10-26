@@ -11,6 +11,7 @@ import 'bcryptjs';
 import 'jsonwebtoken';
 
 const checkVersion_post = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

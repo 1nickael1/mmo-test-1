@@ -1,8 +1,9 @@
 import type { ApiResponse } from "../../../types";
 import { verifyRootToken } from "../../utils/adminAuth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     // Verificar token administrativo
     let adminToken = getCookie(event, "admin_token");

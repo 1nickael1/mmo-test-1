@@ -8,6 +8,7 @@ import 'node:path';
 import 'node:crypto';
 
 const index_get = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const query = getQuery(event);
     const characterLevel = parseInt(query.level) || 1;

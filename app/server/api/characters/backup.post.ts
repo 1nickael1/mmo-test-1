@@ -2,9 +2,10 @@ import fs from "fs";
 import path from "path";
 import type { ApiResponse } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

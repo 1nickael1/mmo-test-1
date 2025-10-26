@@ -8,6 +8,7 @@ import 'node:path';
 import 'node:crypto';
 
 const available_get = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const query = getQuery(event);
     const characterClass = query.class;

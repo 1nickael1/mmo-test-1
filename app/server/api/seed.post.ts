@@ -1,6 +1,7 @@
 import { seedDatabase } from "../utils/seed";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     // Apenas permitir em desenvolvimento
     if (process.env.NODE_ENV === "production") {

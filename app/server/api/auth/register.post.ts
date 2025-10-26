@@ -1,8 +1,9 @@
 import type { ApiResponse, RegisterRequest, User } from "../../../types";
 import { generateToken, hashPassword } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const body = await readBody<RegisterRequest>(event);
     const { email, password, username } = body;

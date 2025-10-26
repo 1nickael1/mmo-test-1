@@ -2,22 +2,30 @@ import { createClient } from '@vercel/postgres';
 
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 class SupabaseAdapter {
   constructor() {
     __publicField(this, "client");
-    const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
-    if (!connectionString) {
-      throw new Error(
-        "POSTGRES_URL \xE9 obrigat\xF3rio. Configure Supabase na Vercel."
-      );
+    __publicField(this, "initialized", false);
+    this.client = null;
+  }
+  async ensureInitialized() {
+    if (!this.initialized) {
+      const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+      if (!connectionString) {
+        throw new Error(
+          "POSTGRES_URL \xE9 obrigat\xF3rio. Configure Supabase na Vercel."
+        );
+      }
+      console.log("\u{1F50C} Conectando ao Supabase PostgreSQL...");
+      this.client = createClient({
+        connectionString
+      });
+      this.initialized = true;
     }
-    console.log("\u{1F50C} Conectando ao Supabase PostgreSQL...");
-    this.client = createClient({
-      connectionString
-    });
   }
   async prepare(query) {
+    await this.ensureInitialized();
     return {
       get: async (...params) => {
         try {
@@ -53,6 +61,7 @@ class SupabaseAdapter {
     };
   }
   async exec(query) {
+    await this.ensureInitialized();
     try {
       await this.client.query(query);
     } catch (error) {
@@ -61,19 +70,24 @@ class SupabaseAdapter {
     }
   }
   async close() {
-    try {
-      await this.client.end();
-    } catch (error) {
-      console.error("Erro ao fechar conex\xE3o:", error);
-      throw error;
+    if (this.client) {
+      try {
+        await this.client.end();
+      } catch (error) {
+        console.error("Erro ao fechar conex\xE3o:", error);
+        throw error;
+      }
     }
   }
 }
-function createDatabase() {
-  console.log("\u{1F680} Usando Supabase PostgreSQL");
-  return new SupabaseAdapter();
+let dbInstance = null;
+function getDatabase() {
+  if (!dbInstance) {
+    console.log("\u{1F680} Criando inst\xE2ncia Supabase PostgreSQL");
+    dbInstance = new SupabaseAdapter();
+  }
+  return dbInstance;
 }
-const db = createDatabase();
 
-export { db as d };
+export { getDatabase as g };
 //# sourceMappingURL=databaseAdapter.mjs.map

@@ -1,6 +1,6 @@
 import { d as defineEventHandler, g as getCookie, a as getHeader, c as createError } from '../../../nitro/nitro.mjs';
 import { v as verifyRootToken } from '../../../_/adminAuth.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,6 +13,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const characters_get = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     let adminToken = getCookie(event, "admin_token");
     if (!adminToken) {

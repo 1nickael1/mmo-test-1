@@ -1,6 +1,6 @@
 import type { ApiResponse, StoryChapter } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 // Capítulos da história - Expandido até nível 50
 const STORY_CHAPTERS: StoryChapter[] = [
@@ -573,6 +573,7 @@ const STORY_CHAPTERS: StoryChapter[] = [
 ];
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 

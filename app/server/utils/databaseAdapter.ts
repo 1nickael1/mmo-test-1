@@ -16,25 +16,35 @@ interface DatabaseAdapter {
 // Adaptador PostgreSQL para Supabase
 class SupabaseAdapter implements DatabaseAdapter {
   private client: any;
+  private initialized: boolean = false;
 
   constructor() {
-    // Usar POSTGRES_URL do Supabase
-    const connectionString =
-      process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    // Não inicializar o cliente aqui para evitar problemas de inicialização
+    this.client = null;
+  }
 
-    if (!connectionString) {
-      throw new Error(
-        "POSTGRES_URL é obrigatório. Configure Supabase na Vercel."
-      );
+  private async ensureInitialized() {
+    if (!this.initialized) {
+      const connectionString =
+        process.env.POSTGRES_URL || process.env.DATABASE_URL;
+
+      if (!connectionString) {
+        throw new Error(
+          "POSTGRES_URL é obrigatório. Configure Supabase na Vercel."
+        );
+      }
+
+      console.log("🔌 Conectando ao Supabase PostgreSQL...");
+      this.client = createClient({
+        connectionString: connectionString,
+      });
+      this.initialized = true;
     }
-
-    console.log("🔌 Conectando ao Supabase PostgreSQL...");
-    this.client = createClient({
-      connectionString: connectionString,
-    });
   }
 
   async prepare(query: string) {
+    await this.ensureInitialized();
+    
     // Simular interface do SQLite para compatibilidade
     return {
       get: async (...params: any[]) => {
@@ -71,6 +81,8 @@ class SupabaseAdapter implements DatabaseAdapter {
   }
 
   async exec(query: string) {
+    await this.ensureInitialized();
+    
     try {
       await this.client.query(query);
     } catch (error) {
@@ -80,31 +92,37 @@ class SupabaseAdapter implements DatabaseAdapter {
   }
 
   async close() {
-    try {
-      await this.client.end();
-    } catch (error) {
-      console.error("Erro ao fechar conexão:", error);
-      throw error;
+    if (this.client) {
+      try {
+        await this.client.end();
+      } catch (error) {
+        console.error("Erro ao fechar conexão:", error);
+        throw error;
+      }
     }
   }
 }
 
-// Factory para criar o adaptador Supabase
-function createDatabase(): DatabaseAdapter {
-  console.log("🚀 Usando Supabase PostgreSQL");
-  return new SupabaseAdapter();
-}
+// Instância global do banco (lazy initialization)
+let dbInstance: DatabaseAdapter | null = null;
 
-// Instância global do banco
-const db = createDatabase();
+function getDatabase(): DatabaseAdapter {
+  if (!dbInstance) {
+    console.log("🚀 Criando instância Supabase PostgreSQL");
+    dbInstance = new SupabaseAdapter();
+  }
+  return dbInstance;
+}
 
 // Função para inicializar o banco (verificar conexão)
 export async function initializeDatabase() {
   try {
     console.log("🔍 Verificando conexão com Supabase...");
+    
+    const db = getDatabase();
 
     // Testar conexão com uma query simples
-    const testQuery = db.prepare("SELECT NOW() as current_time");
+    const testQuery = await db.prepare("SELECT NOW() as current_time");
     const result = await testQuery.get();
 
     if (result) {
@@ -115,7 +133,7 @@ export async function initializeDatabase() {
     }
 
     // Verificar se as tabelas existem
-    const tablesQuery = db.prepare(`
+    const tablesQuery = await db.prepare(`
       SELECT table_name 
       FROM information_schema.tables 
       WHERE table_schema = 'public' 
@@ -141,4 +159,5 @@ export async function initializeDatabase() {
   }
 }
 
-export default db;
+// Exportar função para obter a instância do banco
+export default getDatabase;

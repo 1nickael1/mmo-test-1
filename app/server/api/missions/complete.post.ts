@@ -1,8 +1,9 @@
 import type { ApiResponse } from "../../../types";
 import { verifyToken } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const body = await readBody(event);
     const { missionId, characterId } = body;

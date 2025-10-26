@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   // Remover cookie de autenticação
   deleteCookie(event, "@mmo/ninja/token");
 

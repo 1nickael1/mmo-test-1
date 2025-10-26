@@ -1,6 +1,6 @@
 import { d as defineEventHandler, a as getHeader, g as getCookie, c as createError, r as readBody } from '../../../nitro/nitro.mjs';
 import { e as extractTokenFromHeader, v as verifyToken } from '../../../_/auth.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -131,6 +131,7 @@ const AVAILABLE_SKILLS = {
   ]
 };
 const learn_post = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

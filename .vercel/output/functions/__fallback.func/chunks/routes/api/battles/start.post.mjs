@@ -1,7 +1,7 @@
 import { d as defineEventHandler, a as getHeader, g as getCookie, c as createError, r as readBody } from '../../../nitro/nitro.mjs';
 import { e as extractTokenFromHeader, v as verifyToken } from '../../../_/auth.mjs';
 import { c as calculateCharacterStatsWithEquipment } from '../../../_/characterStats.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -91,6 +91,7 @@ const NPC_OPPONENTS = {
   }
 };
 const start_post = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
     if (!token) {

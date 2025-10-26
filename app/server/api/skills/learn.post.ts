@@ -1,6 +1,6 @@
 import type { ApiResponse, Skill } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 // Função para calcular cooldown baseado no nível
 // Nível 1 = 1 segundo, Nível 50 = 30 segundos (proporcional)
@@ -115,6 +115,7 @@ const AVAILABLE_SKILLS = {
 };
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

@@ -1,6 +1,6 @@
 import { d as defineEventHandler, r as readBody, c as createError, s as setCookie } from '../../../nitro/nitro.mjs';
 import { a as verifyPassword, g as generateToken } from '../../../_/auth.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,6 +13,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const login_post = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const body = await readBody(event);
     const { username, password } = body;
@@ -22,7 +23,9 @@ const login_post = defineEventHandler(async (event) => {
         message: "Login e senha s\xE3o obrigat\xF3rios"
       });
     }
-    const user = db.prepare("SELECT * FROM users WHERE username = ?").get(username);
+    const db2 = getDatabase();
+    const userQuery = await db2.prepare("SELECT * FROM users WHERE username = ?");
+    const user = await userQuery.get(username);
     if (!user) {
       throw createError({
         statusCode: 401,

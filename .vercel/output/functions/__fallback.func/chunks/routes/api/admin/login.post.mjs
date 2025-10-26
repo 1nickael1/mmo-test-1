@@ -11,6 +11,7 @@ import 'bcryptjs';
 import 'jsonwebtoken';
 
 const login_post = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const body = await readBody(event);
     if (!body.username || !body.password) {

@@ -1,6 +1,6 @@
 import { d as defineEventHandler, a as getHeader, c as createError, f as getRouterParam } from '../../../../nitro/nitro.mjs';
 import { e as extractTokenFromHeader, v as verifyToken } from '../../../../_/auth.mjs';
-import { d as db } from '../../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,6 +13,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const statsWithEquipment_get = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     const token = extractTokenFromHeader(authHeader);

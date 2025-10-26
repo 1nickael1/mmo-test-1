@@ -8,6 +8,7 @@ import 'node:path';
 import 'node:crypto';
 
 const resetCooldowns_post = defineEventHandler(async (event) => {
+  getDatabase();
   throw createError({
     statusCode: 403,
     message: "Esta funcionalidade est\xE1 dispon\xEDvel apenas no dashboard administrativo. Acesse /admin para usar esta funcionalidade."

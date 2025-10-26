@@ -1,8 +1,9 @@
 import type { ApiResponse, Character } from "../../../../types";
 import { verifyToken } from "../../../utils/auth";
-import db from "../../../utils/databaseAdapter";
+import getDatabase from "../../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const characterId = getRouterParam(event, "id");
     const body = await readBody(event);

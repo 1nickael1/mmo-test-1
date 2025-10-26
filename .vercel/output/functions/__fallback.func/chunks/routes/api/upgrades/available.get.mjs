@@ -1,5 +1,5 @@
 import { d as defineEventHandler, e as getQuery, c as createError } from '../../../nitro/nitro.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -10,6 +10,7 @@ import 'node:crypto';
 import '@vercel/postgres';
 
 const available_get = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     const query = getQuery(event);
     const characterLevel = parseInt(query.level) || 1;

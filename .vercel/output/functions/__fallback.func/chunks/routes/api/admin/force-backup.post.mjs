@@ -2,7 +2,7 @@ import { d as defineEventHandler, a as getHeader, g as getCookie, c as createErr
 import { e as extractTokenFromHeader, v as verifyToken } from '../../../_/auth.mjs';
 import fs from 'fs';
 import path from 'path';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase$1 } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -48,7 +48,7 @@ const _AutoBackup = class _AutoBackup {
   }
   async performBackup() {
     try {
-      const users = db.prepare("SELECT id, username FROM users ORDER BY created_at DESC").all();
+      const users = getDatabase$1.prepare("SELECT id, username FROM users ORDER BY created_at DESC").all();
       if (users.length === 0) {
         return;
       }
@@ -73,27 +73,27 @@ const _AutoBackup = class _AutoBackup {
   }
   async backupUserData(userId, username) {
     const userData = {
-      user: db.prepare("SELECT * FROM users WHERE id = ?").get(userId),
-      characters: db.prepare("SELECT * FROM characters WHERE user_id = ?").all(userId),
-      resources: db.prepare(
+      user: getDatabase$1.prepare("SELECT * FROM users WHERE id = ?").get(userId),
+      characters: getDatabase$1.prepare("SELECT * FROM characters WHERE user_id = ?").all(userId),
+      resources: getDatabase$1.prepare(
         "SELECT * FROM resources WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId),
-      skills: db.prepare(
+      skills: getDatabase$1.prepare(
         "SELECT * FROM skills WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId),
-      equipment: db.prepare(
+      equipment: getDatabase$1.prepare(
         "SELECT * FROM equipment WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId),
-      items: db.prepare(
+      items: getDatabase$1.prepare(
         "SELECT * FROM items WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId),
-      upgrades: db.prepare(
+      upgrades: getDatabase$1.prepare(
         "SELECT * FROM upgrades WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId),
-      battles: db.prepare(
+      battles: getDatabase$1.prepare(
         "SELECT * FROM battles WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId),
-      story_progress: db.prepare(
+      story_progress: getDatabase$1.prepare(
         "SELECT * FROM story_progress WHERE character_id IN (SELECT id FROM characters WHERE user_id = ?)"
       ).all(userId)
     };
@@ -162,6 +162,7 @@ const autoBackup = AutoBackup.getInstance();
 autoBackup.start();
 
 const forceBackup_post = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

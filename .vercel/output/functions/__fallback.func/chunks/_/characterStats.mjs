@@ -1,11 +1,11 @@
-import { d as db } from './databaseAdapter.mjs';
+import { g as getDatabase } from './databaseAdapter.mjs';
 
 function calculateCharacterStatsWithEquipment(characterId) {
-  const character = db.prepare("SELECT * FROM characters WHERE id = ?").get(characterId);
+  const character = getDatabase.prepare("SELECT * FROM characters WHERE id = ?").get(characterId);
   if (!character) {
     throw new Error("Personagem n\xE3o encontrado");
   }
-  const equippedItems = db.prepare(
+  const equippedItems = getDatabase.prepare(
     `
     SELECT * FROM equipment 
     WHERE character_id = ? AND equipped = TRUE

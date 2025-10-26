@@ -1,6 +1,7 @@
 import type { ApiResponse } from "../../types";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     // Versão atual da aplicação
     const currentVersion = "1.2.0";

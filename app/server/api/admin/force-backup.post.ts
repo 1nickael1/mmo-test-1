@@ -3,6 +3,7 @@ import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
 import autoBackup from "../../utils/autoBackup";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

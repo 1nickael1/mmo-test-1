@@ -4,6 +4,7 @@ import type { ApiResponse } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

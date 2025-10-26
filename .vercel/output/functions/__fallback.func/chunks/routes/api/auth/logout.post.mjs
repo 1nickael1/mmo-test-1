@@ -8,6 +8,7 @@ import 'node:path';
 import 'node:crypto';
 
 const logout_post = defineEventHandler(async (event) => {
+  getDatabase();
   deleteCookie(event, "@mmo/ninja/token");
   return {
     success: true,

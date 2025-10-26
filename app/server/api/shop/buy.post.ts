@@ -1,9 +1,10 @@
 import type { ApiResponse } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 import { findShopItemById } from "../../utils/shopItems";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 

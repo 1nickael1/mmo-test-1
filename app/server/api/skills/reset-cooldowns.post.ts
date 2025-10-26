@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   throw createError({
     statusCode: 403,
     message:

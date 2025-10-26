@@ -1,6 +1,6 @@
 import { d as defineEventHandler, a as getHeader, g as getCookie, c as createError, r as readBody } from '../../../nitro/nitro.mjs';
 import { e as extractTokenFromHeader, v as verifyToken } from '../../../_/auth.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import { f as findShopItemById } from '../../../_/shopItems.mjs';
 import 'node:http';
 import 'node:https';
@@ -14,6 +14,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const buy_post = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
     if (!token) {

@@ -1,7 +1,8 @@
 import type { ApiResponse, Upgrade } from "../../../types";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const query = getQuery(event);
     const characterLevel = parseInt(query.level as string) || 1;

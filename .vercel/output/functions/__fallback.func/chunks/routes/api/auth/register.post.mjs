@@ -1,6 +1,6 @@
 import { d as defineEventHandler, r as readBody, c as createError, s as setCookie } from '../../../nitro/nitro.mjs';
 import { h as hashPassword, g as generateToken } from '../../../_/auth.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,6 +13,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const register_post = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     const body = await readBody(event);
     const { email, password, username } = body;

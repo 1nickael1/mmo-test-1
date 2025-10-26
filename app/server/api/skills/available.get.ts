@@ -1,6 +1,7 @@
 import type { ApiResponse } from "../../../types";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const query = getQuery(event);
     const characterClass = query.class as string;

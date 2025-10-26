@@ -8,6 +8,7 @@ import 'node:path';
 import 'node:crypto';
 
 const test_get = defineEventHandler(async (event) => {
+  getDatabase();
   return {
     message: "API funcionando!",
     timestamp: (/* @__PURE__ */ new Date()).toISOString()

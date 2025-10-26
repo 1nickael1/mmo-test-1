@@ -8,6 +8,7 @@ import 'node:path';
 import 'node:crypto';
 
 const version_get = defineEventHandler(async (event) => {
+  getDatabase();
   try {
     const currentVersion = "1.2.0";
     const minSupportedVersion = "1.2.0";

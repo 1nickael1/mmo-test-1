@@ -1,6 +1,6 @@
 import type { ApiResponse, Upgrade } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 // Melhorias disponíveis
 const AVAILABLE_UPGRADES = [
@@ -82,6 +82,7 @@ const AVAILABLE_UPGRADES = [
 ];
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);

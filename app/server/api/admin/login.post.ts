@@ -5,6 +5,7 @@ import {
 } from "../../utils/adminAuth";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const body = await readBody<{
       username: string;

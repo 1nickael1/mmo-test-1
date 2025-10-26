@@ -1,7 +1,7 @@
 import type { ApiResponse, BattleRequest, NPC } from "../../../types";
 import { extractTokenFromHeader, verifyToken } from "../../utils/auth";
 import { calculateCharacterStatsWithEquipment } from "../../utils/characterStats";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 // NPCs disponíveis (sincronizado com opponents.get.ts)
 const NPC_OPPONENTS: Record<string, NPC> = {
@@ -83,6 +83,7 @@ const NPC_OPPONENTS: Record<string, NPC> = {
 };
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 

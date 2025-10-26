@@ -1,8 +1,9 @@
 import type { ApiResponse, LoginRequest, User } from "../../../types";
 import { generateToken, verifyPassword } from "../../utils/auth";
-import db from "../../utils/databaseAdapter";
+import getDatabase from "../../utils/databaseAdapter";
 
 export default defineEventHandler(async (event) => {
+    const db = getDatabase();
   try {
     const body = await readBody<LoginRequest>(event);
     const { username, password } = body;
@@ -15,9 +16,9 @@ export default defineEventHandler(async (event) => {
     }
 
     // Buscar usuário no banco
-    const user = db
-      .prepare("SELECT * FROM users WHERE username = ?")
-      .get(username) as User & { password_hash: string };
+    const db = getDatabase();
+    const userQuery = await db.prepare("SELECT * FROM users WHERE username = ?");
+    const user = await userQuery.get(username) as User & { password_hash: string };
 
     if (!user) {
       throw createError({

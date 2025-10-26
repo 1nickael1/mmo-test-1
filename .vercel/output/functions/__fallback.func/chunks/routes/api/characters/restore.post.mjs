@@ -2,7 +2,7 @@ import { d as defineEventHandler, a as getHeader, g as getCookie, c as createErr
 import fs from 'fs';
 import path from 'path';
 import { e as extractTokenFromHeader, v as verifyToken } from '../../../_/auth.mjs';
-import { d as db } from '../../../_/databaseAdapter.mjs';
+import { g as getDatabase } from '../../../_/databaseAdapter.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -15,6 +15,7 @@ import 'jsonwebtoken';
 import '@vercel/postgres';
 
 const restore_post = defineEventHandler(async (event) => {
+  const db = getDatabase();
   try {
     const authHeader = getHeader(event, "authorization");
     let token = extractTokenFromHeader(authHeader);
