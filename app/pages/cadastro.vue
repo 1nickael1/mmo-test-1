@@ -105,7 +105,7 @@ definePageMeta({
 
 // Verificar se usuário já está logado e redirecionar
 onMounted(() => {
-  const token = useCookie("token");
+  const token = useCookie("@mmo/ninja/token");
   if (token.value) {
     navigateTo("/home");
   }

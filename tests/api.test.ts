@@ -361,7 +361,13 @@ describe("APIs do Sistema", () => {
         },
       ];
 
-      const response = await $fetch("/api/shop/items?level=3");
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 3,
+          class: "ninja",
+        },
+      });
 
       expect(response.success).toBe(true);
       expect(response.data).toBeInstanceOf(Array);
@@ -392,6 +398,238 @@ describe("APIs do Sistema", () => {
 
       expect(response.success).toBe(true);
       expect(response.message).toBe("Item comprado com sucesso");
+    });
+  });
+
+  describe("API da Loja", () => {
+    it("deve retornar itens da loja para ninja nível 1", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "ninja",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens específicos do ninja
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Shuriken Básico");
+      expect(itemNames).toContain("Uniforme Ninja");
+    });
+
+    it("deve retornar itens da loja para guerreiro espacial nível 1", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "guerreiro_espacial",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens específicos do guerreiro espacial
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Rifle de Plasma");
+      expect(itemNames).toContain("Armadura Espacial Básica");
+    });
+
+    it("deve retornar itens da loja para mago elemental nível 1", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "mago_elemental",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens específicos do mago elemental
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Cajado Elemental");
+      expect(itemNames).toContain("Túnica de Mago");
+    });
+
+    it("deve retornar itens da loja para arqueiro élfico nível 1", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "arqueiro_elfo",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens específicos do arqueiro élfico
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Arco Élfico");
+      expect(itemNames).toContain("Armadura Élfica");
+    });
+
+    it("deve retornar itens da loja para paladino sagrado nível 1", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "paladino_sagrado",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens específicos do paladino sagrado
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Espada Sagrada");
+      expect(itemNames).toContain("Armadura Sagrada");
+    });
+
+    it("deve retornar itens da loja para ladrão sombrio nível 1", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "ladrao_sombrio",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens específicos do ladrão sombrio
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Adaga Sombria");
+      expect(itemNames).toContain("Armadura Sombria");
+    });
+
+    it("deve retornar itens base para todas as classes", async () => {
+      const classes = [
+        "ninja",
+        "guerreiro_espacial",
+        "mago_elemental",
+        "arqueiro_elfo",
+        "paladino_sagrado",
+        "ladrao_sombrio",
+      ];
+
+      for (const characterClass of classes) {
+        const response = await $fetch("/api/shop/items", {
+          method: "GET",
+          query: {
+            level: 1,
+            class: characterClass,
+          },
+        });
+
+        expect(response.success).toBe(true);
+        expect(response.data).toBeDefined();
+        expect(Array.isArray(response.data)).toBe(true);
+        expect(response.data.length).toBeGreaterThan(0);
+
+        // Verificar se contém itens base (disponíveis para todas as classes)
+        const itemNames = response.data.map((item: any) => item.name);
+        expect(itemNames).toContain("Poção de Vida Básica");
+        expect(itemNames).toContain("Espada Básica");
+      }
+    });
+
+    it("deve retornar itens de níveis diferentes", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 5,
+          class: "ninja",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Verificar se contém itens de diferentes níveis
+      const items = response.data;
+      const level1Items = items.filter(
+        (item: any) => item.level_required === 1
+      );
+      const level5Items = items.filter(
+        (item: any) => item.level_required === 5
+      );
+
+      expect(level1Items.length).toBeGreaterThan(0);
+      expect(level5Items.length).toBeGreaterThan(0);
+    });
+
+    it("deve marcar itens como compráveis ou não baseado no nível", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 3,
+          class: "ninja",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+
+      const items = response.data;
+
+      // Itens do nível 3 ou inferior devem ser compráveis
+      const purchasableItems = items.filter(
+        (item: any) => item.can_buy === true
+      );
+      expect(purchasableItems.length).toBeGreaterThan(0);
+
+      // Itens de nível superior devem não ser compráveis
+      const nonPurchasableItems = items.filter(
+        (item: any) => item.can_buy === false
+      );
+      expect(nonPurchasableItems.length).toBeGreaterThan(0);
+    });
+
+    it("deve retornar erro se não fornecer parâmetros obrigatórios", async () => {
+      // Teste sem parâmetros
+      await expect($fetch("/api/shop/items")).rejects.toThrow();
+    });
+
+    it("deve retornar itens mesmo com classe inválida (fallback para ninja)", async () => {
+      const response = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 1,
+          class: "classe_inexistente",
+        },
+      });
+
+      expect(response.success).toBe(true);
+      expect(response.data).toBeDefined();
+      expect(Array.isArray(response.data)).toBe(true);
+      expect(response.data.length).toBeGreaterThan(0);
+
+      // Deve retornar pelo menos os itens base
+      const itemNames = response.data.map((item: any) => item.name);
+      expect(itemNames).toContain("Poção de Vida Básica");
     });
   });
 });

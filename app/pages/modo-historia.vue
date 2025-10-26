@@ -304,7 +304,7 @@ const loadStoryChapters = async () => {
 
   loading.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/story/chapters", {
       method: "GET",
       headers: {
@@ -320,7 +320,7 @@ const loadStoryChapters = async () => {
       storyChapters.value = response.data || [];
     }
   } catch (error) {
-    } finally {
+  } finally {
     loading.value = false;
   }
 };
@@ -329,7 +329,7 @@ const loadCurrentGold = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/resources", {
       method: "GET",
       headers: {
@@ -346,8 +346,7 @@ const loadCurrentGold = async () => {
       );
       currentGold.value = goldResource ? goldResource.amount : 0;
     }
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const selectChapter = (chapter: StoryChapter) => {
@@ -358,7 +357,7 @@ const startChapterBattle = async (chapter: StoryChapter) => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
 
     // Iniciar batalha real do capítulo
     const battleResponse = await $fetch("/api/story/start-battle", {

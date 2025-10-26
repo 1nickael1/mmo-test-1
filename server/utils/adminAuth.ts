@@ -54,5 +54,5 @@ export function hashPassword(password: string): string {
 
 export function updateRootPassword(newPassword: string): void {
   // Em produção, isso deveria salvar em um arquivo de configuração ou banco de dados
-  }`);
-  }
+  console.log("Password updated successfully");
+}

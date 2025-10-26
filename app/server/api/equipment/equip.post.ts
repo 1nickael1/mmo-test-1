@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 
     if (!token) {
-      token = getCookie(event, "token"); // Try to get token from cookie
+      token = getCookie(event, "@mmo/ninja/token"); // Try to get token from cookie
     }
 
     if (!token) {
@@ -92,14 +92,20 @@ export default defineEventHandler(async (event) => {
       return response;
     }
 
-    // Desequipar outros equipamentos do mesmo tipo
-    db.prepare(
+    // Desequipar outros equipamentos do mesmo tipo (apenas para weapon e armor)
+    if (
+      equipment.equipment_type === "weapon" ||
+      equipment.equipment_type === "armor"
+    ) {
+      db.prepare(
+        `
+        UPDATE equipment 
+        SET equipped = FALSE 
+        WHERE character_id = ? AND equipment_type = ? AND id != ?
       `
-      UPDATE equipment 
-      SET equipped = FALSE 
-      WHERE character_id = ? AND equipment_type = ? AND id != ?
-    `
-    ).run(character_id, equipment.equipment_type, equipment_id);
+      ).run(character_id, equipment.equipment_type, equipment_id);
+    }
+    // Para accessories, não desequipar outros (permitir múltiplos acessórios)
 
     // Equipar o novo equipamento
     db.prepare(

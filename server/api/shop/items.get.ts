@@ -253,7 +253,6 @@ export default defineEventHandler(async (event) => {
             ...item,
             can_buy: canBuy,
           };
-          );
           return result;
         });
         availableItems.push(...itemsWithValidation);
@@ -270,8 +269,6 @@ export default defineEventHandler(async (event) => {
         availableItems.push(...items);
       }
     }
-
-    );
 
     const response: ApiResponse<ShopItem[]> = {
       success: true,

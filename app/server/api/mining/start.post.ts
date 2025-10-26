@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     let token = extractTokenFromHeader(getHeader(event, "authorization"));
 
     if (!token) {
-      token = getCookie(event, "token"); // Try to get token from cookie
+      token = getCookie(event, "@mmo/ninja/token"); // Try to get token from cookie
     }
 
     if (!token) {

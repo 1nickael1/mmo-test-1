@@ -29,7 +29,7 @@ export const useAppVersion = () => {
   const requiresLogout = ref(false);
 
   // Versão do localStorage (para detectar mudanças estruturais)
-  const storageVersion = ref<string>("1.0.0");
+  const storageVersion = ref<string>("1.2.0");
 
   // Verificar se a versão do localStorage mudou
   const checkStorageVersion = () => {
@@ -68,6 +68,12 @@ export const useAppVersion = () => {
     if (process.client) {
       // Limpar tudo, incluindo token
       clearLocalStorage(false);
+
+      // Definir a nova storage version para evitar loop
+      localStorage.setItem(STORAGE_VERSION_KEY, storageVersion.value);
+
+      // Limpar selectedCharacterId para evitar redirecionamento automático
+      localStorage.removeItem("@mmo/ninja/selectedCharacterId");
 
       // Redirecionar para login
       window.location.href = "/login";
@@ -115,6 +121,30 @@ export const useAppVersion = () => {
     if (!process.client) return;
 
     try {
+      // PRIMEIRO: Verificar se a storage version mudou (pode requerer logout)
+      const storedStorageVersion = localStorage.getItem(STORAGE_VERSION_KEY);
+      if (
+        !storedStorageVersion ||
+        storedStorageVersion !== storageVersion.value
+      ) {
+        // Storage version mudou - forçar logout para garantir compatibilidade
+        requiresLogout.value = true;
+
+        // Atualizar storage version ANTES do logout para evitar loop
+        localStorage.setItem(STORAGE_VERSION_KEY, storageVersion.value);
+
+        const { showError } = useToast();
+        showError(
+          "A estrutura da aplicação foi atualizada. Você será redirecionado para fazer login novamente."
+        );
+
+        setTimeout(() => {
+          forceLogout();
+        }, 3000);
+
+        return;
+      }
+
       const serverData = await fetchServerVersion();
       if (!serverData) return;
 
@@ -147,7 +177,7 @@ export const useAppVersion = () => {
         return;
       }
 
-      // Verificar se a versão atual é suportada (mais flexível)
+      // Verificar se a versão atual é suportada
       const isVersionSupported =
         compareVersions(currentVersion.value, minSupportedVersion.value) >= 0;
 
@@ -155,6 +185,23 @@ export const useAppVersion = () => {
       if (!storedVersion) {
         localStorage.setItem(STORAGE_KEY, serverData.version);
         currentVersion.value = serverData.version;
+        return;
+      }
+
+      // Verificar se a versão atual é menor que a versão mínima suportada
+      if (!isVersionSupported) {
+        requiresLogout.value = true;
+
+        // Forçar logout imediatamente
+        const { showError } = useToast();
+        showError(
+          `Sua versão (${currentVersion.value}) não é mais suportada. Versão mínima: ${minSupportedVersion.value}. Você será redirecionado para fazer login novamente.`
+        );
+
+        setTimeout(() => {
+          forceLogout();
+        }, 3000);
+
         return;
       }
 

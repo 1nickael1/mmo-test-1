@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     const characterId = parseInt(character_id);
 
     // Verificar autenticação
-    const token = getCookie(event, "token");
+    const token = getCookie(event, "@mmo/ninja/token");
     if (!token) {
       throw createError({
         statusCode: 401,

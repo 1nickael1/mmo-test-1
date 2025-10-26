@@ -105,7 +105,7 @@ export const useCharacterStore = defineStore("character", () => {
         }
       }
     } catch (error) {
-      } finally {
+    } finally {
       loading.value = false;
     }
   };
@@ -143,7 +143,8 @@ export const useCharacterStore = defineStore("character", () => {
         }
       }
     } catch (error) {
-      } finally {
+      console.error("Store: Erro ao carregar personagens:", error);
+    } finally {
       loading.value = false;
     }
   };
@@ -242,6 +243,7 @@ export const useCharacterStore = defineStore("character", () => {
     currentCharacter,
     characters: readonly(characters),
     loading: readonly(loading),
+    getAuthHeaders,
     getBaseStats,
     getXpForLevel,
     canLevelUp,

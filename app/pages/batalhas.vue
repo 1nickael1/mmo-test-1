@@ -500,7 +500,7 @@ const loadOpponents = async () => {
   loading.value = true;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/battles/opponents?level=${characterStore.currentCharacter.level}`,
       {
@@ -511,7 +511,8 @@ const loadOpponents = async () => {
     );
     opponents.value = response.data || [];
   } catch (error) {
-    } finally {
+    console.error("Erro ao carregar oponentes:", error);
+  } finally {
     loading.value = false;
   }
 };
@@ -520,7 +521,7 @@ const loadSkills = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/skills/${characterStore.currentCharacter.id}`,
       {
@@ -550,15 +551,14 @@ const loadSkills = async () => {
         skillCooldowns.value[skill.skill_name] = 0;
       }
     });
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const saveBattleState = async () => {
   if (!currentBattle.value || !characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     await $fetch("/api/battles/save", {
       method: "POST",
       headers: {
@@ -577,15 +577,14 @@ const saveBattleState = async () => {
         },
       },
     });
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const loadActiveBattle = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/battles/active?character_id=${characterStore.currentCharacter.id}`,
       {
@@ -626,15 +625,14 @@ const loadActiveBattle = async () => {
       battleState.value = "battling";
       startCooldownTimer();
     }
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const finishBattle = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     await $fetch("/api/battles/finish", {
       method: "POST",
       headers: {
@@ -644,8 +642,7 @@ const finishBattle = async () => {
         character_id: characterStore.currentCharacter.id,
       },
     });
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const startBattle = async (opponent: NPC) => {
@@ -654,7 +651,7 @@ const startBattle = async (opponent: NPC) => {
   battleLoading.value = true;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/battles/start", {
       method: "POST",
       headers: {
@@ -679,7 +676,7 @@ const startBattle = async (opponent: NPC) => {
       await saveBattleState();
     }
   } catch (error) {
-    } finally {
+  } finally {
     battleLoading.value = false;
   }
 };
@@ -732,7 +729,7 @@ const useSkill = async (skill: any) => {
   battleMessage.value = `Você usa ${skill.skill_name}!`;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/skills/use", {
       method: "POST",
       headers: {
@@ -847,7 +844,7 @@ const resolveBattle = async (outcome: "victory" | "defeat") => {
   if (!currentBattle.value) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
 
     // Determinar se é uma batalha de história
     const isStoryBattle = currentBattle.value.battle_type === "story";
@@ -892,8 +889,7 @@ const resolveBattle = async (outcome: "victory" | "defeat") => {
       // Atualizar personagem no store
       await characterStore.loadCharacters();
     }
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const resetBattle = () => {

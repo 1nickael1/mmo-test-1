@@ -1,5 +1,37 @@
 # Contexto Permanente - MMO RPG Project
 
+## 🚀 Versão Atual: 1.2.0 (Janeiro 2025)
+
+### 🎯 **Principais Melhorias Implementadas:**
+
+#### **✅ Correções de Autenticação (v1.2.0)**
+
+- **Cookie Padronizado**: Todos os cookies agora usam prefixo `@mmo/ninja/`
+- **Botão de Logout Melhorado**: Ícone visível e funcional em desktop e mobile
+- **Carregamento de Usuário**: Header agora carrega dados do usuário automaticamente
+- **Consistência**: Todas as páginas agora usam autenticação correta
+
+#### **✅ Interface de Personagem Reformulada (v1.2.0)**
+
+- **Dashboard Completo**: Resumo de status, habilidades e equipamentos
+- **Lista de Personagens**: Troca fácil entre personagens na mesma página
+- **Carregamento Automático**: Habilidades e equipamentos carregam automaticamente
+- **Estados Visuais**: Loading states e mensagens motivacionais
+
+#### **✅ Filtros e Navegação Melhorados (v1.2.0)**
+
+- **Legibilidade**: Texto escuro em fundos claros para melhor contraste
+- **Indicação Visual**: Borda azul para filtros selecionados
+- **Consistência**: Padrão visual unificado em todas as páginas
+- **Responsividade**: Funciona perfeitamente em desktop e mobile
+
+#### **✅ Correções de Sistema (v1.2.0)**
+
+- **Erro "Personagem não encontrado"**: Resolvido em todas as páginas
+- **Carregamento de Recursos**: Ouro, materiais e cristais agora aparecem corretamente
+- **Funcionalidades Completas**: Loja, equipamentos, batalhas funcionam 100%
+- **Estabilidade**: Sistema robusto e confiável para produção
+
 ## Stack Tecnológica (2025)
 
 - **Frontend**: Nuxt 3.13.0 + Vue 3.5.22 + TypeScript 5.9.3

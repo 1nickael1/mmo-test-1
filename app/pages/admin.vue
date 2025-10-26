@@ -22,114 +22,126 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
-        <!-- Login Form (se não estiver logado) -->
-        <div v-if="!isAuthenticated" class="max-w-md mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle class="text-center">Login Administrativo</CardTitle>
-              <CardDescription class="text-center">
-                Acesso restrito para administradores
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form @submit.prevent="login" class="space-y-4">
-                <div>
-                  <Label for="username">Usuário</Label>
-                  <Input
-                    id="username"
-                    v-model="loginForm.username"
-                    type="text"
-                    placeholder="root"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label for="password">Senha</Label>
-                  <Input
-                    id="password"
-                    v-model="loginForm.password"
-                    type="password"
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-                <Button type="submit" class="w-full" :disabled="loading">
-                  {{ loading ? "Entrando..." : "Entrar" }}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+        <ClientOnly>
+          <!-- Loading State -->
+          <div v-if="isAuthenticated === null" class="text-center">
+            <div
+              class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"
+            ></div>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">
+              Verificando autenticação...
+            </p>
+          </div>
 
-        <!-- Dashboard Content (se estiver logado) -->
-        <div v-else class="space-y-6">
-          <!-- Characters Section -->
-          <Card>
-            <CardHeader>
-              <CardTitle>Gerenciar Personagens</CardTitle>
-              <CardDescription>
-                Visualize e gerencie todos os personagens do sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div class="space-y-4">
-                <!-- Character List -->
-                <div v-if="characters.length > 0" class="space-y-3">
-                  <div
-                    v-for="character in characters"
-                    :key="character.id"
-                    class="border rounded-lg p-4 bg-white dark:bg-gray-800"
-                  >
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white"
-                        >
-                          {{ character.name }}
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                          Classe: {{ character.class }} | Nível:
-                          {{ character.level }} | XP: {{ character.xp }}
-                        </p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                          Usuário: {{ character.user_username }} ({{
-                            character.user_email
-                          }})
-                        </p>
-                      </div>
-                      <div class="flex space-x-2">
-                        <Button
-                          @click="resetSkillsCooldown(character.id)"
-                          variant="outline"
-                          size="sm"
-                          :disabled="loading"
-                        >
-                          Reset Cooldowns
-                        </Button>
-                        <Button
-                          @click="openCharacterEditor(character)"
-                          variant="outline"
-                          size="sm"
-                        >
-                          Editar
-                        </Button>
+          <!-- Login Form (se não estiver logado) -->
+          <div v-else-if="isAuthenticated === false" class="max-w-md mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle class="text-center">Login Administrativo</CardTitle>
+                <CardDescription class="text-center">
+                  Acesso restrito para administradores
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form @submit.prevent="login" class="space-y-4">
+                  <div>
+                    <Label for="username">Usuário</Label>
+                    <Input
+                      id="username"
+                      v-model="loginForm.username"
+                      type="text"
+                      placeholder="root"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label for="password">Senha</Label>
+                    <Input
+                      id="password"
+                      v-model="loginForm.password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" class="w-full" :disabled="loading">
+                    {{ loading ? "Entrando..." : "Entrar" }}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+
+          <!-- Dashboard Content (se estiver logado) -->
+          <div v-else class="space-y-6">
+            <!-- Characters Section -->
+            <Card>
+              <CardHeader>
+                <CardTitle>Gerenciar Personagens</CardTitle>
+                <CardDescription>
+                  Visualize e gerencie todos os personagens do sistema
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div class="space-y-4">
+                  <!-- Character List -->
+                  <div v-if="characters.length > 0" class="space-y-3">
+                    <div
+                      v-for="character in characters"
+                      :key="character.id"
+                      class="border rounded-lg p-4 bg-white dark:bg-gray-800"
+                    >
+                      <div class="flex justify-between items-start">
+                        <div>
+                          <h3
+                            class="text-lg font-semibold text-gray-900 dark:text-white"
+                          >
+                            {{ character.name }}
+                          </h3>
+                          <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Classe: {{ character.class }} | Nível:
+                            {{ character.level }} | XP: {{ character.xp }}
+                          </p>
+                          <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Usuário: {{ character.user_username }} ({{
+                              character.user_email
+                            }})
+                          </p>
+                        </div>
+                        <div class="flex space-x-2">
+                          <Button
+                            @click="resetSkillsCooldown(character.id)"
+                            variant="outline"
+                            size="sm"
+                            :disabled="loading"
+                          >
+                            Reset Cooldowns
+                          </Button>
+                          <Button
+                            @click="openCharacterEditor(character)"
+                            variant="outline"
+                            size="sm"
+                          >
+                            Editar
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <div
+                    v-else-if="!loading"
+                    class="text-center text-gray-500 dark:text-gray-400"
+                  >
+                    Nenhum personagem encontrado
+                  </div>
+                  <div v-if="loading" class="text-center">
+                    Carregando personagens...
+                  </div>
                 </div>
-                <div
-                  v-else-if="!loading"
-                  class="text-center text-gray-500 dark:text-gray-400"
-                >
-                  Nenhum personagem encontrado
-                </div>
-                <div v-if="loading" class="text-center">
-                  Carregando personagens...
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
+        </ClientOnly>
       </div>
     </main>
 
@@ -239,7 +251,7 @@ definePageMeta({
 const { showSuccess, showError } = useToast();
 
 // State
-const isAuthenticated = ref(false);
+const isAuthenticated = ref<boolean | null>(null); // null = verificando, true = logado, false = não logado
 const loading = ref(false);
 const characters = ref<any[]>([]);
 const showCharacterEditor = ref(false);
@@ -369,13 +381,35 @@ const updateCharacter = async () => {
 
 // Check authentication on mount
 onMounted(async () => {
-  // Verificar se já está autenticado
-  try {
-    await loadCharacters();
-    isAuthenticated.value = true;
-  } catch (error) {
-    // Não está autenticado
-    isAuthenticated.value = false;
+  // Só executar no cliente
+  if (process.client) {
+    // Verificar se já está autenticado verificando o cookie admin_token
+    const adminToken = useCookie("admin_token");
+
+    if (adminToken.value) {
+      try {
+        // Testar se o token é válido fazendo uma requisição simples
+        const response = await $fetch("/api/admin/characters", {
+          headers: {
+            Authorization: `Bearer ${adminToken.value}`,
+          },
+        });
+
+        if (response.success) {
+          characters.value = response.data.characters;
+          isAuthenticated.value = true;
+        } else {
+          isAuthenticated.value = false;
+          adminToken.value = null;
+        }
+      } catch (error) {
+        // Token inválido ou expirado
+        isAuthenticated.value = false;
+        adminToken.value = null;
+      }
+    } else {
+      isAuthenticated.value = false;
+    }
   }
 });
 </script>

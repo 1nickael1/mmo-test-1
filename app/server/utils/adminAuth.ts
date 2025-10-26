@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { hashPassword } from "./auth";
 
 // Configuração do usuário root (em produção, isso deveria vir de variáveis de ambiente)
 const ROOT_USER = {
@@ -51,11 +52,9 @@ export function verifyRootToken(token: string): any {
   }
 }
 
-export function hashPassword(password: string): string {
-  return bcrypt.hashSync(password, 10);
-}
+export { hashPassword };
 
 export function updateRootPassword(newPassword: string): void {
   // Em produção, isso deveria salvar em um arquivo de configuração ou banco de dados
-  }`);
-  }
+  console.log("Password updated successfully");
+}

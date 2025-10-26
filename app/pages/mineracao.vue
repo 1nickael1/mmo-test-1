@@ -268,7 +268,7 @@ const loadResources = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/resources/${characterStore.currentCharacter.id}`,
       {
@@ -278,8 +278,7 @@ const loadResources = async () => {
       }
     );
     resources.value = response.data || [];
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const startMining = async (miningType: "materials" | "crystals") => {
@@ -288,7 +287,7 @@ const startMining = async (miningType: "materials" | "crystals") => {
   mining.value = true;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/mining/start", {
       method: "POST",
       headers: {
@@ -305,7 +304,7 @@ const startMining = async (miningType: "materials" | "crystals") => {
       await loadResources(); // Recarregar recursos
     }
   } catch (error: any) {
-    } finally {
+  } finally {
     mining.value = false;
   }
 };

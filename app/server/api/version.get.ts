@@ -3,26 +3,41 @@ import type { ApiResponse } from "../../types";
 export default defineEventHandler(async (event) => {
   try {
     // Versão atual da aplicação
-    const currentVersion = "1.1.0";
+    const currentVersion = "1.2.0";
 
     // Versão mínima suportada (versões abaixo desta serão forçadas a atualizar)
-    const minSupportedVersion = "1.0.0";
+    const minSupportedVersion = "1.2.0";
 
     // Data da última atualização
-    const lastUpdate = "2025-10-25T19:29:52.667Z";
+    const lastUpdate = "2025-01-25T20:00:00.000Z";
 
     // Versões que requerem logout forçado (versões antigas incompatíveis)
     const forceLogoutVersions: string[] = [];
 
     // Changelog das principais mudanças
-    const changelog = [    {
-      version: "1.1.0",
-      date: "2025-10-25T19:29:52.667Z",
-      changes: [
-        "Implementação de 5 novas classes de personagem com conteúdo completo até nível 50"
-      ],
-      breaking_changes: []
-    },
+    const changelog = [
+      {
+        version: "1.2.0",
+        date: "2025-01-25T20:00:00.000Z",
+        changes: [
+          "Correções de autenticação com cookies padronizados",
+          "Interface de personagem reformulada com dashboard completo",
+          "Filtros e navegação melhorados com melhor legibilidade",
+          "Correção do erro 'personagem não encontrado' em todas as páginas",
+          "Carregamento correto de recursos (ouro, materiais, cristais)",
+          "Botão de logout melhorado com ícone visível",
+          "Sistema robusto e estável para produção",
+        ],
+        breaking_changes: [],
+      },
+      {
+        version: "1.1.0",
+        date: "2025-10-25T19:29:52.667Z",
+        changes: [
+          "Implementação de 5 novas classes de personagem com conteúdo completo até nível 50",
+        ],
+        breaking_changes: [],
+      },
 
       {
         version: "1.0.0",

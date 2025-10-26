@@ -116,6 +116,14 @@ export interface EquipmentStats {
   holy_resistance?: number;
   holy_protection?: number;
   holy_power?: number;
+  intimidation?: number;
+  flight?: boolean;
+  mana?: number;
+  elemental_mastery?: number;
+  spell_knowledge?: number;
+  perception?: number;
+  healing?: number;
+  lockpicking?: number;
 }
 
 export interface StoryChapter {

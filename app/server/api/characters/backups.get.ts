@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
     // Fallback: usa cookie "token" se não houver Authorization header
     if (!token) {
-      const cookieToken = getCookie(event, "token");
+      const cookieToken = getCookie(event, "@mmo/ninja/token");
       token = cookieToken || null;
     }
 

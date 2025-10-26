@@ -74,7 +74,12 @@ Object.defineProperty(global, "process", {
       }
       return Promise.resolve({
         success: true,
-        data: { username: "testuser", email: "test@test.com", id: 1 },
+        data: {
+          username: body?.username || "testuser",
+          email: "test@test.com",
+          id: 1,
+          token: "mock-jwt-token",
+        },
         message: "Login realizado com sucesso",
       });
     }
@@ -170,9 +175,242 @@ Object.defineProperty(global, "process", {
     }
 
     if (url.includes("/api/shop/items")) {
+      const query = options?.query || {};
+
+      // Se não há parâmetros obrigatórios, rejeitar
+      if (!query.level || !query.class) {
+        return Promise.reject(
+          new Error("Parâmetros obrigatórios não fornecidos")
+        );
+      }
+
+      const level = parseInt(query.level) || 1;
+      const characterClass = query.class || "ninja";
+
+      // Itens base para todas as classes
+      const baseItems = [
+        {
+          id: "pocao_vida_basica",
+          name: "Poção de Vida Básica",
+          type: "potion",
+          price: 25,
+          level_required: 1,
+          description: "Restaura 50 pontos de vida",
+          category: "Consumíveis",
+          can_buy: level >= 1,
+        },
+        {
+          id: "espada_basica",
+          name: "Espada Básica",
+          type: "equipment",
+          price: 100,
+          level_required: 1,
+          stats: { strength: 5, damage: 10 },
+          description: "Espada simples para iniciantes",
+          category: "Armas",
+          can_buy: level >= 1,
+        },
+      ];
+
+      // Itens específicos por classe
+      const classItems: Record<string, any[]> = {
+        ninja: [
+          {
+            id: "shuriken_basico",
+            name: "Shuriken Básico",
+            type: "equipment",
+            price: 80,
+            level_required: 1,
+            stats: { agility: 8, damage: 12 },
+            description: "Arma de arremesso ninja básica",
+            category: "Armas Ninja",
+            can_buy: level >= 1,
+          },
+          {
+            id: "uniforme_ninja",
+            name: "Uniforme Ninja",
+            type: "equipment",
+            price: 120,
+            level_required: 1,
+            stats: { agility: 10, stealth: 5 },
+            description: "Roupa tradicional ninja para furtividade",
+            category: "Armaduras Ninja",
+            can_buy: level >= 1,
+          },
+        ],
+        guerreiro_espacial: [
+          {
+            id: "rifle_plasma",
+            name: "Rifle de Plasma",
+            type: "equipment",
+            price: 150,
+            level_required: 1,
+            stats: { strength: 12, damage: 20 },
+            description: "Arma de energia para combate espacial",
+            category: "Armas Espaciais",
+            can_buy: level >= 1,
+          },
+          {
+            id: "armadura_espacial_basica",
+            name: "Armadura Espacial Básica",
+            type: "equipment",
+            price: 200,
+            level_required: 1,
+            stats: { defense: 15, radiation_resistance: 20 },
+            description: "Proteção básica contra ambiente espacial",
+            category: "Armaduras Espaciais",
+            can_buy: level >= 1,
+          },
+        ],
+        mago_elemental: [
+          {
+            id: "cajado_elemental",
+            name: "Cajado Elemental",
+            type: "equipment",
+            price: 100,
+            level_required: 1,
+            stats: { intelligence: 15, magic_power: 20 },
+            description: "Cajado que amplifica magias elementais",
+            category: "Armas Mágicas",
+            can_buy: level >= 1,
+          },
+          {
+            id: "tunica_mago",
+            name: "Túnica de Mago",
+            type: "equipment",
+            price: 130,
+            level_required: 1,
+            stats: { intelligence: 12, mana: 30 },
+            description: "Túnica que aumenta poder mágico",
+            category: "Armaduras Mágicas",
+            can_buy: level >= 1,
+          },
+        ],
+        arqueiro_elfo: [
+          {
+            id: "arco_elfico",
+            name: "Arco Élfico",
+            type: "equipment",
+            price: 90,
+            level_required: 1,
+            stats: { agility: 12, accuracy: 15 },
+            description: "Arco tradicional élfico de alta precisão",
+            category: "Armas Élficas",
+            can_buy: level >= 1,
+          },
+          {
+            id: "armadura_elfica",
+            name: "Armadura Élfica",
+            type: "equipment",
+            price: 140,
+            level_required: 1,
+            stats: { agility: 10, nature_resistance: 15 },
+            description: "Armadura leve e ágil dos elfos",
+            category: "Armaduras Élficas",
+            can_buy: level >= 1,
+          },
+        ],
+        paladino_sagrado: [
+          {
+            id: "espada_sagrada",
+            name: "Espada Sagrada",
+            type: "equipment",
+            price: 110,
+            level_required: 1,
+            stats: { strength: 10, holy_damage: 15 },
+            description: "Espada abençoada com poder divino",
+            category: "Armas Sagradas",
+            can_buy: level >= 1,
+          },
+          {
+            id: "armadura_sagrada",
+            name: "Armadura Sagrada",
+            type: "equipment",
+            price: 160,
+            level_required: 1,
+            stats: { defense: 12, holy_resistance: 20 },
+            description: "Armadura abençoada pelos deuses",
+            category: "Armaduras Sagradas",
+            can_buy: level >= 1,
+          },
+        ],
+        ladrao_sombrio: [
+          {
+            id: "adaga_sombria",
+            name: "Adaga Sombria",
+            type: "equipment",
+            price: 85,
+            level_required: 1,
+            stats: { agility: 10, stealth: 12 },
+            description: "Adaga afiada para ataques furtivos",
+            category: "Armas Sombrias",
+            can_buy: level >= 1,
+          },
+          {
+            id: "armadura_sombria",
+            name: "Armadura Sombria",
+            type: "equipment",
+            price: 125,
+            level_required: 1,
+            stats: { stealth: 15, agility: 8 },
+            description: "Armadura que favorece furtividade",
+            category: "Armaduras Sombrias",
+            can_buy: level >= 1,
+          },
+        ],
+      };
+
+      // Adicionar itens de níveis superiores se necessário
+      const allItems = [...baseItems];
+      if (classItems[characterClass]) {
+        allItems.push(...classItems[characterClass]);
+      }
+
+      // Adicionar alguns itens de níveis superiores (não compráveis)
+      if (level >= 3) {
+        allItems.push({
+          id: "item_nivel_3",
+          name: "Item Nível 3",
+          type: "equipment",
+          price: 300,
+          level_required: 3,
+          stats: { strength: 15 },
+          description: "Item de nível 3",
+          category: "Teste",
+          can_buy: level >= 3,
+        });
+      }
+
+      if (level >= 5) {
+        allItems.push({
+          id: "item_nivel_5",
+          name: "Item Nível 5",
+          type: "equipment",
+          price: 500,
+          level_required: 5,
+          stats: { strength: 25 },
+          description: "Item de nível 5",
+          category: "Teste",
+          can_buy: level >= 5,
+        });
+      }
+
+      // Sempre adicionar alguns itens de nível superior para teste de can_buy
+      allItems.push({
+        id: "item_nivel_superior",
+        name: "Item Nível Superior",
+        type: "equipment",
+        price: 1000,
+        level_required: level + 2,
+        stats: { strength: 50 },
+        description: "Item de nível superior",
+        category: "Teste",
+        can_buy: false,
+      });
+
       return Promise.resolve({
         success: true,
-        data: [{ name: "Test Item", price: 100, level_required: 1 }],
+        data: allItems,
       });
     }
 

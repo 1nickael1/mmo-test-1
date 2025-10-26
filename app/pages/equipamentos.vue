@@ -164,8 +164,8 @@
           size="sm"
           :class="
             selectedType === type
-              ? 'bg-white text-black border-white'
-              : 'text-white border-white hover:bg-white hover:text-black'
+              ? 'bg-blue-600 text-white border-blue-600 ring-2 ring-blue-500'
+              : 'text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
           "
         >
           {{ type }}
@@ -373,7 +373,7 @@ const loadEquipment = async () => {
 
   loading.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/equipment/${characterStore.currentCharacter.id}`,
       {
@@ -386,11 +386,9 @@ const loadEquipment = async () => {
 
     if (response.success) {
       equipment.value = response.data || [];
-      => !item.equipped)
-      );
     }
   } catch (error) {
-    } finally {
+  } finally {
     loading.value = false;
   }
 };
@@ -399,7 +397,7 @@ const loadCurrentGold = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/resources", {
       method: "GET",
       headers: {
@@ -416,8 +414,7 @@ const loadCurrentGold = async () => {
       );
       currentGold.value = goldResource ? goldResource.amount : 0;
     }
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const toggleEquipment = async (item: Equipment) => {
@@ -425,7 +422,7 @@ const toggleEquipment = async (item: Equipment) => {
 
   loading.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/equipment/equip", {
       method: "POST",
       headers: {

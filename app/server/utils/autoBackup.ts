@@ -30,16 +30,13 @@ export class AutoBackup {
     this.backupInterval = setInterval(() => {
       this.performBackup();
     }, this.BACKUP_INTERVAL);
-
-    } horas`
-    );
   }
 
   public stop(): void {
     if (this.backupInterval) {
       clearInterval(this.backupInterval);
       this.backupInterval = null;
-      }
+    }
   }
 
   private async performBackup(): Promise<void> {
@@ -61,7 +58,8 @@ export class AutoBackup {
           await this.backupUserData(user.id, user.username);
           totalBackups++;
         } catch (error) {
-          :`,
+          console.error(
+            `Erro ao fazer backup do usuário ${user.username}:`,
             error
           );
           totalErrors++;
@@ -71,7 +69,8 @@ export class AutoBackup {
       // Limpar backups antigos
       this.cleanupOldBackups();
     } catch (error) {
-      }
+      console.error("Erro geral no backup:", error);
+    }
   }
 
   private async backupUserData(
@@ -134,8 +133,7 @@ export class AutoBackup {
 
     // Salvar backup
     fs.writeFileSync(backupFilePath, JSON.stringify(userData, null, 2));
-
-    }
+  }
 
   private cleanupOldBackups(): void {
     try {
@@ -179,13 +177,13 @@ export class AutoBackup {
           backupsToDelete.forEach((backup) => {
             try {
               fs.unlinkSync(backup.filePath);
-              } catch (error) {
-              }
+            } catch (error) {}
           });
         }
       });
     } catch (error) {
-      }
+      console.error("Erro ao limpar backups antigos:", error);
+    }
   }
 
   private extractUserIdFromFileName(fileName: string): string {

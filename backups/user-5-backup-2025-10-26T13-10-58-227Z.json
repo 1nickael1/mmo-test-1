@@ -14,19 +14,19 @@
       "name": "Riki",
       "class": "ninja",
       "level": 3,
-      "xp": 2000,
-      "stats_json": "{\"strength\":10,\"agility\":14,\"defense\":8,\"health\":100,\"max_health\":100}",
+      "xp": 2100,
+      "stats_json": "{\"strength\":10,\"agility\":14,\"defense\":8,\"health\":119,\"max_health\":100}",
       "created_at": "2025-10-20 15:22:37",
-      "updated_at": "2025-10-25 19:49:33"
+      "updated_at": "2025-10-26 11:44:33"
     },
     {
       "id": 3,
       "user_id": 5,
       "name": "Riki 2",
       "class": "guerreiro_espacial",
-      "level": 2,
+      "level": 3,
       "xp": 1200,
-      "stats_json": "{\"strength\":13,\"agility\":7,\"defense\":11,\"health\":110,\"max_health\":110}",
+      "stats_json": "{\"strength\":11,\"agility\":10,\"defense\":10,\"health\":100,\"max_health\":100}",
       "created_at": "2025-10-25 17:15:07",
       "updated_at": "2025-10-25 18:49:04"
     }
@@ -50,8 +50,8 @@
       "id": 1,
       "character_id": 1,
       "resource_type": "ouro",
-      "amount": 550,
-      "updated_at": "2025-10-25 16:52:49"
+      "amount": 575,
+      "updated_at": "2025-10-26 11:44:33"
     },
     {
       "id": 20,
@@ -64,15 +64,15 @@
       "id": 19,
       "character_id": 3,
       "resource_type": "materiais",
-      "amount": 0,
-      "updated_at": "2025-10-25 17:41:53"
+      "amount": 1,
+      "updated_at": "2025-10-26 12:20:37"
     },
     {
       "id": 18,
       "character_id": 3,
       "resource_type": "ouro",
-      "amount": 1010,
-      "updated_at": "2025-10-25 17:48:43"
+      "amount": 480,
+      "updated_at": "2025-10-26 13:07:12"
     }
   ],
   "skills": [
@@ -86,7 +86,7 @@
       "cooldown_seconds": 1,
       "damage": 20,
       "description": null,
-      "last_used": "2025-10-25 16:52:48"
+      "last_used": "2025-10-26 11:44:32"
     },
     {
       "id": 3,
@@ -122,7 +122,7 @@
       "cooldown_seconds": 2,
       "damage": 35,
       "description": "Técnica de fogo básica",
-      "last_used": null
+      "last_used": "2025-10-26 11:44:30"
     },
     {
       "id": 10,
@@ -173,6 +173,33 @@
       "equipped": 1,
       "stats_json": "{\"defense\":3,\"health\":20}",
       "created_at": "2025-10-22 19:59:27"
+    },
+    {
+      "id": 5,
+      "character_id": 3,
+      "equipment_name": "Armadura Básica",
+      "equipment_type": "weapon",
+      "equipped": 0,
+      "stats_json": "{\"defense\":8,\"health\":20}",
+      "created_at": "2025-10-26 12:47:01"
+    },
+    {
+      "id": 6,
+      "character_id": 3,
+      "equipment_name": "Pistola Laser",
+      "equipment_type": "weapon",
+      "equipped": 1,
+      "stats_json": "{\"strength\":15,\"damage\":22}",
+      "created_at": "2025-10-26 13:01:52"
+    },
+    {
+      "id": 14,
+      "character_id": 3,
+      "equipment_name": "Armadura Espacial Básica",
+      "equipment_type": "armor",
+      "equipped": 1,
+      "stats_json": "{\"defense\":15,\"radiation_resistance\":20}",
+      "created_at": "2025-10-26 13:07:12"
     }
   ],
   "items": [
@@ -459,6 +486,16 @@
       "xp_gained": 200,
       "rewards_json": "{\"xp\":200,\"gold\":60}",
       "battle_date": "2025-10-25 17:48:43"
+    },
+    {
+      "id": 20,
+      "character_id": 1,
+      "opponent_type": "bandido_espacial_1",
+      "opponent_level": 3,
+      "outcome": "victory",
+      "xp_gained": 100,
+      "rewards_json": "{\"xp\":100,\"gold\":25}",
+      "battle_date": "2025-10-26 11:44:33"
     }
   ],
   "story_progress": [

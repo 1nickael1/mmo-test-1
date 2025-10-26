@@ -256,7 +256,7 @@ const startStoryMission = async (missionId: string) => {
 
   starting.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/missions/complete", {
       method: "POST",
       headers: {
@@ -290,7 +290,7 @@ const loadMissions = async () => {
 
   loading.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/missions?level=${characterStore.currentCharacter.level}&class=${characterStore.currentCharacter.class}`,
       {
@@ -304,7 +304,7 @@ const loadMissions = async () => {
       missions.value = response.data || [];
     }
   } catch (error) {
-    } finally {
+  } finally {
     loading.value = false;
   }
 };

@@ -57,8 +57,8 @@
           size="sm"
           :class="
             selectedCategory === category
-              ? 'bg-white text-black border-white'
-              : 'text-white border-white hover:bg-white hover:text-black'
+              ? 'bg-blue-600 text-white border-blue-600 ring-2 ring-blue-500'
+              : 'text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
           "
         >
           {{ category }}
@@ -236,7 +236,7 @@ const loadShopItems = async () => {
 
   loading.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/shop/items", {
       method: "GET",
       headers: {
@@ -244,6 +244,7 @@ const loadShopItems = async () => {
       },
       query: {
         level: characterStore.currentCharacter.level,
+        class: characterStore.currentCharacter.class,
       },
     });
 
@@ -251,7 +252,7 @@ const loadShopItems = async () => {
       shopItems.value = response.data || [];
     }
   } catch (error) {
-    } finally {
+  } finally {
     loading.value = false;
   }
 };
@@ -260,7 +261,7 @@ const loadCurrentGold = async () => {
   if (!characterStore.currentCharacter) return;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/resources", {
       method: "GET",
       headers: {
@@ -277,8 +278,7 @@ const loadCurrentGold = async () => {
       );
       currentGold.value = goldResource ? goldResource.amount : 0;
     }
-  } catch (error) {
-    }
+  } catch (error) {}
 };
 
 const buyItem = async (item: ShopItem) => {
@@ -286,7 +286,7 @@ const buyItem = async (item: ShopItem) => {
 
   loading.value = true;
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/shop/buy", {
       method: "POST",
       headers: {

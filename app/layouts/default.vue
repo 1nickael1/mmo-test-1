@@ -50,12 +50,14 @@
                 <div
                   class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
                 >
-                  Próxima cura em: {{ timeToNextHeal }}
-                  <div
-                    class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"
-                  ></div>
+                  Tempo do Servidor
                 </div>
               </div>
+            </div>
+
+            <!-- User Info -->
+            <div v-if="user" class="flex items-center space-x-2 text-sm">
+              <Badge variant="secondary"> 👤 {{ user.username }} </Badge>
             </div>
 
             <!-- Character Info -->
@@ -63,264 +65,353 @@
               v-if="characterStore.currentCharacter"
               class="flex items-center space-x-2 text-sm"
             >
-              <Badge variant="secondary">
-                Nível {{ characterStore.currentCharacter.level }}
+              <Badge variant="outline">
+                ⚔️ {{ characterStore.currentCharacter.name }}
               </Badge>
-              <span class="text-gray-600 dark:text-gray-300">
-                {{ characterStore.currentCharacter.name }}
-              </span>
+              <Badge variant="outline">
+                📊 Nível {{ characterStore.currentCharacter.level }}
+              </Badge>
             </div>
 
-            <!-- Version Info -->
-            <VersionInfo />
-
             <!-- Logout Button -->
-            <Button @click="handleLogout" variant="outline" size="sm">
+            <Button
+              v-if="user"
+              @click="logout"
+              variant="outline"
+              size="sm"
+              class="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 border-red-300 dark:border-red-600 font-semibold"
+            >
+              <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                ></path>
+              </svg>
               Sair
             </Button>
           </div>
         </div>
 
-        <!-- Segunda linha: Desktop Navigation -->
+        <!-- Segunda linha: Navigation Menu (Desktop) -->
         <div
-          class="hidden md:block border-t border-gray-200 dark:border-gray-700 py-3"
+          class="hidden md:block border-t border-gray-200 dark:border-gray-700"
         >
-          <nav class="flex items-center justify-center space-x-8">
-            <a
-              href="/home"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              🏠 Home
-            </a>
-            <a
-              href="/personagem"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              👤 Personagem
-            </a>
-            <a
-              href="/selecionar-personagem"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              🔄 Trocar Personagem
-            </a>
-            <a
-              href="/habilidades"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              ⚡ Habilidades
-            </a>
-            <a
-              href="/batalhas"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              ⚔️ Batalhas
-            </a>
-            <a
-              href="/melhorias"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              🏗️ Melhorias
-            </a>
-            <a
-              href="/modo-historia"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              📖 História
-            </a>
-            <a
-              href="/loja"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              🛒 Loja
-            </a>
-            <a
-              href="/equipamentos"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              🛡️ Equipamentos
-            </a>
-            <a
-              href="/inventario"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              🎒 Inventário
-            </a>
-            <a
-              href="/mineracao"
-              @click="handleNavigation"
-              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer font-medium"
-            >
-              ⛏️ Mineração
-            </a>
-          </nav>
+          <NavigationMenu class="flex justify-center">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/home'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🏠 Home
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/personagem'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  ⚔️ Personagem
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/batalhas'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  ⚔️ Batalhas
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/habilidades'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🎯 Habilidades
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/melhorias'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🔧 Melhorias
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/equipamentos'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🛡️ Equipamentos
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/inventario'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🎒 Inventário
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/loja'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🛒 Loja
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/mineracao'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  ⛏️ Mineração
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/missoes'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  📋 Missões
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/modo-historia'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  📖 História
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/rankings'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🏆 Rankings
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  :href="'/selecionar-personagem'"
+                  class="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  🔄 Trocar Personagem
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
 
-        <!-- Mobile Menu -->
+        <!-- Mobile Menu (Segunda linha quando aberto) -->
         <div
-          v-if="mobileMenuOpen"
+          v-if="isMobileMenuOpen"
           class="md:hidden border-t border-gray-200 dark:border-gray-700 py-4"
         >
-          <!-- Mobile Character Info -->
-          <div
-            v-if="characterStore.currentCharacter"
-            class="flex items-center justify-between mb-4 px-2"
-          >
-            <div class="flex items-center space-x-2">
-              <Badge variant="secondary">
-                Nível {{ characterStore.currentCharacter.level }}
-              </Badge>
-              <span class="text-gray-600 dark:text-gray-300 text-sm">
-                {{ characterStore.currentCharacter.name }}
-              </span>
-            </div>
-            <Badge variant="outline" class="text-xs">
-              🕐 {{ serverTime }}
-            </Badge>
-          </div>
-
-          <!-- Mobile Navigation -->
-          <nav class="grid grid-cols-2 gap-2">
-            <a
-              href="/home"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+          <div class="space-y-2">
+            <NuxtLink
+              to="/home"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
               🏠 Home
-            </a>
-            <a
-              href="/personagem"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            </NuxtLink>
+            <NuxtLink
+              to="/personagem"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
-              👤 Personagem
-            </a>
-            <a
-              href="/selecionar-personagem"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
-            >
-              🔄 Trocar Personagem
-            </a>
-            <a
-              href="/habilidades"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
-            >
-              ⚡ Habilidades
-            </a>
-            <a
-              href="/batalhas"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+              ⚔️ Personagem
+            </NuxtLink>
+            <NuxtLink
+              to="/batalhas"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
               ⚔️ Batalhas
-            </a>
-            <a
-              href="/melhorias"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            </NuxtLink>
+            <NuxtLink
+              to="/habilidades"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
-              🏗️ Melhorias
-            </a>
-            <a
-              href="/modo-historia"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+              🎯 Habilidades
+            </NuxtLink>
+            <NuxtLink
+              to="/melhorias"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
-              📖 História
-            </a>
-            <a
-              href="/loja"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
-            >
-              🛒 Loja
-            </a>
-            <a
-              href="/equipamentos"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+              🔧 Melhorias
+            </NuxtLink>
+            <NuxtLink
+              to="/equipamentos"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
               🛡️ Equipamentos
-            </a>
-            <a
-              href="/inventario"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            </NuxtLink>
+            <NuxtLink
+              to="/inventario"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
               🎒 Inventário
-            </a>
-            <a
-              href="/mineracao"
-              @click="handleMobileNavigation"
-              class="flex items-center justify-center p-3 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+            </NuxtLink>
+            <NuxtLink
+              to="/loja"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
+            >
+              🛒 Loja
+            </NuxtLink>
+            <NuxtLink
+              to="/mineracao"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
             >
               ⛏️ Mineração
-            </a>
-            <div class="col-span-2 mt-2 flex gap-2">
-              <VersionInfo />
-              <Button @click="handleLogout" variant="outline" class="flex-1">
-                🚪 Sair
-              </Button>
-            </div>
-          </nav>
+            </NuxtLink>
+            <NuxtLink
+              to="/missoes"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
+            >
+              📋 Missões
+            </NuxtLink>
+            <NuxtLink
+              to="/modo-historia"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
+            >
+              📖 História
+            </NuxtLink>
+            <NuxtLink
+              to="/rankings"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
+            >
+              🏆 Rankings
+            </NuxtLink>
+            <NuxtLink
+              to="/selecionar-personagem"
+              class="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+              @click="closeMobileMenu"
+            >
+              🔄 Trocar Personagem
+            </NuxtLink>
+
+            <!-- Mobile Logout Button -->
+            <button
+              v-if="user"
+              @click="logout"
+              class="block w-full text-left px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md border border-red-200 dark:border-red-800"
+            >
+              <svg
+                class="w-4 h-4 inline mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                ></path>
+              </svg>
+              Sair
+            </button>
+          </div>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="flex-1">
       <slot />
     </main>
 
     <!-- Footer -->
     <footer
-      class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto"
+      class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
     >
       <div class="container mx-auto px-4 py-6">
-        <div class="text-center text-gray-600 dark:text-gray-400">
-          <p>&copy; 2024 Ninja Space RPG. Todos os direitos reservados.</p>
+        <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+          <p>© 2025 Ninja Space RPG. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
-
-    <!-- Toast Notifications -->
-    <ClientOnly>
-      <Sonner
-        position="top-right"
-        :toast-options="{
-          duration: 4000,
-          class: 'toast-notification',
-        }"
-      />
-    </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import { useHealthRegeneration } from "~/composables/useHealthRegeneration";
 import { useCharacterStore } from "~/stores/character";
 
 const characterStore = useCharacterStore();
-const { startHealthRegeneration, stopHealthRegeneration, lastHealTime } =
-  useHealthRegeneration();
+const user = ref(null);
+const isMobileMenuOpen = ref(false);
 const serverTime = ref("");
-const timeToNextHeal = ref("");
-const mobileMenuOpen = ref(false);
-let timeInterval: NodeJS.Timeout | null = null;
 
+// Função para alternar o menu mobile
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
+};
+
+// Função para fechar o menu mobile
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false;
+};
+
+// Função para fazer logout
+const logout = async () => {
+  const { logout } = useLogout();
+  await logout();
+  // Limpar dados do usuário após logout
+  user.value = null;
+};
+
+// Carregar dados do usuário
+const loadUser = async () => {
+  try {
+    const token = useCookie("@mmo/ninja/token");
+    if (token.value) {
+      const response = await $fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+      user.value = response.data;
+    }
+  } catch (error) {
+    console.warn("Erro ao carregar usuário:", error);
+    user.value = null;
+  }
+};
+
+// Atualizar tempo do servidor
 const updateServerTime = () => {
   const now = new Date();
   serverTime.value = now.toLocaleTimeString("pt-BR", {
@@ -328,78 +419,12 @@ const updateServerTime = () => {
     minute: "2-digit",
     second: "2-digit",
   });
-
-  // Calcular tempo até próxima cura
-  const currentTime = now.getTime();
-  const timeSinceLastHeal = currentTime - lastHealTime.value;
-  const timeUntilNextHeal = 15000 - (timeSinceLastHeal % 15000);
-
-  const seconds = Math.ceil(timeUntilNextHeal / 1000);
-  timeToNextHeal.value = `${seconds}s`;
 };
 
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value;
-};
-
-const handleLogout = async () => {
-  try {
-    await $fetch("/api/auth/logout", {
-      method: "POST",
-    });
-    await navigateTo("/login");
-  } catch (error) {
-    }
-};
-
+// Atualizar tempo a cada segundo
 onMounted(async () => {
+  await loadUser();
   updateServerTime();
-  timeInterval = setInterval(updateServerTime, 1000);
-
-  // Garantir que sempre haja um personagem selecionado
-  await characterStore.ensureCharacterSelected();
-
-  // Iniciar regeneração de vida se há um personagem
-  if (characterStore.currentCharacter) {
-    startHealthRegeneration();
-  }
-});
-
-// Função para navegação desktop
-const handleNavigation = (event: Event) => {
-  const target = event.currentTarget as HTMLAnchorElement;
-  const href = target.getAttribute("href");
-
-  if (href === window.location.pathname) {
-    // Se for a mesma página, recarregar
-    window.location.reload();
-  } else {
-    // Se for página diferente, navegar normalmente
-    navigateTo(href);
-  }
-};
-
-// Função para navegação mobile
-const handleMobileNavigation = (event: Event) => {
-  const target = event.currentTarget as HTMLAnchorElement;
-  const href = target.getAttribute("href");
-
-  // Fechar menu mobile
-  mobileMenuOpen.value = false;
-
-  if (href === window.location.pathname) {
-    // Se for a mesma página, recarregar
-    window.location.reload();
-  } else {
-    // Se for página diferente, navegar normalmente
-    navigateTo(href);
-  }
-};
-
-onUnmounted(() => {
-  if (timeInterval) {
-    clearInterval(timeInterval);
-  }
-  stopHealthRegeneration();
+  setInterval(updateServerTime, 1000);
 });
 </script>

@@ -78,7 +78,7 @@ definePageMeta({
 
 // Verificar se usuário já está logado e redirecionar
 onMounted(() => {
-  const token = useCookie("token");
+  const token = useCookie("@mmo/ninja/token");
   if (token.value) {
     navigateTo("/home");
   }
@@ -109,7 +109,7 @@ const handleLogin = async () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       // Verifica se usuário já possui personagem
       try {
-        const token = useCookie("token");
+        const token = useCookie("@mmo/ninja/token");
         const charactersResp = await $fetch("/api/characters", {
           method: "GET",
           headers: {

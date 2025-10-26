@@ -245,8 +245,7 @@ export function initializeDatabase() {
     ];
     return validClasses.includes(class_name) ? 1 : 0;
   });
-
-  }
+}
 
 // Initialize database on import
 initializeDatabase();

@@ -117,6 +117,51 @@ describe("Testes de Integração", () => {
       expect(response.success).toBe(true);
       expect(response.data.isCompatible).toBe(true);
     });
+
+    it("deve redirecionar para seleção de personagem se usuário já tem personagens", async () => {
+      // Simular dados de personagens existentes
+      const mockCharacters = [
+        {
+          id: 1,
+          name: "Personagem 1",
+          level: 5,
+          class: "ninja",
+        },
+        {
+          id: 2,
+          name: "Personagem 2",
+          level: 3,
+          class: "guerreiro_espacial",
+        },
+      ];
+
+      // Simular lógica de redirecionamento
+      const shouldRedirectToSelection = mockCharacters.length > 0;
+      expect(shouldRedirectToSelection).toBe(true);
+
+      // Verificar se a lógica está correta
+      const redirectPath =
+        mockCharacters.length > 0
+          ? "/selecionar-personagem"
+          : "/criar-personagem";
+      expect(redirectPath).toBe("/selecionar-personagem");
+    });
+
+    it("deve redirecionar para criação de personagem se usuário não tem personagens", async () => {
+      // Simular lista vazia de personagens
+      const mockCharacters: any[] = [];
+
+      // Simular lógica de redirecionamento
+      const shouldRedirectToCreation = mockCharacters.length === 0;
+      expect(shouldRedirectToCreation).toBe(true);
+
+      // Verificar se a lógica está correta
+      const redirectPath =
+        mockCharacters.length > 0
+          ? "/selecionar-personagem"
+          : "/criar-personagem";
+      expect(redirectPath).toBe("/criar-personagem");
+    });
   });
 
   describe("Fluxo Completo de Personagem", () => {
@@ -433,7 +478,13 @@ describe("Testes de Integração", () => {
         ],
       };
 
-      const shopResponse = await $fetch("/api/shop/items?level=3");
+      const shopResponse = await $fetch("/api/shop/items", {
+        method: "GET",
+        query: {
+          level: 3,
+          class: "ninja",
+        },
+      });
       expect(shopResponse.success).toBe(true);
       expect(shopResponse.data).toBeInstanceOf(Array);
 

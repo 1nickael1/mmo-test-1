@@ -207,7 +207,7 @@ const loadInventory = async () => {
   loading.value = true;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch(
       `/api/inventory/${characterStore.currentCharacter.id}`,
       {
@@ -218,7 +218,7 @@ const loadInventory = async () => {
     );
     inventory.value = response.data || [];
   } catch (error) {
-    } finally {
+  } finally {
     loading.value = false;
   }
 };
@@ -229,7 +229,7 @@ const useItem = async (item: Item) => {
   loading.value = true;
 
   try {
-    const token = useCookie("token");
+    const token = useCookie("@mmo/ninja/token");
     const response = await $fetch("/api/inventory/use", {
       method: "POST",
       headers: {
